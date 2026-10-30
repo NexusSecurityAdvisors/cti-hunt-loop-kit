@@ -43,14 +43,16 @@ cti-hunt-loop-kit/
 ├── data/               # Synthetic lab dataset (Sysmon/Security JSONL + Defender/Sentinel CSV) and generator
 ├── workshop/           # Attendee lab guide, exercises, facilitator guide
 ├── metrics/            # Hunt program tracker (CSV) and KPI script
+├── navigator/          # ATT&CK Navigator coverage layer and coverage table (generated)
+├── tools/              # Layer generator
 └── tests/              # Runs every Sigma rule against the lab dataset
 ```
 
-> **Status:** v1.0. Ten ATT&CK-mapped playbooks with Sigma, KQL and SPL, a synthetic lab dataset, a full workshop and a metrics tracker. See the roadmap below.
+> **Status:** v1.1. Fourteen ATT&CK-mapped playbooks covering Windows, Linux, DNS and Microsoft Entra ID, each with Sigma, KQL and SPL. Also includes a synthetic lab dataset, a full workshop, a metrics tracker and an ATT&CK Navigator coverage layer. See the roadmap below.
 
 ## Playbooks
 
-Together, the ten playbooks follow a typical human-operated ransomware intrusion, from initial access to impact.
+Together, the playbooks follow a typical human-operated ransomware intrusion, from the first compromised identity in the cloud to encryption of Windows and Linux hosts. Coverage by tactic and technique is in [`navigator/COVERAGE.md`](navigator/COVERAGE.md), and there is an [ATT&CK Navigator layer](navigator/cti-hunt-loop-kit.layer.json) you can load.
 
 | ID | Hunt | ATT&CK | Difficulty | Queries |
 |---|---|---|---|---|
@@ -64,6 +66,10 @@ Together, the ten playbooks follow a typical human-operated ransomware intrusion
 | [HL-0008](playbooks/HL-0008-T1218-lolbin-proxy-execution.md) | LOLBin proxy execution (mshta, regsvr32, rundll32) | T1218.005, .010, .011 | Beginner | [Sigma](queries/sigma/hl-0008_lolbin_proxy_execution.yml) · [KQL](queries/kql/hl-0008_lolbin_proxy_execution.kql) · [SPL](queries/spl/hl-0008_lolbin_proxy_execution.spl) |
 | [HL-0009](playbooks/HL-0009-T1021.001-rdp-lateral-movement.md) | RDP lateral movement | T1021.001, T1078 | Intermediate | [Sigma](queries/sigma/hl-0009_rdp_lateral_movement.yml) · [KQL](queries/kql/hl-0009_rdp_lateral_movement.kql) · [SPL](queries/spl/hl-0009_rdp_lateral_movement.spl) |
 | [HL-0010](playbooks/HL-0010-T1567.002-exfiltration-to-cloud-storage.md) | Exfiltration to cloud storage (rclone, MEGA) | T1567.002 | Intermediate | [Sigma](queries/sigma/hl-0010_exfiltration_to_cloud_storage.yml) · [KQL](queries/kql/hl-0010_exfiltration_to_cloud_storage.kql) · [SPL](queries/spl/hl-0010_exfiltration_to_cloud_storage.spl) |
+| [HL-0011](playbooks/HL-0011-T1528-oauth-consent-abuse.md) | OAuth illicit consent grant (Entra ID) | T1528, T1550.001 | Intermediate | [Sigma](queries/sigma/hl-0011_oauth_consent_abuse.yml) · [KQL](queries/kql/hl-0011_oauth_consent_abuse.kql) · [SPL](queries/spl/hl-0011_oauth_consent_abuse.spl) |
+| [HL-0012](playbooks/HL-0012-T1621-mfa-fatigue.md) | MFA fatigue / push bombing (Entra ID) | T1621, T1078.004 | Beginner | [Sigma](queries/sigma/hl-0012_mfa_fatigue.yml) · [KQL](queries/kql/hl-0012_mfa_fatigue.kql) · [SPL](queries/spl/hl-0012_mfa_fatigue.spl) |
+| [HL-0013](playbooks/HL-0013-T1053.003-T1543.002-linux-cron-systemd-persistence.md) | Linux cron and systemd persistence | T1053.003, T1543.002 | Intermediate | [Sigma](queries/sigma/hl-0013_linux_cron_systemd_persistence.yml) · [KQL](queries/kql/hl-0013_linux_cron_systemd_persistence.kql) · [SPL](queries/spl/hl-0013_linux_cron_systemd_persistence.spl) |
+| [HL-0014](playbooks/HL-0014-T1071.004-dns-c2-beaconing.md) | DNS C2 beaconing and tunneling | T1071.004, T1572 | Advanced | [Sigma](queries/sigma/hl-0014_dns_c2_beaconing.yml) · [KQL](queries/kql/hl-0014_dns_c2_beaconing.kql) · [SPL](queries/spl/hl-0014_dns_c2_beaconing.spl) |
 
 ATT&CK tactic names follow ATT&CK v18 and later, where *Defense Evasion* is split into **Stealth** and **Defense Impairment**.
 
@@ -81,7 +87,7 @@ ATT&CK tactic names follow ATT&CK v18 and later, where *Defense Evasion* is spli
 
 ## Practice lab and workshop
 
-The [`workshop/`](workshop/README.md) folder contains a 3.5-hour, hands-on lab built on a fictional ransomware intrusion, *Operation Quiet Ledger*. The intrusion is hidden in five days of synthetic telemetry ([`data/`](data/README.md)), and benign look-alikes are planted for every hunt. You can run it in KQL (free Azure Data Explorer cluster), SPL (Splunk trial) or Sigma + Python with no SIEM at all.
+The [`workshop/`](workshop/README.md) folder contains a 3.5-hour, hands-on lab built on a fictional ransomware intrusion, *Operation Quiet Ledger*. The intrusion starts with an MFA-fatigued Entra ID account and ends with encrypted Windows and Linux servers. The intrusion is hidden in five days of synthetic telemetry ([`data/`](data/README.md)), and benign look-alikes are planted for every hunt. You can run it in KQL (free Azure Data Explorer cluster), SPL (Splunk trial) or Sigma + Python with no SIEM at all.
 
 ```bash
 pip install pysigma-backend-sqlite
@@ -123,8 +129,8 @@ Suggested hunt program metrics. Track them in [`metrics/hunt-tracker.csv`](metri
 - [x] Synthetic lab dataset and workshop exercises ([`data/`](data/README.md), [`workshop/`](workshop/README.md))
 - [x] Hunt metrics tracker ([`metrics/`](metrics/README.md))
 - [x] CI: every Sigma rule is tested against the lab dataset
-- [ ] Next: cloud identity hunts (OAuth consent abuse, MFA fatigue), Linux persistence, DNS C2 beaconing
-- [ ] Next: ATT&CK Navigator layer for kit coverage
+- [x] Cloud identity hunts (OAuth consent abuse, MFA fatigue), Linux persistence and DNS C2 beaconing (HL-0011 to HL-0014), added to the lab and workshop
+- [x] ATT&CK Navigator layer for kit coverage ([`navigator/`](navigator/COVERAGE.md)), regenerated and checked in CI
 
 ## Contributing
 
