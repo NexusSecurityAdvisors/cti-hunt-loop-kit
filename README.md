@@ -39,25 +39,54 @@ cti-hunt-loop-kit/
 │   ├── sigma/          # Platform-agnostic rules
 │   ├── kql/            # Microsoft Sentinel / Defender XDR
 │   └── spl/            # Splunk
-├── detections/         # (coming soon) Hunts promoted to production detections
-├── data/               # (coming soon) Synthetic sample datasets for workshop labs
-├── workshop/           # (coming soon) Attendee lab guide and exercises
-└── metrics/            # (coming soon) Hunt program KPIs and tracking sheet
+├── detections/         # Promotion criteria for turning hunts into production detections
+├── data/               # Synthetic lab dataset (Sysmon/Security JSONL + Defender/Sentinel CSV) and generator
+├── workshop/           # Attendee lab guide, exercises, facilitator guide
+├── metrics/            # Hunt program tracker (CSV) and KPI script
+└── tests/              # Runs every Sigma rule against the lab dataset
 ```
 
-> **Status:** v0.1. Templates, playbook HL-0001 and its Sigma/KQL/SPL queries are available now; folders marked "coming soon" are being built. See the roadmap below.
+> **Status:** v1.0. Ten ATT&CK-mapped playbooks with Sigma, KQL and SPL, a synthetic lab dataset, a full workshop and a metrics tracker. See the roadmap below.
+
+## Playbooks
+
+Together, the ten playbooks follow a typical human-operated ransomware intrusion, from initial access to impact.
+
+| ID | Hunt | ATT&CK | Difficulty | Queries |
+|---|---|---|---|---|
+| [HL-0001](playbooks/HL-0001-T1059.001-encoded-powershell.md) | Encoded PowerShell & download cradles | T1059.001, T1027, T1105 | Beginner | [Sigma](queries/sigma/hl-0001_encoded_powershell.yml) · [KQL](queries/kql/hl-0001_encoded_powershell.kql) · [SPL](queries/spl/hl-0001_encoded_powershell.spl) |
+| [HL-0002](playbooks/HL-0002-T1003.001-lsass-credential-dumping.md) | LSASS credential dumping | T1003.001 | Intermediate | [Sigma](queries/sigma/hl-0002_lsass_credential_dumping.yml) · [KQL](queries/kql/hl-0002_lsass_credential_dumping.kql) · [SPL](queries/spl/hl-0002_lsass_credential_dumping.spl) |
+| [HL-0003](playbooks/HL-0003-T1053.005-scheduled-task-persistence.md) | Scheduled task persistence | T1053.005 | Beginner | [Sigma](queries/sigma/hl-0003_scheduled_task_persistence.yml) · [KQL](queries/kql/hl-0003_scheduled_task_persistence.kql) · [SPL](queries/spl/hl-0003_scheduled_task_persistence.spl) |
+| [HL-0004](playbooks/HL-0004-T1547.001-registry-run-keys.md) | Registry Run key persistence | T1547.001, T1112 | Beginner | [Sigma](queries/sigma/hl-0004_registry_run_keys.yml) · [KQL](queries/kql/hl-0004_registry_run_keys.kql) · [SPL](queries/spl/hl-0004_registry_run_keys.spl) |
+| [HL-0005](playbooks/HL-0005-T1047-T1021.002-wmi-psexec-lateral-movement.md) | WMI / PsExec lateral movement | T1047, T1021.002, T1569.002 | Intermediate | [Sigma](queries/sigma/hl-0005_wmi_psexec_lateral_movement.yml) · [KQL](queries/kql/hl-0005_wmi_psexec_lateral_movement.kql) · [SPL](queries/spl/hl-0005_wmi_psexec_lateral_movement.spl) |
+| [HL-0006](playbooks/HL-0006-T1558.003-kerberoasting.md) | Kerberoasting | T1558.003 | Intermediate | [Sigma](queries/sigma/hl-0006_kerberoasting.yml) · [KQL](queries/kql/hl-0006_kerberoasting.kql) · [SPL](queries/spl/hl-0006_kerberoasting.spl) |
+| [HL-0007](playbooks/HL-0007-T1490-inhibit-system-recovery.md) | Inhibit system recovery | T1490 | Beginner | [Sigma](queries/sigma/hl-0007_inhibit_system_recovery.yml) · [KQL](queries/kql/hl-0007_inhibit_system_recovery.kql) · [SPL](queries/spl/hl-0007_inhibit_system_recovery.spl) |
+| [HL-0008](playbooks/HL-0008-T1218-lolbin-proxy-execution.md) | LOLBin proxy execution (mshta, regsvr32, rundll32) | T1218.005, .010, .011 | Beginner | [Sigma](queries/sigma/hl-0008_lolbin_proxy_execution.yml) · [KQL](queries/kql/hl-0008_lolbin_proxy_execution.kql) · [SPL](queries/spl/hl-0008_lolbin_proxy_execution.spl) |
+| [HL-0009](playbooks/HL-0009-T1021.001-rdp-lateral-movement.md) | RDP lateral movement | T1021.001, T1078 | Intermediate | [Sigma](queries/sigma/hl-0009_rdp_lateral_movement.yml) · [KQL](queries/kql/hl-0009_rdp_lateral_movement.kql) · [SPL](queries/spl/hl-0009_rdp_lateral_movement.spl) |
+| [HL-0010](playbooks/HL-0010-T1567.002-exfiltration-to-cloud-storage.md) | Exfiltration to cloud storage (rclone, MEGA) | T1567.002 | Intermediate | [Sigma](queries/sigma/hl-0010_exfiltration_to_cloud_storage.yml) · [KQL](queries/kql/hl-0010_exfiltration_to_cloud_storage.kql) · [SPL](queries/spl/hl-0010_exfiltration_to_cloud_storage.spl) |
+
+ATT&CK tactic names follow ATT&CK v18 and later, where *Defense Evasion* is split into **Stealth** and **Defense Impairment**.
 
 ## Quick start
 
 1. **Clone the repo**
    ```bash
-   git clone https://github.com/DanPazlev/cti-hunt-loop-kit.git
+   git clone https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit.git
    cd cti-hunt-loop-kit
    ```
 2. **Pick a priority intelligence requirement (PIR)** using `templates/pir-worksheet.md`.
 3. **Write a hypothesis card** (see [playbooks/](playbooks/) for a worked example) for one ATT&CK technique tied to that PIR.
-4. **Run the matching query** from `queries/` against your platform (or the synthetic data in `data/`).
+4. **Run the matching query** from `queries/` against your platform, or practice first on the synthetic lab in [`data/`](data/README.md).
 5. **Record the outcome** in `templates/hunt-report.md`, then complete `templates/intel-feedback.md` so the loop closes.
+
+## Practice lab and workshop
+
+The [`workshop/`](workshop/README.md) folder contains a 3.5-hour, hands-on lab built on a fictional ransomware intrusion, *Operation Quiet Ledger*. The intrusion is hidden in five days of synthetic telemetry ([`data/`](data/README.md)), and benign look-alikes are planted for every hunt. You can run it in KQL (free Azure Data Explorer cluster), SPL (Splunk trial) or Sigma + Python with no SIEM at all.
+
+```bash
+pip install pysigma-backend-sqlite
+python tests/test_lab_detections.py   # every Sigma rule vs. the lab answer key
+```
 
 ## Hunt hypothesis card (preview)
 
@@ -77,7 +106,7 @@ cti-hunt-loop-kit/
 
 ## Measuring the loop
 
-Suggested hunt program metrics (tracked in `metrics/`):
+Suggested hunt program metrics. Track them in [`metrics/hunt-tracker.csv`](metrics/hunt-tracker.csv) and compute them with `python metrics/hunt_metrics.py`:
 
 - Hunts completed per PIR
 - Hypotheses confirmed / refuted / inconclusive
@@ -90,9 +119,12 @@ Suggested hunt program metrics (tracked in `metrics/`):
 
 - [x] Core templates (PIR, hypothesis card, hunt report, intel feedback)
 - [x] First playbook: HL-0001 encoded PowerShell and download cradles (Sigma, KQL, SPL)
-- [ ] Nine more ATT&CK-mapped playbooks with Sigma, KQL, and SPL
-- [ ] Synthetic lab dataset and workshop exercises
-- [ ] Hunt metrics tracker
+- [x] Nine more ATT&CK-mapped playbooks (HL-0002 to HL-0010) with Sigma, KQL and SPL
+- [x] Synthetic lab dataset and workshop exercises ([`data/`](data/README.md), [`workshop/`](workshop/README.md))
+- [x] Hunt metrics tracker ([`metrics/`](metrics/README.md))
+- [x] CI: every Sigma rule is tested against the lab dataset
+- [ ] Next: cloud identity hunts (OAuth consent abuse, MFA fatigue), Linux persistence, DNS C2 beaconing
+- [ ] Next: ATT&CK Navigator layer for kit coverage
 
 ## Contributing
 
@@ -101,7 +133,8 @@ Contributions are welcome: new playbooks, query translations, and lessons learne
 1. Fork the repo and create a feature branch.
 2. Follow the existing templates and include ATT&CK technique IDs.
 3. **Never commit real customer data, IOCs under restrictive TLP, or proprietary telemetry.** Use synthetic or publicly shareable (TLP:CLEAR) material only.
-4. Open a pull request describing what you added and how you tested it.
+4. If you add a playbook, add matching malicious and benign events to `data/generate_lab_data.py`, then regenerate so `tests/test_lab_detections.py` covers your rule.
+5. Open a pull request describing what you added and how you tested it.
 
 ## Disclaimer
 
