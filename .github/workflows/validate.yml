@@ -47,3 +47,6 @@ jobs:
 
       - name: Metrics script smoke test
         run: python metrics/hunt_metrics.py
+
+      - name: ATT&CK Navigator layer is up to date
+        run: python tools/build_navigator_layer.py --check
