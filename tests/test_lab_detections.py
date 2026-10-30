@@ -24,10 +24,14 @@ ROOT = Path(__file__).resolve().parents[1]
 LAB = ROOT / "data" / "lab"
 KEY = json.loads((ROOT / "data" / "answer_key.json").read_text())["hunts"]
 
-SOURCES = {
-    ("process_creation", None): LAB / "sysmon" / "process_creation.jsonl",
-    ("registry_set", None): LAB / "sysmon" / "registry_set.jsonl",
-    (None, "security"): LAB / "security" / "security.jsonl",
+SOURCES = {  # (product, category, service) -> lab file
+    ("windows", "process_creation", None): LAB / "sysmon" / "process_creation.jsonl",
+    ("windows", "registry_set", None): LAB / "sysmon" / "registry_set.jsonl",
+    ("windows", "dns_query", None): LAB / "sysmon" / "dns_query.jsonl",
+    ("windows", None, "security"): LAB / "security" / "security.jsonl",
+    ("linux", "process_creation", None): LAB / "linux" / "process_creation.jsonl",
+    ("azure", None, "signinlogs"): LAB / "entra" / "signinlogs.jsonl",
+    ("azure", None, "auditlogs"): LAB / "entra" / "auditlogs.jsonl",
 }
 
 
@@ -35,10 +39,18 @@ def load(path):
     rows = [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
     cols = sorted({k for r in rows for k in r})
     db = sqlite3.connect(":memory:")
-    db.execute(f"CREATE TABLE logs ({', '.join(f'[{c}]' for c in cols)})")
-    db.executemany(f"INSERT INTO logs VALUES ({', '.join('?' * len(cols))})",
-                   [[r.get(c) for c in cols] for r in rows])
+    db.create_function("REGEXP", 2, lambda pattern, value: value is not None and re.search(pattern, str(value)) is not None)
+    # 'timestamp' is the column the pySigma SQLite backend uses for correlation windows
+    db.execute(f"CREATE TABLE logs ([timestamp], {', '.join(f'[{c}]' for c in cols)})")
+    db.executemany(f"INSERT INTO logs VALUES (?, {', '.join('?' * len(cols))})",
+                   [[r["UtcTime"].rstrip("Z")] + [r.get(c) for c in cols] for r in rows])
     return db
+
+
+def evidence_ids(db, row):
+    """Map correlation evidence ('<n>:<rowid>') back to LabEventIds."""
+    rowids = [int(e.split(":")[-1]) for e in json.loads(row["event_ids"])]
+    return {db.execute("SELECT LabEventId FROM logs WHERE rowid = ?", (r,)).fetchone()[0] for r in rowids}
 
 
 def main():
@@ -48,14 +60,23 @@ def main():
     for rule_path in sorted((ROOT / "queries" / "sigma").glob("hl-*.yml")):
         hunt = "HL-" + re.match(r"hl-(\d{4})", rule_path.name).group(1)
         collection = SigmaCollection.from_yaml(rule_path.read_text())
-        rule = collection.rules[0]
-        src = SOURCES[(rule.logsource.category, rule.logsource.service)]
+        rule = next(r for r in collection.rules if hasattr(r, "logsource"))
+        ls = rule.logsource
+        src = SOURCES[(ls.product, ls.category, ls.service)]
         db = dbs.setdefault(src, load(src))
-        hits = set()
-        for sql in backend.convert(collection):
-            hits |= {row[0] for row in db.execute(sql.replace("SELECT *", "SELECT LabEventId", 1))}
+        db.row_factory = sqlite3.Row
         mal = {e["id"] for e in KEY[hunt]["malicious"]}
         ben = {e["id"] for e in KEY[hunt]["benign_match"]}
+        hits = set()
+        for sql in backend.convert(collection):
+            if sql.lstrip().upper().startswith("WITH"):  # correlation rule: must alert on malicious events only
+                corr = set().union(*[evidence_ids(db, r) for r in db.execute(sql)] or [set()])
+                ok = corr == mal
+                failures += not ok
+                print(f"{'PASS' if ok else 'FAIL'} {hunt} correlation: evidence {len(corr)} events "
+                      f"({len(corr & mal)}/{len(mal)} malicious, {len(corr & ben)} benign)")
+                continue
+            hits |= {row[0] for row in db.execute(sql.replace("SELECT *", "SELECT LabEventId", 1))}
         expected = mal | ben
         missed, extra = expected - hits, hits - expected
         ok = not missed and not extra
