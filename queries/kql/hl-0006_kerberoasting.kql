@@ -1,0 +1,28 @@
+// HL-0006 — Kerberoasting: RC4 service tickets for user SPNs (ATT&CK T1558.003)
+// Platform: Microsoft Sentinel (SecurityEvent, EventID 4769 from domain controllers)
+// Playbook: playbooks/HL-0006-T1558.003-kerberoasting.md
+// Requires "Audit Kerberos Service Ticket Operations" (Success) on every DC.
+// Note: Defender XDR Advanced Hunting has no 4769 table; use Sentinel or Defender for Identity alerts.
+let lookback = 14d;   // Lab dataset: set to 3650d
+SecurityEvent
+| where TimeGenerated > ago(lookback)
+| where EventID == 4769
+| where TicketEncryptionType == "0x17" and Status == "0x0"       // RC4-HMAC, successful
+| where not(ServiceName endswith "$") and ServiceName !~ "krbtgt"  // drop machine accounts and krbtgt
+| extend Requester = tolower(tostring(split(TargetUserName, "@")[0])),
+         SourceIp  = replace_string(IpAddress, "::ffff:", ""),
+         HourBin   = bin(TimeGenerated, 1h)
+| summarize
+    Requests     = count(),
+    DistinctSPNs = dcount(ServiceName),
+    SPNs         = make_set(ServiceName, 50),
+    ActiveHours  = dcount(HourBin),
+    FirstSeen    = min(TimeGenerated),
+    LastSeen     = max(TimeGenerated),
+    DCs          = make_set(Computer, 10)
+    by Requester, SourceIp
+| extend SpanMinutes = datetime_diff("minute", LastSeen, FirstSeen),
+         SPNsPerActiveHour = round(todouble(DistinctSPNs) / ActiveHours, 1)
+// Breadth first: many distinct SPNs per requester/source is the Kerberoasting lead.
+// Within equal breadth, fewest requests first (one-off bursts before steady legacy schedules).
+| order by DistinctSPNs desc, SPNsPerActiveHour desc, Requests asc

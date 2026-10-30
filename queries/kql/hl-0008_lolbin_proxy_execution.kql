@@ -1,0 +1,73 @@
+// HL-0008 — LOLBin Proxy Execution: mshta / regsvr32 / rundll32 (ATT&CK T1218, T1218.005, T1218.010, T1218.011)
+// Platform: Microsoft Defender XDR Advanced Hunting / Microsoft Sentinel (DeviceProcessEvents, DeviceNetworkEvents)
+// Playbook: playbooks/HL-0008-T1218-lolbin-proxy-execution.md
+// Note: in Sentinel, replace Timestamp with TimeGenerated.
+// This file holds two queries. Run Query 1 first; highlight and run Query 2 separately for the network pivot.
+
+// ---------------------------------------------------------------------------
+// Query 1 — LOLBins given remote or script content (mirrors the Sigma rule)
+// ---------------------------------------------------------------------------
+let lookback = 14d; // Lab dataset: set to 3650d
+let mshtaPattern    = @"(?i)(https?://|javascript:|vbscript:)";
+let regsvr32Pattern = @"(?i)([/-]i:http|/i:ftp|scrobj)";
+let rundll32Pattern = @"(?i)(javascript:|vbscript:|RunHTMLApplication|https?://)";
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+// Match on file name OR OriginalFileName so renamed copies are caught
+| extend Ofn = toupper(ProcessVersionInfoOriginalFileName), Bin = tolower(FileName)
+| extend LolBin = case(
+    Bin == "mshta.exe"    or Ofn == "MSHTA.EXE",    "mshta",
+    Bin == "regsvr32.exe" or Ofn == "REGSVR32.EXE", "regsvr32",
+    Bin == "rundll32.exe" or Ofn == "RUNDLL32.EXE", "rundll32",
+    "")
+| where isnotempty(LolBin)
+| where (LolBin == "mshta"    and ProcessCommandLine matches regex mshtaPattern)
+     or (LolBin == "regsvr32" and ProcessCommandLine matches regex regsvr32Pattern)
+     or (LolBin == "rundll32" and ProcessCommandLine matches regex rundll32Pattern)
+| extend Url        = extract(@"(?i)((https?|ftp)://[^\s""']+)", 1, ProcessCommandLine),
+         IsRenamed  = isnotempty(Ofn) and Bin != tolower(Ofn),
+         OffSysDir  = not(FolderPath matches regex @"(?i)^C:\\Windows\\(System32|SysWOW64)\\")
+| extend RemoteHost = extract(@"(?i)^[a-z]+://([^/:]+)", 1, Url)
+| summarize
+    Hits      = count(),
+    Hosts     = dcount(DeviceName),
+    FirstSeen = min(Timestamp),
+    LastSeen  = max(Timestamp),
+    SampleCommandLine = any(ProcessCommandLine),
+    SampleParentCmd   = any(InitiatingProcessCommandLine),
+    DeviceList        = make_set(DeviceName, 25)
+    by LolBin, InitiatingProcessFileName, AccountName, RemoteHost, IsRenamed, OffSysDir
+// Rare LOLBin / parent / destination combinations first
+| order by Hits asc, Hosts asc
+
+
+// ---------------------------------------------------------------------------
+// Query 2 — Network pivot: did the LOLBin itself connect out? (run separately)
+// Joins LOLBin outbound connections to the process that made them, within 5 minutes.
+// A Query 1 hit with no row here = attempt only (check proxy verdict); a row here = likely execution.
+// ---------------------------------------------------------------------------
+let lookback = 14d; // Lab dataset: set to 3650d
+let lolbins = dynamic(["mshta.exe", "regsvr32.exe", "rundll32.exe"]);
+let lolbinProcs = DeviceProcessEvents
+    | where Timestamp > ago(lookback)
+    | extend LolBin = tolower(iff(isnotempty(ProcessVersionInfoOriginalFileName), ProcessVersionInfoOriginalFileName, FileName))
+    | where LolBin in (lolbins)
+    | project DeviceName, LolBin, ProcTime = Timestamp, ProcessCommandLine, AccountName,
+              ParentProcess = InitiatingProcessFileName;
+DeviceNetworkEvents
+| where Timestamp > ago(lookback)
+| extend LolBin = tolower(iff(isnotempty(InitiatingProcessVersionInfoOriginalFileName),
+                              InitiatingProcessVersionInfoOriginalFileName, InitiatingProcessFileName))
+| where LolBin in (lolbins)
+// Outbound to non-RFC1918 addresses only (IPv6 rows drop out here; review them separately if you have them)
+| where not(ipv4_is_private(RemoteIP))
+| join kind=inner lolbinProcs on DeviceName, LolBin
+| where Timestamp between (ProcTime .. (ProcTime + 5m))
+| summarize
+    Connections = count(),
+    FirstConn   = min(Timestamp),
+    RemoteIPs   = make_set(RemoteIP, 10),
+    RemoteUrls  = make_set(RemoteUrl, 10),
+    RemotePorts = make_set(RemotePort, 10)
+    by DeviceName, LolBin, ParentProcess, AccountName, ProcessCommandLine
+| order by Connections asc

@@ -1,0 +1,43 @@
+// HL-0005 — WMI & PsExec-Style Lateral Movement (ATT&CK T1047, T1021.002, T1569.002)
+// Platform: Microsoft Defender XDR Advanced Hunting / Microsoft Sentinel (DeviceProcessEvents)
+// Playbook: playbooks/HL-0005-T1047-T1021.002-wmi-psexec-lateral-movement.md
+// Note: in Sentinel, replace Timestamp with TimeGenerated.
+let lookback = 14d;   // Lab dataset: set to 3650d
+let wmiChildren = dynamic(["cmd.exe", "powershell.exe", "pwsh.exe", "mshta.exe", "rundll32.exe",
+    "regsvr32.exe", "wscript.exe", "cscript.exe"]);
+let psexecServices = dynamic(["PSEXESVC.exe", "PAExec.exe", "csexecsvc.exe", "RemComSvc.exe"]);
+// Impacket wmiexec output redirection: 1> \\127.0.0.1\ADMIN$\__<epoch> 2>&1
+let wmiexecPattern = @"(?i)\\\\127\.0\.0\.1\\ADMIN\$\\__\d+";
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| extend ViaWmi = InitiatingProcessFileName =~ "WmiPrvSE.exe" and FileName in~ (wmiChildren),
+         ViaPsExecSvc = InitiatingProcessFileName in~ (psexecServices)
+| where ViaWmi or ViaPsExecSvc
+// SCCM / MECM compliance scripts run through WMI from this folder (same exclusion as the Sigma rule)
+| where not(ProcessCommandLine contains @"\CCM\SystemTemp\")
+| extend Method = iff(ViaWmi, "WMI (WmiPrvSE child)", "PsExec-style service"),
+         WmiexecSignature = ProcessCommandLine matches regex wmiexecPattern
+| summarize
+    Hits      = count(),
+    Hosts     = dcount(DeviceName),
+    FirstSeen = min(Timestamp),
+    LastSeen  = max(Timestamp),
+    Children  = make_set(FileName, 10),
+    SampleCommandLines = make_set(ProcessCommandLine, 10),
+    DeviceList         = make_set(DeviceName, 25)
+    by Method, InitiatingProcessFileName, AccountName, WmiexecSignature
+// Rare method/account combinations first; the wmiexec signature is high-confidence on its own
+| order by Hits asc, Hosts asc
+//
+// Pivot (Sentinel): network logons on the target host just before the first hit.
+// Replace <host> / <account> / <first-seen> with values from the result above.
+// SecurityEvent
+// | where EventID == 4624 and LogonType == 3
+// | where Computer startswith "<host>" and TargetUserName =~ "<account>"
+// | where TimeGenerated between (datetime(<first-seen>) - 30m .. datetime(<first-seen>) + 5m)
+// | project TimeGenerated, Computer, TargetUserName, LogonType, IpAddress, WorkstationName
+//
+// Pivot (Sentinel, if System events are collected): PsExec-style service installs (7045)
+// Event
+// | where EventLog == "System" and EventID == 7045
+// | where RenderedDescription has_any ("PSEXESVC", "PAExec", "RemCom", "ADMIN$", "cmd.exe /c")

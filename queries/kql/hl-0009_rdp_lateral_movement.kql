@@ -1,0 +1,42 @@
+// HL-0009 — RDP Lateral Movement (ATT&CK T1021.001; related T1078)
+// Platform: Microsoft Sentinel (SecurityEvent, EventID 4624 LogonType 10)
+// Playbook: playbooks/HL-0009-T1021.001-rdp-lateral-movement.md
+// Note: for Defender XDR Advanced Hunting, use DeviceLogonEvents | where LogonType == "RemoteInteractive"
+//       (AccountName, RemoteIP, RemoteDeviceName, Timestamp) with the same logic.
+// Replace jumpHosts and the host-name patterns with your own PAWs / bastions and naming convention.
+let lookback = 14d; // Lab dataset: set to 3650d
+let jumpHosts = dynamic(["10.10.5.10"]);              // approved jump hosts / PAWs
+let ignoreSources = dynamic(["127.0.0.1", "::1", "-", ""]);
+let workstationPattern = @"(?i)^WS-";                 // or use ipv4_is_in_range() on your workstation subnets
+let serverPattern      = @"(?i)^SRV-";
+let rdpPairs = SecurityEvent
+    | where TimeGenerated > ago(lookback)
+    | where EventID == 4624 and LogonType == 10
+    | where not(IpAddress in (jumpHosts)) and not(IpAddress in (ignoreSources))
+    | extend DestHost   = toupper(tostring(split(Computer, ".")[0])),
+             SourceHost = toupper(tostring(split(WorkstationName, ".")[0]))
+    | extend IsServiceAccount = TargetUserName startswith "svc_",
+             SourceClass = case(SourceHost matches regex workstationPattern, "workstation",
+                                SourceHost matches regex serverPattern, "server", "other"),
+             DestClass   = case(DestHost matches regex serverPattern, "server",
+                                DestHost matches regex workstationPattern, "workstation", "other")
+    | extend WorkstationToServer = SourceClass == "workstation" and DestClass == "server"
+    // Stack source IP -> account -> destination
+    | summarize
+        Logons    = count(),
+        FirstSeen = min(TimeGenerated),
+        LastSeen  = max(TimeGenerated)
+        by IpAddress, SourceHost, TargetUserName, DestHost, IsServiceAccount, WorkstationToServer;
+rdpPairs
+// Fan-out: how many destinations did this source + account reach in the window?
+| join kind=inner (
+    rdpPairs | summarize SourceFanOut = dcount(DestHost) by IpAddress, TargetUserName
+  ) on IpAddress, TargetUserName
+| project-away IpAddress1, TargetUserName1
+| extend Flags = trim(" ", strcat(
+             iff(IsServiceAccount, "service-account ", ""),
+             iff(WorkstationToServer, "workstation-to-server ", ""),
+             iff(SourceFanOut > 1, "fan-out", "")))
+| extend Priority = iff(IsServiceAccount, 2, 0) + iff(WorkstationToServer, 1, 0) + iff(SourceFanOut > 1, 1, 0)
+// Flagged pairs first, then rare pairs within each priority band
+| order by Priority desc, Logons asc

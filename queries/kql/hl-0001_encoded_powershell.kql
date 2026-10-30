@@ -2,7 +2,7 @@
 // Platform: Microsoft Defender XDR Advanced Hunting / Microsoft Sentinel (DeviceProcessEvents)
 // Playbook: playbooks/HL-0001-T1059.001-encoded-powershell.md
 // Note: in Sentinel, replace Timestamp with TimeGenerated.
-let lookback = 14d;
+let lookback = 14d; // Lab dataset: set to 3650d
 let encodedPattern = @"(?i)\s[-/]e(c|n[a-z]*)?\s+([A-Za-z0-9+/=]{20,})";
 let cradleKeywords = dynamic(["DownloadString", "DownloadFile", "DownloadData", "Net.WebClient",
     "Invoke-WebRequest", "Start-BitsTransfer", "FromBase64String", "Invoke-Expression", "IEX(", "IEX ("]);

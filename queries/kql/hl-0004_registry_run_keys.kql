@@ -1,0 +1,32 @@
+// HL-0004 — Registry Run Key Persistence (ATT&CK T1547.001; related T1112)
+// Platform: Microsoft Defender XDR Advanced Hunting / Microsoft Sentinel (DeviceRegistryEvents)
+// Playbook: playbooks/HL-0004-T1547.001-registry-run-keys.md
+// Note: in Sentinel, replace Timestamp with TimeGenerated.
+let lookback = 14d; // Lab dataset: set to 3650d
+// Run / RunOnce / WOW6432Node Run / Policies\Explorer\Run (mirrors Sigma selection_key).
+// RegistryKey holds the key only (no value name), so match at end of string or before a subkey.
+let runKeyPattern = @"(?i)\\Software\\(Microsoft\\Windows\\CurrentVersion\\(Run|RunOnce|Policies\\Explorer\\Run)|WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run)(\\|$)";
+// User-writable / staging paths, script hosts, LOLBins and URLs (mirrors Sigma selection_details)
+let suspiciousData = @"(?i)(\\AppData\\Roaming\\|\\AppData\\Local\\Temp\\|\\ProgramData\\|\\Users\\Public\\|\\Windows\\Temp\\|powershell|mshta|rundll32|regsvr32|wscript|cscript|http://|https://)";
+DeviceRegistryEvents
+| where Timestamp > ago(lookback)
+| where ActionType == "RegistryValueSet"
+| where RegistryKey matches regex runKeyPattern
+| where RegistryValueData matches regex suspiciousData
+| extend Hive         = iff(RegistryKey startswith "HKEY_USERS", "HKU (per-user)", "HKLM (machine)"),
+         RunKey       = extract(@"(?i)\\(Run|RunOnce)$", 1, RegistryKey),
+         // File name the value launches, e.g. Spotify.exe, odupd.exe, rundll32.exe
+         PayloadImage = tolower(extract(@"(?i)([\w\-. ]+?\.(exe|dll|bat|cmd|ps1|vbs|js|hta|scr))\b", 1, RegistryValueData)),
+         // Masquerade hint: the value name does not appear anywhere in the data it launches
+         NameNotInData = indexof(tolower(RegistryValueData), tolower(RegistryValueName)) < 0
+| summarize
+    Hits      = count(),
+    Hosts     = dcount(DeviceName),
+    FirstSeen = min(Timestamp),
+    LastSeen  = max(Timestamp),
+    SampleData = any(RegistryValueData),
+    Accounts   = make_set(InitiatingProcessAccountName, 10),
+    DeviceList = make_set(DeviceName, 25)
+    by RegistryValueName, PayloadImage, NameNotInData, Hive, RunKey, InitiatingProcessFileName
+// Values seen on few hosts, written by rare processes, first
+| order by Hosts asc, Hits asc

@@ -1,0 +1,69 @@
+// HL-0010 — Exfiltration to Cloud Storage: rclone / MEGA (ATT&CK T1567.002)
+// Platform: Microsoft Defender XDR Advanced Hunting / Microsoft Sentinel (DeviceProcessEvents, DeviceNetworkEvents)
+// Playbook: playbooks/HL-0010-T1567.002-exfiltration-to-cloud-storage.md
+// Note: in Sentinel, replace Timestamp with TimeGenerated.
+// This file holds two queries. Run Query 1 first; highlight and run Query 2 separately.
+
+// ---------------------------------------------------------------------------
+// Query 1 — rclone (incl. renamed copies) and MEGAcmd transfers (mirrors the Sigma rule)
+// ---------------------------------------------------------------------------
+let lookback = 14d; // Lab dataset: set to 3650d
+let sanctionedRemotes = dynamic(["s3corp"]);                 // replace with your approved rclone remotes
+let sanctionedConfigPrefix = @"C:\Program Files\rclone\";   // replace with your approved config location
+let megaBinaries = dynamic(["megacmdshell.exe", "megaclient.exe", "mega-put.exe", "mega-sync.exe"]);
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| extend IsRcloneImg = FileName =~ "rclone.exe"
+                       or ProcessVersionInfoOriginalFileName =~ "rclone.exe"
+                       or ProcessVersionInfoFileDescription == "Rsync for cloud storage",
+         IsRcloneFlags = ProcessCommandLine matches regex @"(?i)\s(copy|sync|move)\s"
+                         and ProcessCommandLine contains "--config"
+                         and ProcessCommandLine matches regex @"(?i)(--transfers|--multi-thread-streams|--no-check-certificate|--max-age|--ignore-existing|mega:)",
+         IsMega = tolower(FileName) in (megaBinaries)
+| where IsRcloneImg or IsRcloneFlags or IsMega
+| extend Tool = iff(IsMega, "megacmd", "rclone"),
+         IsRenamed = isnotempty(ProcessVersionInfoOriginalFileName) and FileName !~ ProcessVersionInfoOriginalFileName,
+         Operation = tolower(extract(@"(?i)\s(copy|sync|move|copyto|moveto)\s", 1, ProcessCommandLine)),
+         // Remote names are 2+ characters before a colon, so drive letters (C:, D:) are skipped
+         Remote = extract(@"\s([A-Za-z][\w-]+):", 1, ProcessCommandLine),
+         ConfigPath = coalesce(extract(@"(?i)--config[=\s]+""([^""]+)""", 1, ProcessCommandLine),
+                               extract(@"(?i)--config[=\s]+(\S+)", 1, ProcessCommandLine))
+| extend IsSanctioned = Remote in~ (sanctionedRemotes) and ConfigPath startswith sanctionedConfigPrefix
+| summarize
+    Runs      = count(),
+    Hosts     = dcount(DeviceName),
+    FirstSeen = min(Timestamp),
+    LastSeen  = max(Timestamp),
+    SampleCommandLine = any(ProcessCommandLine),
+    ImagePaths        = make_set(FolderPath, 10),
+    DeviceList        = make_set(DeviceName, 25)
+    by Tool, Remote, ConfigPath, Operation, AccountName, InitiatingProcessFileName, IsRenamed, IsSanctioned
+// Unsanctioned and rare first: a one-off run to a new remote outranks a nightly job
+| order by IsSanctioned asc, Runs asc
+
+
+// ---------------------------------------------------------------------------
+// Query 2 — Connections to MEGA, stacked per process (run separately)
+// DeviceNetworkEvents has no byte counts: use connection count, distinct IPs and duration
+// as the volume proxy, then size the transfer from proxy / firewall bytes-out.
+// ---------------------------------------------------------------------------
+let lookback = 14d; // Lab dataset: set to 3650d
+DeviceNetworkEvents
+| where Timestamp > ago(lookback)
+// Exact domain or subdomain of mega.co.nz / mega.nz / mega.io (avoids e.g. "omega.nz")
+| where RemoteUrl matches regex @"(?i)(^|\.)mega\.(co\.nz|nz|io)$"
+| summarize
+    Connections       = count(),
+    DistinctRemoteIPs = dcount(RemoteIP),
+    DistinctHosts     = dcount(RemoteUrl),
+    FirstSeen         = min(Timestamp),
+    LastSeen          = max(Timestamp),
+    SampleUrls        = make_set(RemoteUrl, 10),
+    RemoteIPs         = make_set(RemoteIP, 10)
+    by DeviceName, InitiatingProcessFileName, InitiatingProcessFolderPath,
+       InitiatingProcessVersionInfoOriginalFileName, InitiatingProcessAccountName
+| extend DurationMin = datetime_diff('minute', LastSeen, FirstSeen),
+         IsRenamed   = isnotempty(InitiatingProcessVersionInfoOriginalFileName)
+                       and InitiatingProcessFileName !~ InitiatingProcessVersionInfoOriginalFileName
+// Highest-volume processes first: bulk upload shows as many connections to many userstorage hosts
+| order by Connections desc

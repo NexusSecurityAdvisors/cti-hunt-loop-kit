@@ -1,0 +1,44 @@
+// HL-0003 — Scheduled Task Persistence (ATT&CK T1053.005)
+// Platform: Microsoft Defender XDR Advanced Hunting / Microsoft Sentinel (DeviceProcessEvents)
+// Playbook: playbooks/HL-0003-T1053.005-scheduled-task-persistence.md
+// Note: in Sentinel, replace Timestamp with TimeGenerated.
+// Scope: tasks created through schtasks.exe only. See the playbook pre-check for 4698 / TaskScheduler 106.
+let lookback = 14d; // Lab dataset: set to 3650d
+// "/create" with any dash-like prefix (Sigma windash: - / en dash, em dash, horizontal bar)
+let createSwitch = @"(?i)\s[-/\x{2013}\x{2014}\x{2015}]create\s";
+// User-writable / staging paths, script hosts, LOLBins and URLs (mirrors Sigma selection_suspicious_action)
+let suspiciousAction = @"(?i)(\\ProgramData\\|\\AppData\\|\\Users\\Public\\|\\Temp\\|\\Windows\\Tasks\\|powershell|pwsh|mshta|rundll32|regsvr32|wscript|cscript|cmd\.exe /c|cmd /c|http://|https://)";
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where FileName =~ "schtasks.exe" or ProcessVersionInfoOriginalFileName =~ "schtasks.exe"
+| where ProcessCommandLine matches regex createSwitch
+| extend SuspiciousAction = ProcessCommandLine matches regex suspiciousAction,
+         Masquerade       = ProcessCommandLine contains @"\Microsoft\Windows\"
+| where SuspiciousAction or Masquerade
+| extend TaskName   = trim(@"""", extract(@"(?i)[-/]tn\s+(""[^""]+""|\S+)", 1, ProcessCommandLine)),
+         TaskAction = extract(@"(?i)[-/]tr\s+(.+?)\s+[-/](sc|ru|rp|st|sd|mo|d|f|rl|it|z|np|delay|xml|v1)\b", 1, ProcessCommandLine),
+         RunAs      = trim(@"""", extract(@"(?i)[-/]ru\s+(""[^""]+""|\S+)", 1, ProcessCommandLine)),
+         Trigger    = extract(@"(?i)[-/]sc\s+(\S+)", 1, ProcessCommandLine)
+| summarize
+    Hits      = count(),
+    Hosts     = dcount(DeviceName),
+    FirstSeen = min(Timestamp),
+    LastSeen  = max(Timestamp),
+    SampleCommandLine = any(ProcessCommandLine),
+    DeviceList        = make_set(DeviceName, 25)
+    by TaskName, TaskAction, RunAs, Trigger, Masquerade, InitiatingProcessFileName, AccountName
+// Tasks seen on few hosts, from rare parents / accounts, first
+| order by Hosts asc, Hits asc
+//
+// ---------------------------------------------------------------------------------------------
+// Optional (Sentinel): task registrations from Security 4698, including tasks NOT created via
+// schtasks.exe. Requires "Audit Other Object Access Events".
+// ---------------------------------------------------------------------------------------------
+// SecurityEvent
+// | where TimeGenerated > ago(lookback) and EventID == 4698
+// | extend TaskName    = extract(@"<Data Name=""TaskName"">([^<]+)</Data>", 1, EventData),
+//          TaskContent = extract(@"<Data Name=""TaskContent"">([\s\S]*?)</Data>", 1, EventData)
+// | extend Command     = extract(@"(?i)&lt;Command&gt;([^&]+)&lt;/Command&gt;", 1, TaskContent)
+// | summarize Hits = count(), Hosts = dcount(Computer), HostList = make_set(Computer, 25)
+//             by TaskName, Command, SubjectUserName
+// | order by Hosts asc, Hits asc

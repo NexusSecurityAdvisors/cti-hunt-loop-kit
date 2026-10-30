@@ -1,0 +1,44 @@
+// HL-0007 — Inhibit System Recovery: shadow copy, backup catalog and boot recovery tampering (ATT&CK T1490)
+// Platform: Microsoft Defender XDR Advanced Hunting / Microsoft Sentinel (DeviceProcessEvents)
+// Playbook: playbooks/HL-0007-T1490-inhibit-system-recovery.md
+// Note: in Sentinel, replace Timestamp with TimeGenerated.
+// A hit in the last hour is an IR trigger, not just a hunt lead (see playbook section 4).
+let lookback = 14d;   // Lab dataset: set to 3650d
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| extend Action = case(
+    FileName =~ "vssadmin.exe" and (ProcessCommandLine contains "delete shadows" or ProcessCommandLine contains "resize shadowstorage"), "vssadmin shadow delete/resize",
+    FileName =~ "WMIC.exe" and ProcessCommandLine contains "shadowcopy" and ProcessCommandLine contains "delete", "wmic shadowcopy delete",
+    ProcessCommandLine contains "Win32_ShadowCopy" and ProcessCommandLine contains "Delete", "Win32_ShadowCopy delete",
+    FileName =~ "bcdedit.exe" and (ProcessCommandLine contains "recoveryenabled no" or ProcessCommandLine contains "bootstatuspolicy ignoreallfailures"), "bcdedit recovery disabled",
+    FileName =~ "wbadmin.exe" and ProcessCommandLine contains "delete"
+        and (ProcessCommandLine contains "catalog" or ProcessCommandLine contains "systemstatebackup" or ProcessCommandLine contains "backup"), "wbadmin delete",
+    "")
+| where isnotempty(Action)
+// Destructive scope (/all, /quiet, recovery off) vs. housekeeping (/oldest on one volume)
+| extend BroadScope = ProcessCommandLine contains "/all" or ProcessCommandLine contains "-quiet"
+                      or Action in ("bcdedit recovery disabled", "wbadmin delete")
+| summarize
+    Hits             = count(),
+    DistinctActions  = dcount(Action),
+    Actions          = make_set(Action, 10),
+    Hosts            = dcount(DeviceName),
+    DeviceList       = make_set(DeviceName, 25),
+    BroadScopeHits   = countif(BroadScope),
+    FirstSeen        = min(Timestamp),
+    LastSeen         = max(Timestamp),
+    SampleCommandLines = make_set(ProcessCommandLine, 10)
+    by InitiatingProcessFileName, InitiatingProcessCommandLine, AccountName
+| extend SpanMinutes = datetime_diff("minute", LastSeen, FirstSeen)
+// Ransomware pattern first: many distinct actions from one parent, then multi-host, then rare
+| order by DistinctActions desc, Hosts desc, Hits asc
+//
+// Pivot: everything the same account ran on the affected hosts around the hit, plus any host
+// running the same parent command line (this is how you find the encryptor and the spread).
+// Replace <hosts>, <account>, <parent-cmd> and the time window with values from the result above.
+// DeviceProcessEvents
+// | where Timestamp between (datetime(<first-seen>) - 1h .. datetime(<last-seen>) + 2h)
+// | where (DeviceName in~ (<hosts>) and AccountName =~ "<account>")
+//      or InitiatingProcessCommandLine == "<parent-cmd>" or ProcessCommandLine == "<parent-cmd>"
+// | project Timestamp, DeviceName, AccountName, FileName, FolderPath, ProcessCommandLine, InitiatingProcessCommandLine
+// | order by Timestamp asc
