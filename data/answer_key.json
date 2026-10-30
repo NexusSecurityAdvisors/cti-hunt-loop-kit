@@ -716,6 +716,1206 @@
           "note": "Nightly IT sync to sanctioned corporate S3 remote (s3corp:)"
         }
       ]
+    },
+    "HL-0011": {
+      "malicious": [
+        {
+          "id": "A-00022",
+          "note": "Illicit consent grant: unverified app, mailbox + file scopes, from attacker VPN IP"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "A-00008",
+          "note": "Admin consent (admin_tlee) to the sanctioned M365 backup app, verified publisher, change ticket"
+        }
+      ]
+    },
+    "HL-0012": {
+      "malicious": [
+        {
+          "id": "E-00081",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00082",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00083",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00084",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00085",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00086",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00087",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00088",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00089",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00090",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00091",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00092",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00093",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        },
+        {
+          "id": "E-00094",
+          "note": "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "E-00128",
+          "note": "Single MFA denial from the office IP (accidental tap or stale prompt), no burst"
+        },
+        {
+          "id": "E-00132",
+          "note": "Single MFA denial from the office IP (accidental tap or stale prompt), no burst"
+        },
+        {
+          "id": "E-00146",
+          "note": "user05 replaced phone: 3 timeouts from office IP, then help desk re-registered MFA"
+        },
+        {
+          "id": "E-00149",
+          "note": "user05 replaced phone: 3 timeouts from office IP, then help desk re-registered MFA"
+        },
+        {
+          "id": "E-00151",
+          "note": "user05 replaced phone: 3 timeouts from office IP, then help desk re-registered MFA"
+        },
+        {
+          "id": "E-00171",
+          "note": "Single MFA denial from the office IP (accidental tap or stale prompt), no burst"
+        },
+        {
+          "id": "E-00173",
+          "note": "Single MFA denial from the office IP (accidental tap or stale prompt), no burst"
+        }
+      ]
+    },
+    "HL-0013": {
+      "malicious": [
+        {
+          "id": "L-00146",
+          "note": "Cron entry piping a remote script from the C2 server to sh every 10 minutes"
+        },
+        {
+          "id": "L-00147",
+          "note": "Masquerading systemd unit executing a binary from /dev/shm"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "L-00073",
+          "note": "Ansible deploying node_exporter unit from its /tmp staging dir (python3 parent, change window, both hosts)"
+        },
+        {
+          "id": "L-00074",
+          "note": "Ansible deploying node_exporter unit from its /tmp staging dir (python3 parent, change window, both hosts)"
+        },
+        {
+          "id": "L-00127",
+          "note": "Backup heartbeat cron calling the internal healthchecks.lab.example URL"
+        }
+      ]
+    },
+    "HL-0014": {
+      "malicious": [
+        {
+          "id": "D-00709",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00711",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00712",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00713",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00717",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00718",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00721",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00724",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00726",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00728",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00731",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00737",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00740",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00743",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00745",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00748",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00749",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00751",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00753",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00755",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00760",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00763",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00765",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00768",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00771",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00773",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00775",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00781",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00783",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00787",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00790",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00793",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00796",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00798",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00800",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00801",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00804",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00809",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00811",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00813",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00818",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00822",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00826",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00829",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00830",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00835",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00836",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00838",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00842",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00844",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00846",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00847",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00852",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00853",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00855",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00860",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00864",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00865",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00867",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00869",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00872",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00876",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00878",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00879",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00883",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00884",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00886",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00891",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00894",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00896",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00897",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00900",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00901",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00905",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00908",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00911",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00916",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00921",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00923",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00924",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00926",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00929",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00932",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00933",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00938",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00940",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00941",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00942",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00945",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00949",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00950",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00953",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00955",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00958",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00961",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00964",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00966",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00969",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00971",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00977",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00980",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00982",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00983",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00985",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00987",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00989",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00990",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00992",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00993",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00994",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00997",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00998",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-00999",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01001",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01003",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01004",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01005",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01006",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01007",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01008",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01009",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01010",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01011",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01012",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01013",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01014",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01015",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01016",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01017",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01019",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01020",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01021",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01022",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01024",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01025",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01028",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01029",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01031",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01034",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01035",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01037",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01039",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01040",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01041",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01042",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01045",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01047",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01048",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01049",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01051",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01052",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01053",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01056",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01057",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01058",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01059",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01060",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01063",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01064",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01065",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01066",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01069",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01070",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01073",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01075",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01077",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01078",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01080",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01081",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01084",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01086",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01087",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01089",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01090",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01092",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01095",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01096",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01097",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01098",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01099",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01101",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01103",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01104",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01105",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01107",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01108",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01109",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01110",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01111",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01113",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01114",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01115",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01116",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01120",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01121",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01122",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01124",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01125",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01127",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01128",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01129",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01130",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01133",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01134",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01135",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        },
+        {
+          "id": "D-01136",
+          "note": "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "D-00005",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00011",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00015",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00038",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00042",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00059",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00175",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00232",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00279",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00295",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00363",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00387",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00420",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00424",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00446",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00504",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00522",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00530",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00562",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00611",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00621",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00625",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00645",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00659",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00730",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00739",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00741",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00820",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00824",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00904",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-00917",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01068",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01126",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01150",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01205",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01226",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01248",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01249",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01276",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01293",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01304",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01316",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01352",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01353",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01387",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01401",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01457",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01465",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01518",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01531",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01572",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01582",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01586",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01591",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01648",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01653",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01701",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01708",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01709",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        },
+        {
+          "id": "D-01760",
+          "note": "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing"
+        }
+      ]
     }
   }
 }

