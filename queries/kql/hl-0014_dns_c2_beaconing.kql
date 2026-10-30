@@ -1,0 +1,69 @@
+// HL-0014 — DNS C2 Beaconing and Tunneling (ATT&CK T1071.004, related T1572)
+// Platform: Microsoft Sentinel (DnsEvents from the Windows DNS Server connector / AMA DNS logs)
+// Playbook: playbooks/HL-0014-T1071.004-dns-c2-beaconing.md
+// DnsEvents is logged on the DNS server: Computer is the server, ClientIP is the querying host.
+// Map ClientIP to a host name (DHCP, DeviceNetworkInfo, CMDB); use Sysmon 22 / Defender to get the process.
+// The Sigma rule is only a long-label pre-filter. This query adds the beaconing statistics:
+// per (client, registered parent domain) it measures volume, distinct subdomains, inter-query
+// interval mean / stdev, coefficient of variation (CV = stdev / mean) and active time span.
+let lookback      = 14d;    // Lab dataset: set to 3650d
+let minIntervals  = 10;     // fewer intervals than this and the timing statistics are not meaningful
+let maxRegularCV  = 0.35;   // uniform jitter of +/-50% gives CV ~0.29; human browsing is ~1.0
+let longLabel     = 30;     // same threshold as the Sigma rule
+let internalZones = dynamic(["lab.example"]);   // your AD / internal zones
+let dns = materialize(
+    DnsEvents
+    | where TimeGenerated > ago(lookback)
+    | where SubType == "LookupQuery"
+    | extend Name = tolower(trim_end(@"\.", Name))
+    | where not(Name endswith ".in-addr.arpa" or Name endswith ".ip6.arpa")
+    // Registered parent = last two labels. Extend to three for public suffixes such as co.uk / com.au.
+    | extend ParentDomain = extract(@"([^.]+\.[^.]+)$", 1, Name),
+             FirstLabel   = extract(@"^([^.]+)\.", 1, Name)
+    | where isnotempty(ParentDomain) and not(ParentDomain in~ (internalZones))
+    | extend LabelLen = strlen(FirstLabel),
+             IsLongLabel = FirstLabel matches regex @"^[a-zA-Z0-9]{30,}$"
+);
+let fleet = dns | summarize ClientsForDomain = dcount(ClientIP) by ParentDomain;
+dns
+| order by ClientIP asc, ParentDomain asc, TimeGenerated asc
+| extend DeltaSec = iff(prev(ClientIP) == ClientIP and prev(ParentDomain) == ParentDomain,
+                        datetime_diff("second", TimeGenerated, prev(TimeGenerated)), long(null))
+| summarize
+    Queries          = count(),
+    DistinctNames    = dcount(Name),
+    Intervals        = countif(isnotnull(DeltaSec)),
+    MeanIntervalSec  = avg(DeltaSec),          // nulls are ignored
+    StdevIntervalSec = stdev(DeltaSec),
+    LongLabelQueries = countif(IsLongLabel),
+    MaxLabelLen      = max(LabelLen),
+    TxtQueries       = countif(QueryType == "TXT"),
+    QueryTypes       = make_set(QueryType, 10),
+    FirstSeen        = min(TimeGenerated),
+    LastSeen         = max(TimeGenerated),
+    SampleNames      = make_set(Name, 5)
+    by ClientIP, ParentDomain
+| extend CV = iff(Intervals >= minIntervals and MeanIntervalSec > 0,
+                  round(StdevIntervalSec / MeanIntervalSec, 3), real(null)),
+         DistinctRatio = round(todouble(DistinctNames) / Queries, 2),
+         LongLabelPct  = round(100.0 * LongLabelQueries / Queries, 0),
+         ActiveHours   = round(datetime_diff("minute", LastSeen, FirstSeen) / 60.0, 1),
+         MeanIntervalSec = round(MeanIntervalSec, 0)
+| extend IsRegular = isnotnull(CV) and CV <= maxRegularCV
+// Keep enough volume to measure timing, or anything with encoded-looking labels (AV reputation look-ups land here)
+| where Queries >= minIntervals or LongLabelQueries > 0
+| join kind=leftouter fleet on ParentDomain
+| project-away ParentDomain1
+// Beacon-like first: regular timing, then lowest CV, then most unique subdomains per query.
+// ClientsForDomain separates one-host implants from fleet-wide software (AV, CDN, updaters).
+| order by IsRegular desc, CV asc nulls last, DistinctRatio desc, ClientsForDomain asc
+// ---------------------------------------------------------------------------------------------
+// Defender XDR variant (endpoint DNS with the initiating process). Replace the DnsEvents block in
+// `dns` with the lines below, use DeviceName instead of ClientIP and add InitiatingProcessFileName
+// to the summarize keys. Defender samples/deduplicates DNS events, so prefer Sysmon 22 or server logs
+// for timing statistics when you have them.
+// DeviceEvents
+// | where Timestamp > ago(lookback) and ActionType == "DnsQueryResponse"
+// | extend Name = tolower(tostring(parse_json(AdditionalFields).DnsQueryString)),
+//          QueryType = "", TimeGenerated = Timestamp, ClientIP = DeviceName
+// | ...

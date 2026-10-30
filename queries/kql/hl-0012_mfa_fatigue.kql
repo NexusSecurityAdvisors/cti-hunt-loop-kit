@@ -1,0 +1,52 @@
+// HL-0012 — MFA fatigue / push bombing: burst of denied MFA prompts followed by a success (ATT&CK T1621, T1078.004)
+// Platform: Microsoft Sentinel (SigninLogs from Entra ID diagnostic settings)
+// Playbook: playbooks/HL-0012-T1621-mfa-fatigue.md
+// ResultType is a STRING in Sentinel: 500121 = MFA step failed (declined, timed out, or reported); 0 = success.
+// Note: in Defender XDR Advanced Hunting use AADSignInEventsBeta (ErrorCode is an int there) or the Sentinel connector.
+let lookback = 14d;        // Lab dataset: set to 3650d
+let followWindow = 1h;     // how long after the last denial a success still counts as "the approval"
+let burstThreshold = 5;    // same threshold as the Sigma correlation rule (event_count >= 5 per user per hour)
+let corporateRanges = dynamic(["198.51.100.10/32"]);   // replace with your egress NAT / VPN ranges
+let signins = SigninLogs
+    | where TimeGenerated > ago(lookback)
+    | where ResultType in ("500121", "0")
+    | extend User = tolower(UserPrincipalName),
+             StepDetail = tostring(todynamic(AuthenticationDetails)[0].authenticationStepResultDetail);
+// Step 1 - mirrors the Sigma base rule, grouped like the correlation rule: denials per user per 1h bin
+let denialBins = signins
+    | where ResultType == "500121"
+    | summarize Denials      = count(),
+                FirstDenial  = min(TimeGenerated),
+                LastDenial   = max(TimeGenerated),
+                DenialIps    = make_set(IPAddress, 10),
+                DenialCountries = make_set(Location, 10),
+                DenialApps   = make_set(AppDisplayName, 10),
+                DenialDetail = make_set(StepDetail, 5)
+        by User, HourBin = bin(TimeGenerated, 1h);
+let successes = signins
+    | where ResultType == "0"
+    | project User, SuccessTime = TimeGenerated, SuccessIp = IPAddress, SuccessCountry = Location, SuccessApp = AppDisplayName;
+// Baseline: on how many days did the user sign in successfully from each country? (1 = first time seen)
+let countryDays = successes
+    | summarize CountryDays = dcount(bin(SuccessTime, 1d)) by User, SuccessCountry;
+// Step 2 - first success for the same user within followWindow after the bin's last denial
+let followedBy = denialBins
+    | join kind=inner successes on User
+    | where SuccessTime between (LastDenial .. (LastDenial + followWindow))
+    | summarize arg_min(SuccessTime, SuccessIp, SuccessCountry, SuccessApp) by User, HourBin;
+denialBins
+| join kind=leftouter followedBy on User, HourBin
+| join kind=leftouter countryDays on User, SuccessCountry
+| extend FollowedBySuccess = isnotnull(SuccessTime),
+         Burst             = Denials >= burstThreshold,
+         SameIp            = isnotnull(SuccessTime) and set_has_element(DenialIps, SuccessIp),
+         NewCountry        = isnotnull(SuccessTime) and CountryDays <= 1,
+         NonCorporateIp    = isnotnull(SuccessTime) and not(ipv4_is_in_any_range(SuccessIp, corporateRanges)),
+         SpanMinutes       = datetime_diff("minute", LastDenial, FirstDenial),
+         MinutesToSuccess  = datetime_diff("minute", SuccessTime, LastDenial)
+| extend RiskScore = toint(Burst) + toint(FollowedBySuccess) + toint(SameIp) + toint(NewCountry) + toint(NonCorporateIp)
+| project User, HourBin, Denials, FirstDenial, LastDenial, SpanMinutes, DenialIps, DenialCountries, DenialApps, DenialDetail,
+          FollowedBySuccess, SuccessTime, MinutesToSuccess, SuccessIp, SuccessCountry, SuccessApp,
+          Burst, SameIp, NewCountry, NonCorporateIp, RiskScore
+// Burst + approval from the attacker's IP first; single accidental denials sink to the bottom
+| order by RiskScore desc, Denials desc

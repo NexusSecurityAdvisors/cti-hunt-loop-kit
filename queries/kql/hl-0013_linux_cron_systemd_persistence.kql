@@ -1,0 +1,50 @@
+// HL-0013 — Linux Cron and Systemd Persistence (ATT&CK T1053.003, T1543.002)
+// Platform: Microsoft Defender XDR Advanced Hunting / Microsoft Sentinel (DeviceProcessEvents, Defender for Endpoint on Linux)
+// Playbook: playbooks/HL-0013-T1053.003-T1543.002-linux-cron-systemd-persistence.md
+// Note: in Sentinel, replace Timestamp with TimeGenerated.
+// Scope: Linux devices. FolderPath starting with "/" is a cheap filter; in production join DeviceInfo (OSPlatform == "Linux").
+// Lab dataset: ingest data/lab/mde/DeviceProcessEvents_Linux.csv into DeviceProcessEvents.
+let lookback = 14d; // Lab dataset: set to 3650d
+// Mirrors the Sigma rule: a command line that touches a cron or systemd location ...
+let persistenceTarget = @"(?i)(/etc/cron\.d/|/etc/crontab|/var/spool/cron|/etc/cron\.(hourly|daily)/|/etc/systemd/system/|/lib/systemd/system/|/\.config/systemd/user/)";
+// ... AND carries a payload that downloads, decodes, opens a socket or runs from a staging path
+let suspiciousPayload = @"(?i)(curl\s|wget\s|base64\s+(-d|--decode)|/dev/tcp/|/dev/shm/|/tmp/|/var/tmp/|nc\s+-e|python3?\s+-c|\|\s?(ba)?sh)";
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where FolderPath startswith "/"
+| where ProcessCommandLine matches regex persistenceTarget or FileName == "crontab"
+| where ProcessCommandLine matches regex suspiciousPayload
+// The file being written: cron.d / systemd unit name, /etc/crontab or a user spool
+| extend PersistenceFile = extract(@"(?i)((/etc/cron\.d/|/etc/cron\.(hourly|daily)/|/etc/systemd/system/|/lib/systemd/system/|/\.config/systemd/user/)[\w.@-]+|/etc/crontab|/var/spool/cron[\w/.-]*)", 1, ProcessCommandLine),
+         Mechanism = iff(ProcessCommandLine has "systemd", "systemd", "cron"),
+         FetchUrl  = extract(@"(?i)(https?://[^\s'""|]+)", 1, ProcessCommandLine),
+         ExecStart = extract(@"ExecStart=([^\s\\'""]+)", 1, ProcessCommandLine),
+         PipeToShell  = ProcessCommandLine matches regex @"\|\s?(ba)?sh",
+         VolatilePath = ProcessCommandLine matches regex @"/dev/shm/|/var/tmp/|/tmp/\."
+// Raw-IP fetch URLs and executables in /dev/shm are the strongest signals; internal FQDNs usually are not
+| extend FetchHost = extract(@"https?://([^/:\s]+)", 1, FetchUrl)
+| extend FetchIsRawIp = FetchHost matches regex @"^\d{1,3}(\.\d{1,3}){3}$"
+| summarize
+    Hits      = count(),
+    Hosts     = dcount(DeviceName),
+    FirstSeen = min(Timestamp),
+    LastSeen  = max(Timestamp),
+    DeviceList = make_set(DeviceName, 25),
+    FetchUrls  = make_set(FetchUrl, 10),
+    ExecStarts = make_set(ExecStart, 10),
+    PipeToShell  = max(toint(PipeToShell)),
+    VolatilePath = max(toint(VolatilePath)),
+    FetchIsRawIp = max(toint(FetchIsRawIp)),
+    SampleCommandLine = any(ProcessCommandLine)
+    by PersistenceFile, Mechanism, InitiatingProcessFileName, AccountName
+// Rare first: one host, one write. Fleet-wide config management sorts to the bottom.
+| order by Hosts asc, Hits asc, FetchIsRawIp desc, VolatilePath desc
+// ---------------------------------------------------------------------------------------------
+// Pivot (run separately) - what else happened on a flagged host around the write:
+// DeviceProcessEvents
+// | where DeviceName == "<host>" and Timestamp between (datetime(<first>) - 30m .. datetime(<first>) + 2h)
+// | where FolderPath startswith "/"
+// | where ProcessCommandLine has_any ("systemctl", "crontab", "wget", "curl", "chmod", "/dev/shm")
+//     or InitiatingProcessFileName in ("sshd", "systemd") or FolderPath startswith "/dev/shm/"
+// | project Timestamp, AccountName, InitiatingProcessFileName, FolderPath, ProcessCommandLine
+// | order by Timestamp asc

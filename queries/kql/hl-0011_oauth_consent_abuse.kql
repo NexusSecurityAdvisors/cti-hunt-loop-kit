@@ -1,0 +1,56 @@
+// HL-0011 — OAuth illicit consent grant: high-risk delegated scopes (ATT&CK T1528, T1550.001)
+// Platform: Microsoft Sentinel (AuditLogs from Entra ID diagnostic settings; SigninLogs for the IP pivot)
+// Playbook: playbooks/HL-0011-T1528-oauth-consent-abuse.md
+// Requires Entra ID AuditLogs and SigninLogs streamed to the workspace (diagnostic settings).
+// Note: Defender XDR Advanced Hunting has no AuditLogs table; use Sentinel, or CloudAppEvents / OAuth app governance.
+// Publisher verification is NOT in the consent event: check the service principal (Entra admin center or Graph) in triage.
+let lookback = 14d;   // Lab dataset: set to 3650d
+// Mirrors the Sigma selection_scopes list (substring match, like Sigma |contains)
+let highRiskScopes = @"(?i)(Mail\.Read|Mail\.Send|MailboxSettings\.ReadWrite|Files\.Read\.All|Files\.ReadWrite\.All|Sites\.Read\.All|Sites\.ReadWrite\.All|Contacts\.Read|Directory\.ReadWrite\.All|User\.ReadWrite\.All|Application\.ReadWrite\.All|full_access_as_app|EWS\.AccessAsUser\.All)";
+let corporateRanges = dynamic(["198.51.100.10/32"]);   // replace with your egress NAT / VPN ranges
+// App age: when did the service principal first appear in the tenant? (consent minutes after creation = fresh app)
+let spAdded = AuditLogs
+    | where TimeGenerated > ago(lookback)
+    | where OperationName == "Add service principal" and Result =~ "success"
+    | extend AppId = tostring(todynamic(TargetResources)[0].id)
+    | summarize SpAddedTime = min(TimeGenerated) by AppId;
+// Pivot to SigninLogs: on how many days has this user signed in successfully from the consenting IP?
+let ipHistory = SigninLogs
+    | where TimeGenerated > ago(lookback)
+    | where ResultType == "0"                                // string in Sentinel
+    | summarize IpDaysSeen = dcount(bin(TimeGenerated, 1d)), IpCountries = make_set(Location, 10)
+        by ConsentingUser = tolower(UserPrincipalName), ConsentIp = IPAddress;
+let consents = AuditLogs
+    | where TimeGenerated > ago(lookback)
+    | where OperationName == "Consent to application" and Result =~ "success"
+    | extend Initiator = todynamic(InitiatedBy), Target = todynamic(TargetResources)[0]
+    | extend ConsentingUser = tolower(tostring(Initiator.user.userPrincipalName)),
+             ConsentIp      = tostring(Initiator.user.ipAddress),
+             AppName        = tostring(Target.displayName),
+             AppId          = tostring(Target.id)
+    | mv-apply Prop = Target.modifiedProperties on (
+        summarize Permissions = take_anyif(tostring(Prop.newValue), tostring(Prop.displayName) == "ConsentAction.Permissions"),
+                  AdminFlag   = take_anyif(tostring(Prop.newValue), tostring(Prop.displayName) == "ConsentContext.IsAdminConsent"))
+    | extend Scopes = trim(@"\s+", extract(@"Scope:\s*([^,\]]*)", 1, Permissions)),
+             IsAdminConsent = AdminFlag has "true" or Permissions has "AllPrincipals";
+// Prevalence: how many distinct users consented to the same app (any scope) in the window
+let appPrevalence = consents | summarize AppConsentingUsers = dcount(ConsentingUser) by AppId;
+consents
+| where Scopes matches regex highRiskScopes                   // Sigma: selection and selection_scopes
+| extend RiskyScopes = extract_all(highRiskScopes, Scopes),
+         HasOfflineAccess = Scopes has "offline_access"         // refresh token: access survives password reset
+| join kind=leftouter spAdded on AppId
+| join kind=leftouter ipHistory on ConsentingUser, ConsentIp
+| join kind=leftouter appPrevalence on AppId
+| extend IpDaysSeen = coalesce(IpDaysSeen, long(0)),
+         MinutesSinceSpAdded = iff(isnotnull(SpAddedTime), datetime_diff("minute", TimeGenerated, SpAddedTime), long(null)),
+         NonCorporateIp = not(ipv4_is_in_any_range(ConsentIp, corporateRanges))
+| extend FreshApp = isnotnull(MinutesSinceSpAdded) and MinutesSinceSpAdded <= 1440,
+         RareIpForUser = IpDaysSeen <= 1
+| extend RiskScore = toint(not(IsAdminConsent)) + toint(FreshApp) + toint(RareIpForUser)
+                   + toint(NonCorporateIp) + toint(HasOfflineAccess)
+| project TimeGenerated, ConsentingUser, ConsentIp, NonCorporateIp, IpDaysSeen, IpCountries,
+          AppName, AppId, IsAdminConsent, Scopes, RiskyScopes, HasOfflineAccess,
+          SpAddedTime, MinutesSinceSpAdded, FreshApp, AppConsentingUsers, RiskScore
+// Highest risk first; within equal risk, the rarest app (fewest consenting users) first
+| order by RiskScore desc, AppConsentingUsers asc
