@@ -1,0 +1,5 @@
+hunt_id,playbook,pir_id,attack_techniques,intel_source,intel_received_utc,hunt_started_utc,hunt_completed_utc,platform,hunter,outcome,malicious_clusters,benign_clusters,hosts_affected,data_gaps_found,data_gaps_closed,detection_created,detection_ref,intel_updates,hours_spent,notes
+LAB-01,HL-0001,PIR-01,T1059.001;T1027;T1105,ISAC flash QUIET LEDGER,2026-10-09T13:00Z,2026-10-09T14:00Z,2026-10-09T14:45Z,KQL,example-team,confirmed,2,1,1,0,0,yes,DET-0001,1,0.75,Workshop lab example row - replace with your own hunts
+LAB-02,HL-0006,PIR-02,T1558.003,ISAC flash QUIET LEDGER,2026-10-09T13:00Z,2026-10-09T15:00Z,2026-10-09T15:30Z,KQL,example-team,confirmed,1,1,1,0,0,yes,DET-0002,1,0.5,Legacy RC4 app logged as AES remediation ticket
+LAB-03,HL-0003,PIR-01,T1053.005,ISAC flash QUIET LEDGER,2026-10-09T13:00Z,2026-10-09T14:45Z,2026-10-09T15:00Z,KQL,example-team,confirmed,1,1,1,1,0,no,,0,0.25,No 4698 events in lab - data gap recorded
+LAB-04,HL-0007,PIR-03,T1490,ISAC flash QUIET LEDGER,2026-10-09T13:00Z,2026-10-09T16:00Z,2026-10-09T16:20Z,SPL,example-team,confirmed,1,1,2,0,0,yes,DET-0003,1,0.33,Encryptor found by pivot from kill.bat
