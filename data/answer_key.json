@@ -1,0 +1,721 @@
+{
+  "_readme": "Ground truth for the lab dataset. Facilitators only - do not share with attendees before the debrief.",
+  "scenario": "Operation Quiet Ledger (fictional)",
+  "patient_zero": {
+    "host": "WS-FIN-07.lab.example",
+    "user": "jmiller",
+    "first_malicious": "2026-10-07T09:14Z"
+  },
+  "attacker_infrastructure": {
+    "c2": [
+      "203.0.113.45",
+      "203.0.113.80"
+    ],
+    "exfil": [
+      "198.51.100.23",
+      "198.51.100.24",
+      "198.51.100.61",
+      "*.mega.co.nz"
+    ]
+  },
+  "hunts": {
+    "HL-0001": {
+      "malicious": [
+        {
+          "id": "P-01054",
+          "note": "Encoded download cradle spawned by WINWORD (macro)"
+        },
+        {
+          "id": "P-01056",
+          "note": "Plain-text download cradle from regsvr32 parent"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "P-00041",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00042",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00043",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00045",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00046",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00047",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00048",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00049",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00050",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00051",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00052",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00053",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00054",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00055",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00058",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00059",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00060",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00061",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00492",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00493",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00494",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00497",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00498",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00500",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00503",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00504",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00505",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00506",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00507",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00508",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00509",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00510",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00511",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00512",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00513",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00514",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00962",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00963",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00964",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00965",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00966",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00967",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00968",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00969",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00970",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00971",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00972",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00973",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00976",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00977",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00978",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00979",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00980",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-00981",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01480",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01482",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01483",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01484",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01485",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01486",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01487",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01488",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01489",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01490",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01492",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01493",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01494",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01495",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01496",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01497",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01498",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01500",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01971",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01972",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01973",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01974",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01975",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01977",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01978",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01979",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01980",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01981",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01982",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01984",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01985",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01986",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01987",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01989",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01991",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        },
+        {
+          "id": "P-01992",
+          "note": "SCCM inventory script (CcmExec parent, fleet-wide, SYSTEM)"
+        }
+      ]
+    },
+    "HL-0002": {
+      "malicious": [
+        {
+          "id": "P-01117",
+          "note": "comsvcs.dll MiniDump of LSASS (PID 712)"
+        },
+        {
+          "id": "P-01425",
+          "note": "Renamed ProcDump dumping LSASS on file server"
+        }
+      ],
+      "benign_match": []
+    },
+    "HL-0003": {
+      "malicious": [
+        {
+          "id": "P-01058",
+          "note": "Task masquerading under \\Microsoft\\Windows\\ running ProgramData binary as SYSTEM"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "P-00865",
+          "note": "Dell SupportAssist updater task (signed vendor installer parent)"
+        },
+        {
+          "id": "P-00908",
+          "note": "Dell SupportAssist updater task (signed vendor installer parent)"
+        },
+        {
+          "id": "P-01474",
+          "note": "Dell SupportAssist updater task (signed vendor installer parent)"
+        },
+        {
+          "id": "P-01776",
+          "note": "Dell SupportAssist updater task (signed vendor installer parent)"
+        }
+      ]
+    },
+    "HL-0004": {
+      "malicious": [
+        {
+          "id": "R-00025",
+          "note": "Masquerading OneDrive Run value pointing to AppData\\Roaming dropper"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "R-00009",
+          "note": "Spotify per-user install in AppData\\Roaming (signed, user-installed app)"
+        },
+        {
+          "id": "R-00012",
+          "note": "Spotify per-user install in AppData\\Roaming (signed, user-installed app)"
+        },
+        {
+          "id": "R-00017",
+          "note": "Spotify per-user install in AppData\\Roaming (signed, user-installed app)"
+        }
+      ]
+    },
+    "HL-0005": {
+      "malicious": [
+        {
+          "id": "P-01420",
+          "note": "wmiexec-style cmd with ADMIN$ output redirection"
+        },
+        {
+          "id": "P-01421",
+          "note": "wmiexec-style cmd with ADMIN$ output redirection"
+        },
+        {
+          "id": "P-01423",
+          "note": "wmiexec-style cmd with ADMIN$ output redirection"
+        },
+        {
+          "id": "P-01424",
+          "note": "wmiexec-style cmd with ADMIN$ output redirection"
+        },
+        {
+          "id": "P-01431",
+          "note": "PsExec service launching batch file from staging dir"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "P-00756",
+          "note": "Admin PsExec from JMP-ADM-01 (approved jump host, admin account)"
+        },
+        {
+          "id": "P-01741",
+          "note": "Admin PsExec from JMP-ADM-01 (approved jump host, admin account)"
+        }
+      ]
+    },
+    "HL-0006": {
+      "malicious": [
+        {
+          "id": "S-00761",
+          "note": "Burst of RC4 TGS requests for 4 SPNs from a finance workstation user"
+        },
+        {
+          "id": "S-00762",
+          "note": "Burst of RC4 TGS requests for 4 SPNs from a finance workstation user"
+        },
+        {
+          "id": "S-00763",
+          "note": "Burst of RC4 TGS requests for 4 SPNs from a finance workstation user"
+        },
+        {
+          "id": "S-00765",
+          "note": "Burst of RC4 TGS requests for 4 SPNs from a finance workstation user"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "S-00043",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-00150",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-00249",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-00365",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-00454",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-00548",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-00704",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-00795",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-00892",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-01044",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-01147",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-01235",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-01399",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-01501",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        },
+        {
+          "id": "S-01604",
+          "note": "SRV-APP-LEGACY RC4-only app: one SPN, steady schedule, server source"
+        }
+      ]
+    },
+    "HL-0007": {
+      "malicious": [
+        {
+          "id": "P-01444",
+          "note": "Pre-encryption recovery inhibition from kill.bat"
+        },
+        {
+          "id": "P-01445",
+          "note": "Pre-encryption recovery inhibition from kill.bat"
+        },
+        {
+          "id": "P-01446",
+          "note": "Pre-encryption recovery inhibition from kill.bat"
+        },
+        {
+          "id": "P-01447",
+          "note": "Pre-encryption recovery inhibition from kill.bat"
+        },
+        {
+          "id": "P-01448",
+          "note": "Pre-encryption recovery inhibition from kill.bat"
+        },
+        {
+          "id": "P-01449",
+          "note": "Pre-encryption recovery inhibition from kill.bat"
+        },
+        {
+          "id": "P-01450",
+          "note": "Pre-encryption recovery inhibition from kill.bat"
+        },
+        {
+          "id": "P-01451",
+          "note": "Pre-encryption recovery inhibition from kill.bat"
+        },
+        {
+          "id": "P-01452",
+          "note": "Pre-encryption recovery inhibition from kill.bat"
+        },
+        {
+          "id": "P-01453",
+          "note": "Pre-encryption recovery inhibition from kill.bat"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "P-00011",
+          "note": "Veeam pruning oldest shadow on E: (backup service parent, nightly)"
+        },
+        {
+          "id": "P-00468",
+          "note": "Veeam pruning oldest shadow on E: (backup service parent, nightly)"
+        },
+        {
+          "id": "P-00936",
+          "note": "Veeam pruning oldest shadow on E: (backup service parent, nightly)"
+        },
+        {
+          "id": "P-01440",
+          "note": "Veeam pruning oldest shadow on E: (backup service parent, nightly)"
+        },
+        {
+          "id": "P-01938",
+          "note": "Veeam pruning oldest shadow on E: (backup service parent, nightly)"
+        }
+      ]
+    },
+    "HL-0008": {
+      "malicious": [
+        {
+          "id": "P-01043",
+          "note": "Remote HTA from phishing link (blocked by proxy, no follow-on)"
+        },
+        {
+          "id": "P-01055",
+          "note": "Squiblydoo: regsvr32 loading remote scriptlet"
+        }
+      ],
+      "benign_match": []
+    },
+    "HL-0009": {
+      "malicious": [
+        {
+          "id": "S-00972",
+          "note": "Service account RDP from a finance workstation"
+        },
+        {
+          "id": "S-00974",
+          "note": "Service account RDP from a finance workstation"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "S-00108",
+          "note": "Help desk RDP to workstations from HD-SUPPORT-01 (support subnet, ticketed)"
+        },
+        {
+          "id": "S-00455",
+          "note": "Help desk RDP to workstations from HD-SUPPORT-01 (support subnet, ticketed)"
+        },
+        {
+          "id": "S-00465",
+          "note": "Help desk RDP to workstations from HD-SUPPORT-01 (support subnet, ticketed)"
+        },
+        {
+          "id": "S-00844",
+          "note": "Help desk RDP to workstations from HD-SUPPORT-01 (support subnet, ticketed)"
+        },
+        {
+          "id": "S-01038",
+          "note": "Help desk RDP to workstations from HD-SUPPORT-01 (support subnet, ticketed)"
+        },
+        {
+          "id": "S-01420",
+          "note": "Help desk RDP to workstations from HD-SUPPORT-01 (support subnet, ticketed)"
+        }
+      ]
+    },
+    "HL-0010": {
+      "malicious": [
+        {
+          "id": "P-01436",
+          "note": "Renamed rclone copying Finance share to MEGA remote"
+        }
+      ],
+      "benign_match": [
+        {
+          "id": "P-00020",
+          "note": "Nightly IT sync to sanctioned corporate S3 remote (s3corp:)"
+        },
+        {
+          "id": "P-00473",
+          "note": "Nightly IT sync to sanctioned corporate S3 remote (s3corp:)"
+        },
+        {
+          "id": "P-00941",
+          "note": "Nightly IT sync to sanctioned corporate S3 remote (s3corp:)"
+        },
+        {
+          "id": "P-01455",
+          "note": "Nightly IT sync to sanctioned corporate S3 remote (s3corp:)"
+        },
+        {
+          "id": "P-01940",
+          "note": "Nightly IT sync to sanctioned corporate S3 remote (s3corp:)"
+        }
+      ]
+    }
+  }
+}
