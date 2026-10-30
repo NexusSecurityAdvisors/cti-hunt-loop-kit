@@ -28,3 +28,22 @@ jobs:
 
       - name: Test-convert Sigma rules to Splunk SPL
         run: sigma convert -t splunk --without-pipeline queries/sigma
+
+  lab:
+    name: Sigma rules vs. lab dataset
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Sigma SQLite backend
+        run: pip install "sigma-cli==4.0.0" "pysigma-backend-sqlite==2.1.1"
+
+      - name: Run every Sigma rule against the lab answer key
+        run: python tests/test_lab_detections.py
+
+      - name: Metrics script smoke test
+        run: python metrics/hunt_metrics.py
