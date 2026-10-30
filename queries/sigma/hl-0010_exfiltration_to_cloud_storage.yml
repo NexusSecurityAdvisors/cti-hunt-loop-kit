@@ -1,0 +1,49 @@
+title: HL-0010 Rclone or MEGA Client Used for Bulk Transfer
+id: ec9a54c0-4c93-4cb9-ae98-b3c65fd70db3
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0010). Detects rclone (including renamed copies,
+    via OriginalFileName and rclone-specific flags) and MEGA command-line clients performing copy/sync
+    operations, the most common double-extortion exfiltration tooling.
+references:
+    - https://attack.mitre.org/techniques/T1567/002/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0010-T1567.002-exfiltration-to-cloud-storage.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.exfiltration
+    - attack.t1567.002
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_rclone_img:
+        - Image|endswith: '\rclone.exe'
+        - OriginalFileName: 'rclone.exe'
+        - Description: 'Rsync for cloud storage'
+    selection_rclone_flags:
+        CommandLine|contains:
+            - ' copy '
+            - ' sync '
+            - ' move '
+        CommandLine|contains|all:
+            - '--config'
+    selection_rclone_tuning:
+        CommandLine|contains:
+            - '--transfers'
+            - '--multi-thread-streams'
+            - '--no-check-certificate'
+            - '--max-age'
+            - '--ignore-existing'
+            - 'mega:'
+    selection_mega:
+        Image|endswith:
+            - '\MEGAcmdShell.exe'
+            - '\MEGAclient.exe'
+            - '\mega-put.exe'
+            - '\mega-sync.exe'
+    condition: selection_rclone_img or (selection_rclone_flags and selection_rclone_tuning) or selection_mega
+falsepositives:
+    - IT-approved rclone jobs syncing to sanctioned corporate storage (verify remote name and config path)
+    - Users of the MEGA desktop client where it is permitted
+level: medium

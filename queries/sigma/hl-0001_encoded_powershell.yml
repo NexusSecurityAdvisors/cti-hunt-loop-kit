@@ -7,13 +7,13 @@ description: |
     tune exclusions for management agents and admin scripts before promoting to a detection.
 references:
     - https://attack.mitre.org/techniques/T1059/001/
-    - https://github.com/DanPazlev/cti-hunt-loop-kit/blob/main/playbooks/HL-0001-T1059.001-encoded-powershell.md
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0001-T1059.001-encoded-powershell.md
 author: Dan Sorensen
 date: 2026-10-28
 tags:
     - attack.execution
     - attack.t1059.001
-    - attack.defense-evasion
+    - attack.stealth
     - attack.t1027
     - attack.command-and-control
     - attack.t1105

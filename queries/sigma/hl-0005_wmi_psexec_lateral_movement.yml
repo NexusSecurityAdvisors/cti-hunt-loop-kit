@@ -1,0 +1,49 @@
+title: HL-0005 Remote Execution via WMI or PsExec-Style Service
+id: d9db2f95-3691-4ccb-8b02-9b1fadcc0e85
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0005). Detects command interpreters or script hosts
+    spawned by the WMI provider host (wmiexec-style remote execution) or by a PsExec-style service binary,
+    the typical child-process signature of lateral movement with harvested credentials.
+references:
+    - https://attack.mitre.org/techniques/T1047/
+    - https://attack.mitre.org/techniques/T1021/002/
+    - https://attack.mitre.org/techniques/T1569/002/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0005-T1047-T1021.002-wmi-psexec-lateral-movement.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.execution
+    - attack.t1047
+    - attack.lateral-movement
+    - attack.t1021.002
+    - attack.t1569.002
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_wmi_parent:
+        ParentImage|endswith: '\WmiPrvSE.exe'
+    selection_wmi_child:
+        Image|endswith:
+            - '\cmd.exe'
+            - '\powershell.exe'
+            - '\pwsh.exe'
+            - '\mshta.exe'
+            - '\rundll32.exe'
+            - '\regsvr32.exe'
+            - '\wscript.exe'
+            - '\cscript.exe'
+    selection_psexec:
+        ParentImage|endswith:
+            - '\PSEXESVC.exe'
+            - '\PAExec.exe'
+            - '\csexecsvc.exe'
+            - '\RemComSvc.exe'
+    filter_sccm:
+        CommandLine|contains: '\CCM\SystemTemp\'
+    condition: ((selection_wmi_parent and selection_wmi_child) or selection_psexec) and not filter_sccm
+falsepositives:
+    - Configuration management (SCCM / MECM compliance scripts) running through WMI
+    - Administrators using PsExec from approved jump hosts
+level: medium

@@ -1,0 +1,51 @@
+title: HL-0003 Suspicious Scheduled Task Creation
+id: d35e52d7-fb2a-4327-8c4c-1c22ffed089c
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0003). Detects schtasks.exe creating a task
+    whose action runs from a user-writable or staging location, invokes a script host or LOLBin,
+    or masquerades under the \Microsoft\Windows\ task path.
+references:
+    - https://attack.mitre.org/techniques/T1053/005/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0003-T1053.005-scheduled-task-persistence.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.execution
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1053.005
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Image|endswith: '\schtasks.exe'
+        - OriginalFileName: 'schtasks.exe'
+    selection_create:
+        CommandLine|contains|windash: ' -create '
+    selection_suspicious_action:
+        CommandLine|contains:
+            - '\ProgramData\'
+            - '\AppData\'
+            - '\Users\Public\'
+            - '\Temp\'
+            - '\Windows\Tasks\'
+            - 'powershell'
+            - 'pwsh'
+            - 'mshta'
+            - 'rundll32'
+            - 'regsvr32'
+            - 'wscript'
+            - 'cscript'
+            - 'cmd.exe /c'
+            - 'cmd /c'
+            - 'http://'
+            - 'https://'
+    selection_masquerade:
+        CommandLine|contains: '\Microsoft\Windows\'
+    condition: selection_img and selection_create and (selection_suspicious_action or selection_masquerade)
+falsepositives:
+    - Vendor agents and updaters that install tasks running from ProgramData (for example OEM support tools)
+    - Administrative scripts deployed by software distribution
+level: medium

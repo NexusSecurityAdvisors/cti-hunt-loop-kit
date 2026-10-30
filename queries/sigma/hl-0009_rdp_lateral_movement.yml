@@ -1,0 +1,36 @@
+title: HL-0009 RDP Logon from Non-Jump-Host Source
+id: a356cf36-27a9-4117-84e4-22c3809f85a6
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0009). Returns successful RemoteInteractive (RDP)
+    logons (Event ID 4624, LogonType 10) whose source is not an approved jump host. Replace the IP list in
+    filter_jump_hosts with your privileged access workstations / bastions, then stack by source, account and
+    destination - rare pairs and service accounts using RDP are the leads.
+references:
+    - https://attack.mitre.org/techniques/T1021/001/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0009-T1021.001-rdp-lateral-movement.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.lateral-movement
+    - attack.t1021.001
+    - attack.stealth
+    - attack.t1078
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4624
+        LogonType: 10
+    filter_jump_hosts:
+        IpAddress:
+            - '10.10.5.10'   # replace with your jump hosts / PAWs
+            - '127.0.0.1'
+            - '::1'
+            - '-'
+    condition: selection and not filter_jump_hosts
+falsepositives:
+    - Help desk and remote support staff using RDP from support subnets
+    - Administrators connecting from unmanaged or unregistered admin workstations (fix the process, not the rule)
+level: low

@@ -1,0 +1,51 @@
+title: HL-0007 Shadow Copy, Backup Catalog or Boot Recovery Tampering
+id: 5c774371-495c-4149-b7c9-1e471acd3504
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0007). Detects the pre-encryption recovery-inhibition
+    commands used by almost every ransomware family: deleting or shrinking Volume Shadow Copies, deleting the
+    Windows Backup catalog, and disabling Windows Recovery via bcdedit.
+references:
+    - https://attack.mitre.org/techniques/T1490/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0007-T1490-inhibit-system-recovery.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.impact
+    - attack.t1490
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_vssadmin:
+        Image|endswith: '\vssadmin.exe'
+        CommandLine|contains:
+            - 'delete shadows'
+            - 'resize shadowstorage'
+    selection_wmic:
+        Image|endswith: '\WMIC.exe'
+        CommandLine|contains|all:
+            - 'shadowcopy'
+            - 'delete'
+    selection_ps_shadow:
+        CommandLine|contains: 'Win32_ShadowCopy'
+        CommandLine|contains|all:
+            - 'Delete'
+    selection_bcdedit:
+        Image|endswith: '\bcdedit.exe'
+        CommandLine|contains:
+            - 'recoveryenabled no'
+            - 'bootstatuspolicy ignoreallfailures'
+    selection_wbadmin:
+        Image|endswith: '\wbadmin.exe'
+        CommandLine|contains|all:
+            - 'delete'
+        CommandLine|contains:
+            - 'catalog'
+            - 'systemstatebackup'
+            - 'backup'
+    condition: 1 of selection_*
+falsepositives:
+    - Backup software pruning its own shadow copies (usually '/oldest' or a single volume, from the backup service parent)
+    - Administrators reclaiming disk space under change control
+level: high

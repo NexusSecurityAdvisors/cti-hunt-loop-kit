@@ -1,0 +1,57 @@
+title: HL-0008 Signed Binary Proxy Execution of Remote or Script Content
+id: 8aeb881b-c4f8-4a09-94c3-04e1044cd440
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0008). Detects mshta, regsvr32 and rundll32 being used
+    to fetch or run script content (Squiblydoo, remote HTA, javascript: and RunHTMLApplication tricks),
+    a common way for loaders to run payloads under a trusted Microsoft-signed binary.
+references:
+    - https://attack.mitre.org/techniques/T1218/005/
+    - https://attack.mitre.org/techniques/T1218/010/
+    - https://attack.mitre.org/techniques/T1218/011/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0008-T1218-lolbin-proxy-execution.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.stealth
+    - attack.t1218
+    - attack.t1218.005
+    - attack.t1218.010
+    - attack.t1218.011
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_mshta_img:
+        - Image|endswith: '\mshta.exe'
+        - OriginalFileName: 'MSHTA.EXE'
+    selection_mshta_cmd:
+        CommandLine|contains:
+            - 'http://'
+            - 'https://'
+            - 'javascript:'
+            - 'vbscript:'
+    selection_regsvr32_img:
+        - Image|endswith: '\regsvr32.exe'
+        - OriginalFileName: 'REGSVR32.EXE'
+    selection_regsvr32_cmd:
+        CommandLine|contains:
+            - '/i:http'
+            - '-i:http'
+            - '/i:ftp'
+            - 'scrobj'
+    selection_rundll32_img:
+        - Image|endswith: '\rundll32.exe'
+        - OriginalFileName: 'RUNDLL32.EXE'
+    selection_rundll32_cmd:
+        CommandLine|contains:
+            - 'javascript:'
+            - 'vbscript:'
+            - 'RunHTMLApplication'
+            - 'http://'
+            - 'https://'
+    condition: (selection_mshta_img and selection_mshta_cmd) or (selection_regsvr32_img and selection_regsvr32_cmd) or (selection_rundll32_img and selection_rundll32_cmd)
+falsepositives:
+    - Legacy line-of-business HTA applications launched from an intranet URL
+    - Software installers that register COM scriptlets (rare; verify the signer and source)
+level: high

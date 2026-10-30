@@ -1,0 +1,47 @@
+title: HL-0004 Registry Run Key Pointing to Suspicious Location
+id: 9ed78cda-38b4-4612-8e34-5d47bb9f2c11
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0004). Detects Run / RunOnce autostart values
+    written with data that points at user-writable staging paths or launches a script host or LOLBin.
+references:
+    - https://attack.mitre.org/techniques/T1547/001/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0004-T1547.001-registry-run-keys.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1547.001
+    - attack.defense-impairment
+    - attack.t1112
+logsource:
+    category: registry_set
+    product: windows
+detection:
+    selection_key:
+        TargetObject|contains:
+            - '\Software\Microsoft\Windows\CurrentVersion\Run\'
+            - '\Software\Microsoft\Windows\CurrentVersion\RunOnce\'
+            - '\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run\'
+            - '\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run\'
+    selection_details:
+        Details|contains:
+            - '\AppData\Roaming\'
+            - '\AppData\Local\Temp\'
+            - '\ProgramData\'
+            - '\Users\Public\'
+            - '\Windows\Temp\'
+            - 'powershell'
+            - 'mshta'
+            - 'rundll32'
+            - 'regsvr32'
+            - 'wscript'
+            - 'cscript'
+            - 'http://'
+            - 'https://'
+    condition: all of selection_*
+falsepositives:
+    - Consumer and collaboration apps that install per-user into AppData\Roaming (music, chat, sync clients)
+    - Vendor updaters that register RunOnce entries from ProgramData during install
+level: medium

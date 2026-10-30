@@ -1,0 +1,33 @@
+title: HL-0006 Kerberos Service Ticket Requested with RC4 Encryption
+id: 99d4995a-bcdb-45c6-829b-465e19d00b06
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0006). Detects successful Kerberos TGS requests
+    (Event ID 4769) that use RC4-HMAC (0x17) for a user-backed service account. In AES-capable domains
+    RC4 service tickets for user SPNs are a classic Kerberoasting indicator; stack by requesting account
+    and count distinct services.
+references:
+    - https://attack.mitre.org/techniques/T1558/003/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0006-T1558.003-kerberoasting.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.credential-access
+    - attack.t1558.003
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4769
+        TicketEncryptionType: '0x17'
+        Status: '0x0'
+    filter_machine_accounts:
+        ServiceName|endswith: '$'
+    filter_krbtgt:
+        ServiceName: 'krbtgt'
+    condition: selection and not 1 of filter_*
+falsepositives:
+    - Legacy applications or appliances that only support RC4
+    - Service accounts not yet configured with msDS-SupportedEncryptionTypes for AES
+level: medium
