@@ -1,0 +1,33 @@
+``` HL-0013 - Linux Cron and Systemd Persistence (ATT&CK T1053.003, T1543.002) ```
+``` Platform: Splunk. Sources: Sysmon for Linux EventCode 1, or process events from auditd / the Splunk Add-on for Unix and Linux ```
+``` auditd EXECVE records split arguments into a0..aN - make sure your TA reassembles them into one command-line field (process / cmdline) ```
+``` Playbook: playbooks/HL-0013-T1053.003-T1543.002-linux-cron-systemd-persistence.md ```
+``` Adjust index/sourcetype and field names to match your Linux TA / CIM mapping ```
+``` Lab dataset: upload data/lab/linux/process_creation.jsonl to index=linux with sourcetype _json, and use earliest=0 ```
+index=linux (EventCode=1 OR sourcetype="linux:audit" OR sourcetype="auditd") earliest=-14d
+| eval cmd=coalesce(CommandLine, process, cmdline),
+       proc=coalesce(Image, process_path, exe),
+       parent=coalesce(ParentImage, parent_process_path, parent_process),
+       acct=coalesce(User, user, auid),
+       dest=coalesce(Computer, ComputerName, host)
+``` Mirrors the Sigma rule: touches a cron or systemd location AND carries a download / decode / socket / staging payload ```
+| where (match(cmd, "(?i)(/etc/cron\.d/|/etc/crontab|/var/spool/cron|/etc/cron\.(hourly|daily)/|/etc/systemd/system/|/lib/systemd/system/|/\.config/systemd/user/)") OR match(proc, "/crontab$"))
+    AND match(cmd, "(?i)(curl\s|wget\s|base64\s+(-d|--decode)|/dev/tcp/|/dev/shm/|/tmp/|/var/tmp/|nc\s+-e|python3?\s+-c|\|\s?(ba)?sh)")
+| rex field=cmd "(?i)(?<persistence_file>(/etc/cron\.d/|/etc/cron\.(hourly|daily)/|/etc/systemd/system/|/lib/systemd/system/|/\.config/systemd/user/)[\w.@-]+|/etc/crontab|/var/spool/cron[\w/.-]*)"
+| rex field=cmd "(?i)(?<fetch_url>https?://[^\s'\"|]+)"
+| rex field=cmd "ExecStart=(?<exec_start>[^\s\\\\'\"]+)"
+| rex field=fetch_url "https?://(?<fetch_host>[^/:\s]+)"
+| eval mechanism=if(like(cmd, "%systemd%"), "systemd", "cron"),
+       parent_name=mvindex(split(parent, "/"), -1),
+       pipe_to_shell=if(match(cmd, "\|\s?(ba)?sh"), 1, 0),
+       volatile_path=if(match(cmd, "/dev/shm/|/var/tmp/|/tmp/\."), 1, 0),
+       fetch_is_raw_ip=if(isnotnull(fetch_host) AND match(fetch_host, "^\d{1,3}(\.\d{1,3}){3}$"), 1, 0)
+| stats count AS hits dc(dest) AS hosts min(_time) AS first_seen max(_time) AS last_seen
+        values(dest) AS host_list values(fetch_url) AS fetch_urls values(exec_start) AS exec_starts
+        max(pipe_to_shell) AS pipe_to_shell max(volatile_path) AS volatile_path max(fetch_is_raw_ip) AS fetch_is_raw_ip
+        values(cmd) AS sample_cmds
+        BY persistence_file mechanism parent_name acct
+| eval host_list=mvindex(host_list, 0, 24), sample_cmds=mvindex(sample_cmds, 0, 4)
+| convert ctime(first_seen) ctime(last_seen)
+``` Rare first: one host, one write; raw-IP fetches and /dev/shm payloads ahead of the rest ```
+| sort 0 hosts hits -fetch_is_raw_ip -volatile_path

@@ -1,0 +1,46 @@
+``` HL-0011 - OAuth illicit consent grant: high-risk delegated scopes (ATT&CK T1528, T1550.001) ```
+``` Platform: Splunk. Source: Entra ID audit logs (Splunk Add-on for Microsoft Cloud Services, sourcetype azure:aad:audit); sign-in logs for the IP pivot ```
+``` Playbook: playbooks/HL-0011-T1528-oauth-consent-abuse.md ```
+``` Field names are normalized across the kit's flattened lab fields and the add-on's Graph field names; adjust to your mapping ```
+``` Publisher verification is not in the consent event: check the service principal in the Entra admin center or Graph during triage ```
+``` Lab dataset: upload data/lab/entra/auditlogs.jsonl to index=azure and signinlogs.jsonl to index=azure with sourcetype _json; use sourcetype=_json and earliest=0 ```
+index=azure sourcetype="azure:aad:audit" earliest=-14d
+| eval op=coalesce(OperationName, activityDisplayName, 'properties.activityDisplayName'),
+       result=lower(coalesce(Result, result, 'properties.result')),
+       user=lower(coalesce(InitiatedBy, 'initiatedBy.user.userPrincipalName', 'properties.initiatedBy.user.userPrincipalName')),
+       src_ip=coalesce(InitiatedByIp, 'initiatedBy.user.ipAddress', 'properties.initiatedBy.user.ipAddress'),
+       app_name=coalesce(TargetAppName, mvindex('targetResources{}.displayName', 0), mvindex('properties.targetResources{}.displayName', 0)),
+       app_id=coalesce(TargetAppId, mvindex('targetResources{}.id', 0), mvindex('properties.targetResources{}.id', 0)),
+       mod_props=mvjoin(coalesce('targetResources{}.modifiedProperties{}.newValue', 'properties.targetResources{}.modifiedProperties{}.newValue'), " | ")
+| where result="success" AND (op="Consent to application" OR op="Add service principal")
+``` App age: first "Add service principal" for this app in the window ```
+| eventstats min(eval(if(op="Add service principal", _time, null()))) AS sp_added_time BY app_id
+| where op="Consent to application"
+| rex field=mod_props "Scope:\s*(?<scope_raw>[^,\]]*)"
+| eval scopes=trim(coalesce(ConsentPermissions, scope_raw)),
+       is_admin_consent=if(lower(tostring(IsAdminConsent))="true" OR match(mod_props, "(?i)AllPrincipals|IsAdminConsent.{0,10}true"), 1, 0)
+``` Prevalence: distinct users consenting to the same app (any scope) ```
+| eventstats dc(user) AS app_consenting_users BY app_id
+``` Mirrors the Sigma selection_scopes list (substring match) ```
+| where match(scopes, "(?i)(Mail\.Read|Mail\.Send|MailboxSettings\.ReadWrite|Files\.Read\.All|Files\.ReadWrite\.All|Sites\.Read\.All|Sites\.ReadWrite\.All|Contacts\.Read|Directory\.ReadWrite\.All|User\.ReadWrite\.All|Application\.ReadWrite\.All|full_access_as_app|EWS\.AccessAsUser\.All)")
+``` Pivot to sign-in logs: on how many days did this user sign in successfully from the consenting IP? ```
+| join type=left max=1 user src_ip
+    [ search index=azure sourcetype="azure:aad:signin" earliest=-14d
+      | eval user=lower(coalesce(UserPrincipalName, 'properties.userPrincipalName', userPrincipalName)),
+             src_ip=coalesce(IPAddress, 'properties.ipAddress', ipAddress),
+             rc=tostring(coalesce(ResultType, 'properties.status.errorCode', 'status.errorCode')),
+             day=strftime(_time, "%F")
+      | where rc="0"
+      | stats dc(day) AS ip_days_seen BY user src_ip ]
+| eval ip_days_seen=coalesce(ip_days_seen, 0),
+       non_corporate_ip=if(cidrmatch("198.51.100.10/32", src_ip), 0, 1),
+       minutes_since_sp_added=if(isnotnull(sp_added_time), round((_time-sp_added_time)/60, 0), null()),
+       fresh_app=if(isnotnull(minutes_since_sp_added) AND minutes_since_sp_added<=1440, 1, 0),
+       rare_ip_for_user=if(ip_days_seen<=1, 1, 0),
+       has_offline_access=if(match(scopes, "offline_access"), 1, 0)
+``` cidrmatch: replace 198.51.100.10/32 with your egress NAT / VPN ranges ```
+| eval risk_score=if(is_admin_consent=1, 0, 1) + fresh_app + rare_ip_for_user + non_corporate_ip + has_offline_access
+| table _time user src_ip non_corporate_ip ip_days_seen app_name app_id is_admin_consent scopes has_offline_access
+        minutes_since_sp_added fresh_app app_consenting_users risk_score
+``` Highest risk first; within equal risk, the rarest app (fewest consenting users) first ```
+| sort 0 -risk_score app_consenting_users

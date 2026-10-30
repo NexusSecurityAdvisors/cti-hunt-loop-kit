@@ -1,0 +1,55 @@
+``` HL-0012 - MFA fatigue / push bombing: burst of denied MFA prompts followed by a success (ATT&CK T1621, T1078.004) ```
+``` Platform: Splunk. Source: Entra ID sign-in logs (Splunk Add-on for Microsoft Cloud Services, sourcetype azure:aad:signin) ```
+``` Playbook: playbooks/HL-0012-T1621-mfa-fatigue.md ```
+``` Field names are normalized across the kit's flattened lab fields and the add-on's Graph field names; adjust to your mapping ```
+``` 500121 = MFA step failed (declined, timed out, or reported as fraud); 0 = success ```
+``` Lab dataset: upload data/lab/entra/signinlogs.jsonl to index=azure with sourcetype _json; use sourcetype=_json and earliest=0 ```
+index=azure sourcetype="azure:aad:signin" earliest=-14d
+| eval user=lower(coalesce(UserPrincipalName, 'properties.userPrincipalName', userPrincipalName)),
+       rc=tostring(coalesce(ResultType, 'properties.status.errorCode', 'status.errorCode')),
+       src_ip=coalesce(IPAddress, 'properties.ipAddress', ipAddress),
+       country=coalesce(Location, 'properties.location.countryOrRegion', 'location.countryOrRegion'),
+       app=coalesce(AppDisplayName, 'properties.appDisplayName', appDisplayName),
+       detail=coalesce(AuthenticationDetail, 'properties.status.additionalDetails', 'status.additionalDetails')
+| where rc="500121" OR rc="0"
+| eval is_deny=if(rc="500121", 1, 0), is_ok=if(rc="0", 1, 0),
+       deny_time=if(is_deny=1, _time, null()), deny_ip=if(is_deny=1, src_ip, null()),
+       deny_bin=if(is_deny=1, floor(_time/3600)*3600, null()),
+       ok_day=if(is_ok=1, strftime(_time, "%F"), null())
+``` Baseline: on how many days did the user sign in successfully from each country? (1 = first time seen) ```
+| eventstats dc(ok_day) AS country_days BY user country
+``` Walk each user's timeline in order and carry the most recent denial forward ```
+| sort 0 user _time
+| streamstats current=t last(deny_time) AS last_deny_time last(deny_bin) AS last_deny_bin last(deny_ip) AS last_deny_ip BY user
+``` Keep denials (Sigma base rule) and any success within 1h after the latest denial; attach it to that denial's hour bin ```
+| eval follow_success=if(is_ok=1 AND isnotnull(last_deny_time) AND _time-last_deny_time<=3600, 1, 0),
+       bin_key=case(is_deny=1, deny_bin, follow_success=1, last_deny_bin)
+| where isnotnull(bin_key)
+| eval same_ip_evt=if(follow_success=1 AND src_ip=last_deny_ip, 1, 0),
+       new_country_evt=if(follow_success=1 AND country_days<=1, 1, 0),
+       non_corp_evt=if(follow_success=1 AND NOT cidrmatch("198.51.100.10/32", src_ip), 1, 0)
+``` cidrmatch: replace 198.51.100.10/32 with your egress NAT / VPN ranges ```
+| stats sum(is_deny) AS denials
+        min(deny_time) AS first_denial max(deny_time) AS last_denial
+        values(deny_ip) AS denial_ips
+        values(eval(if(is_deny=1, country, null()))) AS denial_countries
+        values(eval(if(is_deny=1, detail, null()))) AS denial_detail
+        values(eval(if(is_deny=1, app, null()))) AS denial_apps
+        max(follow_success) AS followed_by_success
+        min(eval(if(follow_success=1, _time, null()))) AS success_time
+        values(eval(if(follow_success=1, src_ip, null()))) AS success_ip
+        values(eval(if(follow_success=1, country, null()))) AS success_country
+        max(same_ip_evt) AS same_ip max(new_country_evt) AS new_country max(non_corp_evt) AS non_corporate_ip
+        BY user bin_key
+| eval burst=if(denials>=5, 1, 0),
+       span_minutes=round((last_denial-first_denial)/60, 0),
+       minutes_to_success=if(isnotnull(success_time), round((success_time-last_denial)/60, 0), null()),
+       risk_score=burst + followed_by_success + same_ip + new_country + non_corporate_ip,
+       hour_bin=strftime(bin_key, "%F %H:00")
+``` burst threshold 5 = the Sigma correlation rule (event_count >= 5 per user per hour) ```
+| convert ctime(first_denial) ctime(last_denial) ctime(success_time)
+| table user hour_bin denials first_denial last_denial span_minutes denial_ips denial_countries denial_apps denial_detail
+        followed_by_success success_time minutes_to_success success_ip success_country
+        burst same_ip new_country non_corporate_ip risk_score
+``` Burst + approval from the attacker's IP first; single accidental denials sink to the bottom ```
+| sort 0 -risk_score -denials

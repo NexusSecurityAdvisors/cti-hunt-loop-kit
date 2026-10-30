@@ -1,0 +1,47 @@
+``` HL-0014 - DNS C2 Beaconing and Tunneling (ATT&CK T1071.004, related T1572) ```
+``` Platform: Splunk. Source: Sysmon EventCode 22 (DNSEvent) - gives the querying process (Image) ```
+``` Alternatives: Splunk Stream (sourcetype=stream:dns, field query) or Zeek dns.log (sourcetype=bro:dns / zeek:dns, fields query, id.orig_h) ```
+``` Playbook: playbooks/HL-0014-T1071.004-dns-c2-beaconing.md ```
+``` The Sigma rule is only a long-label pre-filter; this search adds beaconing statistics per host + process + parent domain ```
+``` Lab dataset: upload data/lab/sysmon/dns_query.jsonl to index=windows with sourcetype _json, and use earliest=0 ```
+index=windows EventCode=22 earliest=-14d
+| eval query=lower(replace(coalesce(QueryName, query), "\.$", "")),
+       qtype=upper(coalesce(QueryType, record_type, qtype_name)),
+       proc=coalesce(Image, process_path, process),
+       dest=coalesce(Computer, ComputerName, host)
+| where NOT match(query, "(?i)\.(in-addr|ip6)\.arpa$")
+``` Registered parent = last two labels; extend to three for public suffixes such as co.uk / com.au ```
+| rex field=query "(?<parent_domain>[^.]+\.[^.]+)$"
+| rex field=query "^(?<first_label>[^.]+)\."
+``` Internal / AD zones - adjust ```
+| where isnotnull(parent_domain) AND parent_domain!="lab.example"
+| eval label_len=len(first_label),
+       long_label=if(match(first_label, "^[a-zA-Z0-9]{30,}$"), 1, 0),
+       is_txt=if(qtype="TXT" OR qtype="16", 1, 0)
+``` Inter-query interval per host + process + parent domain (events must be in ascending time order) ```
+| sort 0 _time
+| streamstats current=f last(_time) AS prev_time BY dest proc parent_domain
+| eval delta=_time-prev_time
+| stats count AS queries dc(query) AS distinct_names count(delta) AS intervals
+        avg(delta) AS mean_interval stdev(delta) AS stdev_interval
+        sum(long_label) AS long_label_queries max(label_len) AS max_label_len sum(is_txt) AS txt_queries
+        values(qtype) AS query_types min(_time) AS first_seen max(_time) AS last_seen
+        values(query) AS sample_names
+        BY dest proc parent_domain
+``` Fleet breadth: one-host implants vs fleet-wide software (AV reputation, CDN, updaters) ```
+| eventstats dc(dest) AS clients_for_domain BY parent_domain
+| eval cv=if(intervals>=10 AND mean_interval>0, round(stdev_interval/mean_interval, 3), null()),
+       distinct_ratio=round(distinct_names/queries, 2),
+       long_label_pct=round(100*long_label_queries/queries, 0),
+       active_hours=round((last_seen-first_seen)/3600, 1),
+       mean_interval=round(mean_interval, 0),
+       is_regular=if(isnotnull(cv) AND cv<=0.35, 1, 0),
+       cv_sort=coalesce(cv, 99),
+       sample_names=mvindex(sample_names, 0, 4)
+``` Keep enough volume to measure timing, or anything with encoded-looking labels ```
+| where queries>=10 OR long_label_queries>0
+``` Optional: label entropy with URL Toolbox - | `ut_shannon(first_label)` before the stats, then avg(ut_shannon) ```
+| convert ctime(first_seen) ctime(last_seen)
+``` Beacon-like first: regular timing, lowest CV, most unique subdomains per query, fewest clients ```
+| sort 0 -is_regular cv_sort -distinct_ratio clients_for_domain
+| fields - cv_sort
