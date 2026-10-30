@@ -1,0 +1,56 @@
+title: HL-0013 Linux Cron or Systemd Persistence with Suspicious Payload
+id: 501af82b-0a8a-4320-b9a9-ed1748b23b10
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0013). Detects shell commands that write cron entries or
+    systemd unit files whose payload downloads, decodes or runs code from staging locations - typical of
+    ransomware affiliates and cryptominers persisting on Linux servers, NAS and hypervisor management hosts.
+references:
+    - https://attack.mitre.org/techniques/T1053/003/
+    - https://attack.mitre.org/techniques/T1543/002/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0013-T1053.003-T1543.002-linux-cron-systemd-persistence.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.execution
+    - attack.t1053.003
+    - attack.t1543.002
+logsource:
+    product: linux
+    category: process_creation
+detection:
+    selection_persistence_target:
+        - CommandLine|contains:
+              - '/etc/cron.d/'
+              - '/etc/crontab'
+              - '/var/spool/cron'
+              - '/etc/cron.hourly/'
+              - '/etc/cron.daily/'
+              - '/etc/systemd/system/'
+              - '/lib/systemd/system/'
+              - '/.config/systemd/user/'
+        - Image|endswith: '/crontab'
+    selection_suspicious_payload:
+        CommandLine|contains:
+            - 'curl '
+            - 'wget '
+            - 'base64 -d'
+            - 'base64 --decode'
+            - '/dev/tcp/'
+            - '/dev/shm/'
+            - '/tmp/'
+            - '/var/tmp/'
+            - 'nc -e'
+            - 'python -c'
+            - 'python3 -c'
+            - '| sh'
+            - '|sh'
+            - '| bash'
+            - '|bash'
+    condition: selection_persistence_target and selection_suspicious_payload
+falsepositives:
+    - Monitoring or heartbeat cron jobs that call internal health-check URLs with curl
+    - Configuration management (Ansible, Puppet, Chef) templating unit files from /tmp staging
+level: medium

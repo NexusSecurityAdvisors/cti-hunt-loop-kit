@@ -1,0 +1,33 @@
+title: HL-0014 DNS Query with Long Encoded Subdomain Label
+id: be920e69-35c6-4051-a7b4-fa0cab72f20f
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0014). Coarse pre-filter for DNS command-and-control and
+    tunneling: DNS queries whose first label is a long run of hex/base32-like characters, as produced by implants
+    that encode beacons or data in subdomains. Sigma cannot measure timing; the KQL and SPL hunts add the
+    beaconing statistics (interval regularity, unique subdomains per parent domain).
+references:
+    - https://attack.mitre.org/techniques/T1071/004/
+    - https://attack.mitre.org/techniques/T1572/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0014-T1071.004-dns-c2-beaconing.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.command-and-control
+    - attack.t1071.004
+    - attack.t1572
+logsource:
+    product: windows
+    category: dns_query
+detection:
+    selection:
+        QueryName|re: '^[a-zA-Z0-9]{30,}\.'
+    filter_ptr:
+        QueryName|endswith:
+            - '.in-addr.arpa'
+            - '.ip6.arpa'
+    condition: selection and not filter_ptr
+falsepositives:
+    - Security products that look up file hashes over DNS (reputation services)
+    - CDN and cloud services that use hashed hostnames
+level: low

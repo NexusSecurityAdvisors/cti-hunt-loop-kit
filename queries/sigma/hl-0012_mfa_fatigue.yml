@@ -1,0 +1,50 @@
+title: HL-0012 MFA Push Denied by User
+id: 78d966c0-ca82-4e09-83fb-a4ecbb6ebfe5
+name: hl_0012_mfa_denied
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0012). Returns Entra ID sign-ins that failed the MFA
+    step (ResultType 500121, e.g. user declined the push). One denial is noise; a burst for one user followed
+    by a success is MFA fatigue (push bombing). The correlation rule below groups denials per user per hour;
+    the KQL and SPL hunts add the "followed by success from the same IP" step.
+references:
+    - https://attack.mitre.org/techniques/T1621/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0012-T1621-mfa-fatigue.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.credential-access
+    - attack.t1621
+    - attack.initial-access
+    - attack.t1078.004
+logsource:
+    product: azure
+    service: signinlogs
+detection:
+    selection:
+        ResultType: 500121
+    condition: selection
+falsepositives:
+    - Users who lost or replaced their phone, or accidentally tapped Deny
+    - Sign-ins from new devices that trigger repeated prompts during enrollment
+level: low
+---
+title: HL-0012 MFA Fatigue - Burst of Denied MFA Prompts for One User
+id: 70375583-d268-4aa4-bbf0-ea52e43260c8
+status: experimental
+description: Five or more MFA denials for the same user within one hour.
+author: Dan Sorensen
+date: 2026-10-30
+correlation:
+    type: event_count
+    rules:
+        - hl_0012_mfa_denied
+    group-by:
+        - UserPrincipalName
+    timespan: 1h
+    generate: true
+    condition:
+        gte: 5
+falsepositives:
+    - A user repeatedly denying prompts from their own new device
+level: high

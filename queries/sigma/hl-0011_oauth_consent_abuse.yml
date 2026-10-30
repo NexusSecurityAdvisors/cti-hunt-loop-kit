@@ -1,0 +1,46 @@
+title: HL-0011 OAuth Consent Granted to App with High-Risk Delegated Scopes
+id: 2988abdd-b41d-4bfe-acc9-2c1f02ba764d
+status: experimental
+description: |
+    Hunt query for the CTI Hunt Loop Kit (playbook HL-0011). Detects successful Entra ID (Azure AD) consent
+    grants where the requested permissions include mailbox, file or directory access - the core of illicit
+    consent grant / consent phishing attacks, which give an adversary persistent token-based access that
+    survives password resets and MFA. Field names follow the kit's flattened AuditLogs mapping
+    (see data/README.md); map ConsentPermissions to TargetResources[].modifiedProperties "ConsentAction.Permissions".
+references:
+    - https://attack.mitre.org/techniques/T1528/
+    - https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/blob/main/playbooks/HL-0011-T1528-oauth-consent-abuse.md
+author: Dan Sorensen
+date: 2026-10-30
+tags:
+    - attack.credential-access
+    - attack.t1528
+    - attack.lateral-movement
+    - attack.t1550.001
+logsource:
+    product: azure
+    service: auditlogs
+detection:
+    selection:
+        OperationName: 'Consent to application'
+        Result: 'success'
+    selection_scopes:
+        ConsentPermissions|contains:
+            - 'Mail.Read'
+            - 'Mail.Send'
+            - 'MailboxSettings.ReadWrite'
+            - 'Files.Read.All'
+            - 'Files.ReadWrite.All'
+            - 'Sites.Read.All'
+            - 'Sites.ReadWrite.All'
+            - 'Contacts.Read'
+            - 'Directory.ReadWrite.All'
+            - 'User.ReadWrite.All'
+            - 'Application.ReadWrite.All'
+            - 'full_access_as_app'
+            - 'EWS.AccessAsUser.All'
+    condition: selection and selection_scopes
+falsepositives:
+    - Admin-approved line-of-business or backup applications that legitimately need mailbox or file access
+    - Verified-publisher productivity add-ins consented to under an approved consent policy
+level: medium
