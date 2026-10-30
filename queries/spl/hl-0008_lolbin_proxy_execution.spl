@@ -1,0 +1,46 @@
+``` HL-0008 - LOLBin Proxy Execution: mshta / regsvr32 / rundll32 (ATT&CK T1218, T1218.005, T1218.010, T1218.011) ```
+``` Platform: Splunk. Sources: Sysmon EventCode 1 and/or Windows Security EventCode 4688 (command-line auditing required) ```
+``` Playbook: playbooks/HL-0008-T1218-lolbin-proxy-execution.md ```
+``` Adjust index/sourcetype and field names to match your Windows TA / CIM mapping ```
+``` OriginalFileName exists only in Sysmon - with 4688 alone, renamed LOLBins are not caught ```
+``` Lab dataset: use earliest=0 ```
+index=windows (EventCode=1 OR EventCode=4688) earliest=-14d
+| eval proc=lower(coalesce(Image, New_Process_Name, NewProcessName)),
+       cmd=coalesce(CommandLine, Process_Command_Line),
+       parent=lower(coalesce(ParentImage, Creator_Process_Name, ParentProcessName)),
+       acct=coalesce(User, Account_Name, user),
+       ofn=upper(OriginalFileName),
+       dest=coalesce(Computer, ComputerName, host)
+| eval lolbin=case(match(proc, "mshta\.exe$") OR ofn="MSHTA.EXE", "mshta",
+                   match(proc, "regsvr32\.exe$") OR ofn="REGSVR32.EXE", "regsvr32",
+                   match(proc, "rundll32\.exe$") OR ofn="RUNDLL32.EXE", "rundll32")
+| where isnotnull(lolbin)
+| where (lolbin="mshta" AND match(cmd, "(?i)(https?://|javascript:|vbscript:)"))
+     OR (lolbin="regsvr32" AND match(cmd, "(?i)([/-]i:http|/i:ftp|scrobj)"))
+     OR (lolbin="rundll32" AND match(cmd, "(?i)(javascript:|vbscript:|RunHTMLApplication|https?://)"))
+| rex field=cmd "(?i)(?<url>(https?|ftp)://[^\s\"']+)"
+| rex field=url "(?i)^[a-z]+://(?<remote_host>[^/:]+)"
+| eval remote_host=coalesce(remote_host, "-"),
+       renamed=if(isnotnull(ofn) AND ofn!=upper(mvindex(split(proc, "\\"), -1)), 1, 0)
+| stats count AS hits dc(dest) AS hosts min(_time) AS first_seen max(_time) AS last_seen
+        values(dest) AS host_list values(cmd) AS sample_cmds
+        BY lolbin parent acct remote_host renamed
+| eval host_list=mvindex(host_list, 0, 24), sample_cmds=mvindex(sample_cmds, 0, 4)
+| convert ctime(first_seen) ctime(last_seen)
+``` Rare LOLBin / parent / destination combinations first ```
+| sort 0 hits hosts
+
+
+``` ===================================================================================== ```
+``` Search 2 - network pivot (run as a SEPARATE search; do not paste together with the search above) ```
+``` Did the LOLBin itself connect to a non-RFC1918 address? Requires Sysmon EventCode 3 ```
+``` Lab dataset: use earliest=0 ```
+index=windows EventCode=3 earliest=-14d
+| eval proc=lower(Image), ofn=upper(OriginalFileName), dest=coalesce(Computer, ComputerName, host),
+       dest_ip=coalesce(DestinationIp, dest_ip), dest_host=coalesce(DestinationHostname, "-")
+| where match(proc, "(mshta|regsvr32|rundll32)\.exe$") OR in(ofn, "MSHTA.EXE", "REGSVR32.EXE", "RUNDLL32.EXE")
+| where NOT (cidrmatch("10.0.0.0/8", dest_ip) OR cidrmatch("172.16.0.0/12", dest_ip) OR cidrmatch("192.168.0.0/16", dest_ip) OR cidrmatch("127.0.0.0/8", dest_ip))
+| stats count AS connections min(_time) AS first_conn values(dest_ip) AS remote_ips values(dest_host) AS remote_hosts
+        values(DestinationPort) AS ports BY dest proc User
+| convert ctime(first_conn)
+| sort 0 connections

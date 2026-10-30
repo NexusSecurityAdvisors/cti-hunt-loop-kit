@@ -1,0 +1,33 @@
+``` HL-0004 - Registry Run Key Persistence (ATT&CK T1547.001; related T1112) ```
+``` Platform: Splunk. Source: Sysmon EventCode 13 (Registry value set) ```
+``` For Security 4657 instead, map ObjectName+ObjectValueName to key and NewValue to data ```
+``` Playbook: playbooks/HL-0004-T1547.001-registry-run-keys.md ```
+``` Adjust index/sourcetype and field names to match your Windows TA / CIM mapping ```
+``` Lab dataset: use earliest=0 ```
+index=windows EventCode=13 earliest=-14d
+| eval key=coalesce(TargetObject, registry_path),
+       data=coalesce(Details, registry_value_data),
+       writer=lower(coalesce(Image, process_path)),
+       acct=coalesce(User, user),
+       dest=coalesce(Computer, ComputerName, host)
+``` Eval string literal "\\\\" reaches the regex engine as \\ and matches one literal backslash ```
+``` Sysmon TargetObject ends with the value name, so the key path is always followed by a backslash ```
+| where match(key, "(?i)\\\\software\\\\(microsoft\\\\windows\\\\currentversion\\\\(run|runonce|policies\\\\explorer\\\\run)|wow6432node\\\\microsoft\\\\windows\\\\currentversion\\\\run)\\\\")
+| where match(data, "(?i)(\\\\appdata\\\\roaming\\\\|\\\\appdata\\\\local\\\\temp\\\\|\\\\programdata\\\\|\\\\users\\\\public\\\\|\\\\windows\\\\temp\\\\|powershell|mshta|rundll32|regsvr32|wscript|cscript|http://|https://)")
+| eval value_name=mvindex(split(key, "\\"), -1),
+       writer_name=mvindex(split(writer, "\\"), -1),
+       hive=if(match(key, "(?i)^(HKU|HKEY_USERS)"), "HKU (per-user)", "HKLM (machine)"),
+       run_key=if(match(key, "(?i)runonce"), "RunOnce", "Run")
+``` File name the value launches, e.g. Spotify.exe, odupd.exe, rundll32.exe ```
+| rex field=data "(?i)(?<payload_image>[\w\-. ]+?\.(exe|dll|bat|cmd|ps1|vbs|js|hta|scr))\b"
+| eval payload_image=lower(payload_image),
+       name_not_in_data=if(like(lower(data), "%".lower(value_name)."%"), 0, 1)
+``` stats BY drops rows with null BY fields, so fill them first ```
+| fillnull value="-" payload_image writer_name acct
+| stats count AS hits dc(dest) AS hosts min(_time) AS first_seen max(_time) AS last_seen
+        values(dest) AS host_list values(acct) AS accounts values(data) AS sample_data
+        BY value_name payload_image name_not_in_data hive run_key writer_name
+| eval host_list=mvindex(host_list, 0, 24), sample_data=mvindex(sample_data, 0, 4)
+| convert ctime(first_seen) ctime(last_seen)
+``` Values seen on few hosts, written by rare processes, first ```
+| sort 0 hosts hits

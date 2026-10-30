@@ -1,0 +1,33 @@
+``` HL-0003 - Scheduled Task Persistence (ATT&CK T1053.005) ```
+``` Platform: Splunk. Sources: Sysmon EventCode 1 and/or Windows Security EventCode 4688 (command-line auditing required) ```
+``` Playbook: playbooks/HL-0003-T1053.005-scheduled-task-persistence.md ```
+``` Scope: tasks created through schtasks.exe only. Review Security 4698 / TaskScheduler 106 separately (see playbook). ```
+``` Adjust index/sourcetype and field names to match your Windows TA / CIM mapping ```
+``` Lab dataset: use earliest=0 ```
+index=windows (EventCode=1 OR EventCode=4688) earliest=-14d
+| eval proc=lower(coalesce(Image, New_Process_Name, NewProcessName)),
+       ofn=lower(coalesce(OriginalFileName, "-")),
+       cmd=coalesce(CommandLine, Process_Command_Line),
+       parent=lower(coalesce(ParentImage, Creator_Process_Name, ParentProcessName)),
+       acct=coalesce(User, Account_Name, user),
+       dest=coalesce(Computer, ComputerName, host)
+| where match(proc, "schtasks\.exe$") OR ofn="schtasks.exe"
+``` "/create" with any dash-like prefix (Sigma windash) ```
+| where match(cmd, "(?i)\s[-/–—―]create\s")
+``` Eval string literal "\\\\" reaches the regex engine as \\ and matches one literal backslash ```
+| eval suspicious_action=if(match(cmd, "(?i)(\\\\programdata\\\\|\\\\appdata\\\\|\\\\users\\\\public\\\\|\\\\temp\\\\|\\\\windows\\\\tasks\\\\|powershell|pwsh|mshta|rundll32|regsvr32|wscript|cscript|cmd\.exe /c|cmd /c|http://|https://)"), 1, 0),
+       masquerade=if(match(cmd, "(?i)\\\\microsoft\\\\windows\\\\"), 1, 0)
+| where suspicious_action=1 OR masquerade=1
+| rex field=cmd "(?i)[-/]tn\s+\"?(?<task_name>[^\"]+?)\"?\s+[-/]"
+| rex field=cmd "(?i)[-/]tr\s+(?<task_action>.+?)\s+[-/](sc|ru|rp|st|sd|mo|d|f|rl|it|z|np|delay|xml|v1)\b"
+| rex field=cmd "(?i)[-/]ru\s+\"?(?<run_as>[^\"\s]+)"
+| rex field=cmd "(?i)[-/]sc\s+(?<trigger>\S+)"
+``` stats BY drops rows with null BY fields, so fill them first ```
+| fillnull value="-" task_name task_action run_as trigger parent acct
+| stats count AS hits dc(dest) AS hosts min(_time) AS first_seen max(_time) AS last_seen
+        values(dest) AS host_list values(cmd) AS sample_cmds
+        BY task_name task_action run_as trigger masquerade parent acct
+| eval host_list=mvindex(host_list, 0, 24), sample_cmds=mvindex(sample_cmds, 0, 4)
+| convert ctime(first_seen) ctime(last_seen)
+``` Tasks seen on few hosts, from rare parents/accounts, first ```
+| sort 0 hosts hits

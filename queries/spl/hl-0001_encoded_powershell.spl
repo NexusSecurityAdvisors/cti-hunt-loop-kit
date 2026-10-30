@@ -3,16 +3,18 @@
 ``` Playbook: playbooks/HL-0001-T1059.001-encoded-powershell.md ```
 ``` Adjust index/sourcetype and field names to match your Windows TA / CIM mapping ```
 index=windows (EventCode=1 OR EventCode=4688) earliest=-14d
+``` Lab dataset (data/lab): use earliest=0 ```
 | eval proc=lower(coalesce(Image, New_Process_Name, NewProcessName)),
        cmd=coalesce(CommandLine, Process_Command_Line),
        parent=lower(coalesce(ParentImage, Creator_Process_Name, ParentProcessName)),
-       acct=coalesce(User, Account_Name, user)
+       acct=coalesce(User, Account_Name, user),
+       dest=coalesce(Computer, ComputerName, host)
 | where match(proc, "(powershell|pwsh|powershell_ise)\.exe$")
 | eval has_encoded=if(match(cmd, "(?i)\s[-/]e(c|n[a-z]*)?\s+[A-Za-z0-9+/=]{20,}"), 1, 0),
        has_cradle=if(match(cmd, "(?i)(downloadstring|downloadfile|downloaddata|net\.webclient|invoke-webrequest|start-bitstransfer|frombase64string|invoke-expression|iex\s*\()"), 1, 0)
 | where has_encoded=1 OR has_cradle=1
-| stats count AS hits dc(host) AS hosts min(_time) AS first_seen max(_time) AS last_seen
-        values(host) AS host_list values(cmd) AS sample_cmds
+| stats count AS hits dc(dest) AS hosts min(_time) AS first_seen max(_time) AS last_seen
+        values(dest) AS host_list values(cmd) AS sample_cmds
         BY parent acct has_encoded has_cradle
 | eval host_list=mvindex(host_list, 0, 24), sample_cmds=mvindex(sample_cmds, 0, 4)
 | convert ctime(first_seen) ctime(last_seen)

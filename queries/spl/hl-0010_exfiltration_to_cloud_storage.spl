@@ -1,0 +1,56 @@
+``` HL-0010 - Exfiltration to Cloud Storage: rclone / MEGA (ATT&CK T1567.002) ```
+``` Platform: Splunk. Sources: Sysmon EventCode 1 and/or Windows Security EventCode 4688; Sysmon EventCode 3 for Search 2 ```
+``` Playbook: playbooks/HL-0010-T1567.002-exfiltration-to-cloud-storage.md ```
+``` Adjust index/sourcetype and field names to match your Windows TA / CIM mapping ```
+``` OriginalFileName / Description exist only in Sysmon - with 4688 alone, renamed rclone is caught only by its flags ```
+``` Replace the sanctioned remote (s3corp) and config path with your approved rclone jobs ```
+``` Lab dataset: use earliest=0 ```
+index=windows (EventCode=1 OR EventCode=4688) earliest=-14d
+| eval proc=lower(coalesce(Image, New_Process_Name, NewProcessName)),
+       cmd=coalesce(CommandLine, Process_Command_Line),
+       parent=lower(coalesce(ParentImage, Creator_Process_Name, ParentProcessName)),
+       acct=coalesce(User, Account_Name, user),
+       ofn=lower(OriginalFileName),
+       dest=coalesce(Computer, ComputerName, host)
+| eval is_rclone_img=if(match(proc, "rclone\.exe$") OR ofn="rclone.exe" OR Description="Rsync for cloud storage", 1, 0),
+       is_rclone_flags=if(match(cmd, "(?i)\s(copy|sync|move)\s") AND like(cmd, "%--config%")
+                          AND match(cmd, "(?i)(--transfers|--multi-thread-streams|--no-check-certificate|--max-age|--ignore-existing|mega:)"), 1, 0),
+       is_mega=if(match(proc, "(megacmdshell|megaclient|mega-put|mega-sync)\.exe$"), 1, 0)
+| where is_rclone_img=1 OR is_rclone_flags=1 OR is_mega=1
+``` Remote names are 2+ characters before a colon, so drive letters (C:, D:) are skipped ```
+| rex field=cmd "\s(?<remote>[A-Za-z][\w-]+):"
+| rex field=cmd "(?i)--config[=\s]+(\"(?<cfg_quoted>[^\"]+)\"|(?<cfg_plain>\S+))"
+| eval tool=if(is_mega=1, "megacmd", "rclone"),
+       remote=coalesce(remote, "-"),
+       config_path=coalesce(cfg_quoted, cfg_plain, "-"),
+       renamed=if(isnotnull(ofn) AND ofn!=mvindex(split(proc, "\\"), -1), 1, 0),
+       sanctioned=if(remote="s3corp" AND match(config_path, "(?i)^C:\\\\Program Files\\\\rclone\\\\"), 1, 0)
+| stats count AS runs dc(dest) AS hosts min(_time) AS first_seen max(_time) AS last_seen
+        values(dest) AS host_list values(proc) AS image_paths values(cmd) AS sample_cmds
+        BY tool remote config_path acct parent renamed sanctioned
+| eval host_list=mvindex(host_list, 0, 24), sample_cmds=mvindex(sample_cmds, 0, 4)
+| convert ctime(first_seen) ctime(last_seen)
+``` Unsanctioned and rare first: a one-off run to a new remote outranks a nightly job ```
+| sort 0 sanctioned runs
+
+
+``` ===================================================================================== ```
+``` Search 2 - connections to MEGA per process (run as a SEPARATE search; do not paste together with the search above) ```
+``` Sysmon 3 has no byte counts: use connection count, distinct IPs and duration as the volume proxy ```
+``` Lab dataset: use earliest=0 ```
+index=windows EventCode=3 earliest=-14d
+| eval dest=coalesce(Computer, ComputerName, host),
+       dest_host=lower(coalesce(DestinationHostname, dest_host)),
+       dest_ip=coalesce(DestinationIp, dest_ip),
+       proc=lower(Image), ofn=lower(OriginalFileName)
+``` Exact domain or subdomain of mega.co.nz / mega.nz / mega.io ```
+| where match(dest_host, "(^|\.)mega\.(co\.nz|nz|io)$")
+| stats count AS connections dc(dest_ip) AS distinct_ips dc(dest_host) AS distinct_hosts
+        min(_time) AS first_seen max(_time) AS last_seen values(dest_host) AS sample_hosts values(dest_ip) AS remote_ips
+        BY dest proc ofn User
+| eval duration_min=round((last_seen-first_seen)/60, 1),
+       renamed=if(isnotnull(ofn) AND ofn!=mvindex(split(proc, "\\"), -1), 1, 0),
+       sample_hosts=mvindex(sample_hosts, 0, 9)
+| convert ctime(first_seen) ctime(last_seen)
+``` Highest-volume processes first ```
+| sort 0 - connections

@@ -1,0 +1,31 @@
+``` HL-0009 - RDP Lateral Movement (ATT&CK T1021.001; related T1078) ```
+``` Platform: Splunk. Source: Windows Security EventCode 4624 with LogonType 10 (RemoteInteractive) ```
+``` Playbook: playbooks/HL-0009-T1021.001-rdp-lateral-movement.md ```
+``` Adjust index/sourcetype and field names to match your Windows TA / CIM mapping ```
+``` Replace the jump-host IPs and the WS- / SRV- host-name patterns with your own PAWs and naming convention ```
+``` Windows TA note: Account_Name is multivalue on 4624 (subject, then target) - mvindex(...,1) takes the target ```
+``` Lab dataset: use earliest=0 ```
+index=windows EventCode=4624 earliest=-14d
+| eval logon_type=coalesce(LogonType, Logon_Type),
+       src_ip=coalesce(IpAddress, Source_Network_Address),
+       acct=coalesce(TargetUserName, mvindex(Account_Name, 1), Account_Name),
+       src_ws=upper(mvindex(split(coalesce(WorkstationName, Workstation_Name, "-"), "."), 0)),
+       dest=upper(mvindex(split(coalesce(Computer, ComputerName, host), "."), 0))
+| where logon_type=10
+``` Drop approved jump hosts and loopback / console sources ```
+| where NOT in(src_ip, "10.10.5.10", "127.0.0.1", "::1", "-")
+| eval is_service_account=if(match(acct, "(?i)^svc_"), 1, 0),
+       src_class=case(match(src_ws, "^WS-"), "workstation", match(src_ws, "^SRV-"), "server", true(), "other"),
+       dest_class=case(match(dest, "^SRV-"), "server", match(dest, "^WS-"), "workstation", true(), "other"),
+       workstation_to_server=if(src_class="workstation" AND dest_class="server", 1, 0)
+``` Fan-out: distinct destinations reached by the same source + account ```
+| eventstats dc(dest) AS source_fan_out BY src_ip acct
+``` Stack source IP -> account -> destination ```
+| stats count AS logons min(_time) AS first_seen max(_time) AS last_seen
+        BY src_ip src_ws acct dest is_service_account workstation_to_server source_fan_out
+| eval fan_out=if(source_fan_out>1, 1, 0),
+       priority=(is_service_account*2) + workstation_to_server + fan_out,
+       flags=trim(if(is_service_account=1, "service-account ", "") . if(workstation_to_server=1, "workstation-to-server ", "") . if(fan_out=1, "fan-out", ""))
+| convert ctime(first_seen) ctime(last_seen)
+``` Flagged pairs first, then rare pairs within each priority band ```
+| sort 0 -priority logons

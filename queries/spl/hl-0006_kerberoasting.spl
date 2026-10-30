@@ -1,0 +1,25 @@
+``` HL-0006 - Kerberoasting: RC4 service tickets for user SPNs (ATT&CK T1558.003) ```
+``` Platform: Splunk. Source: Windows Security EventCode 4769 from domain controllers ```
+``` Requires "Audit Kerberos Service Ticket Operations" (Success) on every DC ```
+``` Playbook: playbooks/HL-0006-T1558.003-kerberoasting.md ```
+``` Adjust index/sourcetype and field names to match your Windows TA / CIM mapping ```
+``` Lab dataset: use earliest=0 ```
+index=windows EventCode=4769 earliest=-14d
+| eval etype=lower(coalesce(TicketEncryptionType, Ticket_Encryption_Type)),
+       status=lower(coalesce(Status, Failure_Code)),
+       svc=coalesce(ServiceName, Service_Name),
+       requester=lower(mvindex(split(coalesce(TargetUserName, Account_Name), "@"), 0)),
+       src_ip=replace(coalesce(IpAddress, Client_Address, Source_Network_Address), "^::ffff:", ""),
+       dest=coalesce(Computer, ComputerName, host)
+``` RC4-HMAC, successful, not a machine account, not krbtgt - mirrors the Sigma rule ```
+| where etype="0x17" AND status="0x0" AND NOT match(svc, "\$$") AND lower(svc)!="krbtgt"
+| eval hour_bin=floor(_time/3600)
+| stats count AS requests dc(svc) AS distinct_spns values(svc) AS spns dc(hour_bin) AS active_hours
+        min(_time) AS first_seen max(_time) AS last_seen values(dest) AS dcs
+        BY requester src_ip
+| eval span_minutes=round((last_seen-first_seen)/60, 0),
+       spns_per_active_hour=round(distinct_spns/active_hours, 1),
+       spns=mvindex(spns, 0, 49)
+| convert ctime(first_seen) ctime(last_seen)
+``` Breadth first: many distinct SPNs per requester/source is the lead; then fewest requests (one-off bursts before steady legacy schedules) ```
+| sort 0 -distinct_spns -spns_per_active_hour requests
