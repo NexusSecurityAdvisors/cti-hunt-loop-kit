@@ -44,7 +44,7 @@ Each event has a `LabEventId` (`ReportId` in the Defender tables), so findings c
 2. Let the wizard infer the schema, then set `Timestamp` / `TimeGenerated` to `datetime`. Set `InitiatedBy`, `TargetResources` and `AuthenticationDetails` to `dynamic`. The queries wrap them in `todynamic()`, so `string` also works.
 3. In each KQL file, set `let lookback = 3650d;`. Queries written for Sentinel use `TimeGenerated`, and the Defender ones use `Timestamp`.
 
-**No SIEM?** `python tests/test_lab_detections.py` converts every Sigma rule to SQL and runs it against the JSONL files in SQLite (`pip install pysigma-backend-sqlite`). You can also open the CSVs in any notebook.
+**No SIEM?** `python tests/test_lab_detections.py` converts every Sigma rule to SQL and runs it against the JSONL files in SQLite (Python 3.11+, `pip install -r requirements.txt`). You can also open the CSVs in any notebook.
 
 ## Regenerating
 
@@ -52,4 +52,4 @@ Each event has a `LabEventId` (`ReportId` in the Defender tables), so findings c
 python data/generate_lab_data.py
 ```
 
-The output is byte-for-byte reproducible (fixed seed). If you add a scenario, tag its events in the generator with `(hunt_id, "malicious" | "benign_match", note)`. The answer key and the CI test will then pick it up.
+The output is byte-for-byte reproducible (fixed seed). If you add a scenario, tag its events in the generator with `(hunt_id, "malicious" | "benign_match", note)`. The answer key and the CI test will then pick it up. CI regenerates the dataset on every run and fails if the committed files differ, so always commit the generator and its output together.
