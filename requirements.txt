@@ -1,4 +1,4 @@
-# Tooling for validating and testing the kit (Python 3.11+).
+# Tooling for validating and testing the kit. Python version: see .python-version (3.14).
 # Pinned so CI and workshop machines get identical rule conversions. Dependabot proposes upgrades.
 sigma-cli==4.0.0
 pysigma-backend-sqlite==2.1.1

@@ -14,7 +14,8 @@ All notable changes to the CTI Hunt Loop Kit. Dates are UTC.
 
 ### Documentation
 - README: *Validation and CI* section, corrected ATT&CK version note (the Stealth / Defense Impairment split arrived in v19), updated layout and contributing steps.
-- Workshop and data guides: Sigma + Python track needs Python 3.11+ (pySigma requirement) and installs from `requirements.txt`.
+- One Python version everywhere: `.python-version` (3.14) drives CI (`python-version-file`), and the README, workshop and data guides all reference it. 3.14 is the newest release the Sigma toolchain installs on (`google-re2` has no 3.15 wheels yet).
+- Workshop and data guides install from `requirements.txt`.
 - Pull request checklist covers lab tests, consistency checks and the Navigator layer.
 - Facilitator guide moved to a private repository so attendees cannot read ahead; available to facilitators on request.
 

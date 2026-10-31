@@ -46,7 +46,8 @@ cti-hunt-loop-kit/
 ├── navigator/          # ATT&CK Navigator coverage layer and coverage table (generated)
 ├── tools/              # Layer generator
 ├── tests/              # Sigma rules vs. lab answer key; repo consistency checks
-├── requirements.txt    # Pinned Sigma tooling for CI, tests and the workshop (Python 3.11+)
+├── .python-version     # Python version used everywhere (3.14)
+├── requirements.txt    # Pinned Sigma tooling for CI, tests and the workshop (Python 3.14)
 └── CHANGELOG.md        # Release notes
 ```
 
@@ -92,7 +93,7 @@ ATT&CK tactic names follow ATT&CK v19 and later, where *Defense Evasion* is spli
 The [`workshop/`](workshop/README.md) folder contains a 3.5-hour, hands-on lab built on a fictional ransomware intrusion, *Operation Quiet Ledger*. The intrusion starts with an MFA-fatigued Entra ID account and ends with encrypted Windows and Linux servers. The intrusion is hidden in five days of synthetic telemetry ([`data/`](data/README.md)), and benign look-alikes are planted for every hunt. You can run it in KQL (free Azure Data Explorer cluster), SPL (Splunk trial) or Sigma + Python with no SIEM at all.
 
 ```bash
-python -m venv .venv && source .venv/bin/activate   # Python 3.11+
+python -m venv .venv && source .venv/bin/activate   # Python 3.14 (see .python-version)
 pip install -r requirements.txt
 python tests/test_lab_detections.py   # every Sigma rule vs. the lab answer key
 ```
@@ -111,7 +112,7 @@ Every push and pull request runs the [Validate workflow](.github/workflows/valid
 | Metrics script runs | `python metrics/hunt_metrics.py` |
 | ATT&CK Navigator layer is current | `python tools/build_navigator_layer.py --check` |
 
-The workflow runs with read-only permissions, pins third-party actions to full commit SHAs and pins Python dependencies. [Dependabot](.github/dependabot.yml) proposes updates weekly.
+CI, tests and the workshop all use the Python version in [`.python-version`](.python-version) (3.14). Python 3.15 is not used yet because pySigma's `google-re2` dependency has no 3.15 wheels; bump `.python-version` once it does. The workflow runs with read-only permissions, pins third-party actions to full commit SHAs and pins Python dependencies. [Dependabot](.github/dependabot.yml) proposes updates weekly.
 
 ## Hunt hypothesis card (preview)
 
