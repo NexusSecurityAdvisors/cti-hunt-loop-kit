@@ -41,14 +41,17 @@ cti-hunt-loop-kit/
 │   └── spl/            # Splunk
 ├── detections/         # Promotion criteria for turning hunts into production detections
 ├── data/               # Synthetic lab dataset (Sysmon/Security JSONL + Defender/Sentinel CSV) and generator
-├── workshop/           # Attendee lab guide, exercises, facilitator guide
+├── workshop/           # Attendee lab guide and exercises (facilitator guide is private)
 ├── metrics/            # Hunt program tracker (CSV) and KPI script
 ├── navigator/          # ATT&CK Navigator coverage layer and coverage table (generated)
 ├── tools/              # Layer generator
-└── tests/              # Runs every Sigma rule against the lab dataset
+├── tests/              # Sigma rules vs. lab answer key; repo consistency checks
+├── .python-version     # Python version used everywhere (3.14)
+├── requirements.txt    # Pinned Sigma tooling for CI, tests and the workshop (Python 3.14)
+└── CHANGELOG.md        # Release notes
 ```
 
-> **Status:** v1.1. Fourteen ATT&CK-mapped playbooks covering Windows, Linux, DNS and Microsoft Entra ID, each with Sigma, KQL and SPL. Also includes a synthetic lab dataset, a full workshop, a metrics tracker and an ATT&CK Navigator coverage layer. See the roadmap below.
+> **Status:** v1.2. Fourteen ATT&CK-mapped playbooks covering Windows, Linux, DNS and Microsoft Entra ID, each with Sigma, KQL and SPL. Also includes a synthetic lab dataset, a full workshop, a metrics tracker and an ATT&CK Navigator coverage layer. See the roadmap below.
 
 ## Playbooks
 
@@ -71,7 +74,7 @@ Together, the playbooks follow a typical human-operated ransomware intrusion, fr
 | [HL-0013](playbooks/HL-0013-T1053.003-T1543.002-linux-cron-systemd-persistence.md) | Linux cron and systemd persistence | T1053.003, T1543.002 | Intermediate | [Sigma](queries/sigma/hl-0013_linux_cron_systemd_persistence.yml) · [KQL](queries/kql/hl-0013_linux_cron_systemd_persistence.kql) · [SPL](queries/spl/hl-0013_linux_cron_systemd_persistence.spl) |
 | [HL-0014](playbooks/HL-0014-T1071.004-dns-c2-beaconing.md) | DNS C2 beaconing and tunneling | T1071.004, T1572 | Advanced | [Sigma](queries/sigma/hl-0014_dns_c2_beaconing.yml) · [KQL](queries/kql/hl-0014_dns_c2_beaconing.kql) · [SPL](queries/spl/hl-0014_dns_c2_beaconing.spl) |
 
-ATT&CK tactic names follow ATT&CK v18 and later, where *Defense Evasion* is split into **Stealth** and **Defense Impairment**.
+ATT&CK tactic names follow ATT&CK v19 and later, where *Defense Evasion* is split into **Stealth** and **Defense Impairment**. The Navigator layer targets the current release (see [`navigator/COVERAGE.md`](navigator/COVERAGE.md)).
 
 ## Quick start
 
@@ -90,9 +93,26 @@ ATT&CK tactic names follow ATT&CK v18 and later, where *Defense Evasion* is spli
 The [`workshop/`](workshop/README.md) folder contains a 3.5-hour, hands-on lab built on a fictional ransomware intrusion, *Operation Quiet Ledger*. The intrusion starts with an MFA-fatigued Entra ID account and ends with encrypted Windows and Linux servers. The intrusion is hidden in five days of synthetic telemetry ([`data/`](data/README.md)), and benign look-alikes are planted for every hunt. You can run it in KQL (free Azure Data Explorer cluster), SPL (Splunk trial) or Sigma + Python with no SIEM at all.
 
 ```bash
-pip install pysigma-backend-sqlite
+python -m venv .venv && source .venv/bin/activate   # Python 3.14 (see .python-version)
+pip install -r requirements.txt
 python tests/test_lab_detections.py   # every Sigma rule vs. the lab answer key
 ```
+
+## Validation and CI
+
+Every push and pull request runs the [Validate workflow](.github/workflows/validate.yml). You can run the same checks locally after `pip install -r requirements.txt`:
+
+| Check | Command |
+|---|---|
+| Sigma syntax and best practices | `sigma check queries/sigma` |
+| Sigma converts cleanly to Splunk | `sigma convert -t splunk --without-pipeline queries/sigma` |
+| Lab dataset matches its generator | `python data/generate_lab_data.py && git diff --exit-code -- data/lab data/answer_key.json` |
+| Every rule finds exactly the answer-key events | `python tests/test_lab_detections.py` |
+| Playbooks, queries, answer key, README rows and links agree | `python tests/test_repo_consistency.py` |
+| Metrics script runs | `python metrics/hunt_metrics.py` |
+| ATT&CK Navigator layer is current | `python tools/build_navigator_layer.py --check` |
+
+CI, tests and the workshop all use the Python version in [`.python-version`](.python-version) (3.14). Python 3.15 is not used yet because pySigma's `google-re2` dependency has no 3.15 wheels; bump `.python-version` once it does. The workflow runs with read-only permissions, pins third-party actions to full commit SHAs and pins Python dependencies. [Dependabot](.github/dependabot.yml) proposes updates weekly.
 
 ## Hunt hypothesis card (preview)
 
@@ -131,6 +151,7 @@ Suggested hunt program metrics. Track them in [`metrics/hunt-tracker.csv`](metri
 - [x] CI: every Sigma rule is tested against the lab dataset
 - [x] Cloud identity hunts (OAuth consent abuse, MFA fatigue), Linux persistence and DNS C2 beaconing (HL-0011 to HL-0014), added to the lab and workshop
 - [x] ATT&CK Navigator layer for kit coverage ([`navigator/`](navigator/COVERAGE.md)), regenerated and checked in CI
+- [x] CI hardening: SHA-pinned actions, pinned Python tooling, Dependabot, lab reproducibility and repo consistency checks (v1.2, see [`CHANGELOG.md`](CHANGELOG.md))
 
 ## Contributing
 
@@ -139,8 +160,9 @@ Contributions are welcome: new playbooks, query translations, and lessons learne
 1. Fork the repo and create a feature branch.
 2. Follow the existing templates and include ATT&CK technique IDs.
 3. **Never commit real customer data, IOCs under restrictive TLP, or proprietary telemetry.** Use synthetic or publicly shareable (TLP:CLEAR) material only.
-4. If you add a playbook, add matching malicious and benign events to `data/generate_lab_data.py`, then regenerate so `tests/test_lab_detections.py` covers your rule.
-5. Open a pull request describing what you added and how you tested it.
+4. If you add a playbook, add matching malicious and benign events to `data/generate_lab_data.py`, then regenerate so `tests/test_lab_detections.py` covers your rule. Add a row to the playbook table above and run `python tools/build_navigator_layer.py` to refresh the coverage layer.
+5. Run the checks under [Validation and CI](#validation-and-ci) locally.
+6. Open a pull request describing what you added and how you tested it.
 
 ## Disclaimer
 

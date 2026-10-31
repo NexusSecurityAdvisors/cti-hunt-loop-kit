@@ -7,7 +7,7 @@ when run against the synthetic lab dataset in data/lab.
 Rules are converted with the pySigma SQLite backend and executed in an in-memory database,
 so this checks real rule logic, not just syntax.
 
-    pip install "pysigma-backend-sqlite"
+    pip install -r requirements.txt   # Python 3.14 (see .python-version)
     python data/generate_lab_data.py   # optional: regenerate (deterministic)
     python tests/test_lab_detections.py
 """
@@ -62,7 +62,12 @@ def main():
         collection = SigmaCollection.from_yaml(rule_path.read_text())
         rule = next(r for r in collection.rules if hasattr(r, "logsource"))
         ls = rule.logsource
-        src = SOURCES[(ls.product, ls.category, ls.service)]
+        key = (ls.product, ls.category, ls.service)
+        if key not in SOURCES:
+            sys.exit(f"{rule_path.name}: no lab data mapped for logsource {key}. Add it to SOURCES.")
+        if hunt not in KEY:
+            sys.exit(f"{rule_path.name}: {hunt} is missing from data/answer_key.json. Regenerate the lab data.")
+        src = SOURCES[key]
         db = dbs.setdefault(src, load(src))
         db.row_factory = sqlite3.Row
         mal = {e["id"] for e in KEY[hunt]["malicious"]}

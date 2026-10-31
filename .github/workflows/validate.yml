@@ -6,22 +6,34 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Least privilege: the jobs only read the repository.
 permissions:
   contents: read
+
+# Cancel superseded runs on the same branch or PR.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   sigma:
     name: Sigma rules
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/setup-python@v6
+      # Actions are pinned to full commit SHAs (supply-chain hardening); Dependabot keeps them current.
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
-          python-version: "3.12"
+          persist-credentials: false
+
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version-file: .python-version
+          cache: pip
+          cache-dependency-path: requirements.txt
 
       - name: Install Sigma tooling
-        run: pip install "sigma-cli==4.0.0" "pysigma-backend-splunk==3.0.0"
+        run: pip install -r requirements.txt
 
       - name: Check Sigma rules (syntax and best practices)
         run: sigma check queries/sigma
@@ -31,19 +43,33 @@ jobs:
 
   lab:
     name: Sigma rules vs. lab dataset
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
-          python-version: "3.12"
+          persist-credentials: false
 
-      - name: Install Sigma SQLite backend
-        run: pip install "sigma-cli==4.0.0" "pysigma-backend-sqlite==2.1.1"
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version-file: .python-version
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install Sigma tooling
+        run: pip install -r requirements.txt
+
+      - name: Lab dataset is reproducible from the generator
+        run: |
+          python data/generate_lab_data.py
+          git diff --exit-code --stat -- data/lab data/answer_key.json || {
+            echo "::error::data/lab or answer_key.json differs from generate_lab_data.py output. Regenerate and commit."; exit 1; }
 
       - name: Run every Sigma rule against the lab answer key
         run: python tests/test_lab_detections.py
+
+      - name: Repository consistency (playbooks, queries, links)
+        run: python tests/test_repo_consistency.py
 
       - name: Metrics script smoke test
         run: python metrics/hunt_metrics.py
