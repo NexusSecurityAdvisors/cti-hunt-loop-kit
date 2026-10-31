@@ -41,7 +41,7 @@ cti-hunt-loop-kit/
 │   └── spl/            # Splunk
 ├── detections/         # Promotion criteria for turning hunts into production detections
 ├── data/               # Synthetic lab dataset (Sysmon/Security JSONL + Defender/Sentinel CSV) and generator
-├── workshop/           # Attendee lab guide, exercises, facilitator guide
+├── workshop/           # Attendee lab guide and exercises (facilitator guide is private)
 ├── metrics/            # Hunt program tracker (CSV) and KPI script
 ├── navigator/          # ATT&CK Navigator coverage layer and coverage table (generated)
 ├── tools/              # Layer generator
