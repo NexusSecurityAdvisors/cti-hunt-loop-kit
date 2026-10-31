@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this kit in research, teaching or a publication, please cite it as below."
+title: "CTI Hunt Loop Kit: Intel-driven threat hunting, closed-loop"
+type: software
+authors:
+  - family-names: Sorensen
+    given-names: Dan
+    affiliation: Nexus Security Advisors
+version: 1.3.0
+date-released: 2026-10-31
+license: Apache-2.0
+repository-code: "https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit"
+keywords: [threat hunting, cyber threat intelligence, Sigma, KQL, SPL, MITRE ATT&CK, detection engineering]
+references:
+  - type: book
+    title: "Advanced Cyber Threat Intelligence and Hunting"
+    authors:
+      - family-names: Sorensen
+        given-names: Dan
+      - family-names: Tiepolo
+        given-names: Gianluca

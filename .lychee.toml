@@ -1,0 +1,17 @@
+# Link checker configuration (used by the scheduled maintenance workflow).
+max_retries = 3
+retry_wait_time = 5
+timeout = 30
+max_concurrency = 8
+accept = [200, 203, 206, 429]
+exclude_path = ["data/lab"]
+exclude = [
+  # Hosts that block automated checkers but are verified manually
+  "^https://www\\.sans\\.org/",
+  "^https://researchr\\.org/",
+  "^https://dataexplorer\\.azure\\.com/",
+  # Placeholders and examples
+  "example\\.(com|org)",
+  "\\.example(/|$)",
+  "^https://<",
+]

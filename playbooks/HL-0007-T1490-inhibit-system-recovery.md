@@ -97,8 +97,14 @@ Scope exclusions to **parent image + exact command line + host**. Never exclude 
 
 ## References
 
+Current threat intelligence and research (full list in [`docs/REFERENCES.md`](../docs/REFERENCES.md)):
+
+- CISA, FBI, NSA, & MS-ISAC (2023). *#StopRansomware guide*. Cybersecurity and Infrastructure Security Agency. <https://www.cisa.gov/stopransomware/ransomware-guide> ([bib](../docs/REFERENCES.md#cisa-ransomware-guide))
+- CISA & FBI (2024). *#StopRansomware: BlackSuit (Royal) ransomware (AA23-061A), updated August 2024*. Joint cybersecurity advisory. <https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-061a> ([bib](../docs/REFERENCES.md#cisa-aa23-061a))
+
+Technique and product documentation:
+
 - MITRE ATT&CK T1490 — https://attack.mitre.org/techniques/T1490/
 - MITRE ATT&CK T1486 — https://attack.mitre.org/techniques/T1486/
-- CISA #StopRansomware Guide — https://www.cisa.gov/stopransomware/ransomware-guide
 - CISA #StopRansomware advisories — https://www.cisa.gov/stopransomware
 - SigmaHQ rule repository — https://github.com/SigmaHQ/sigma
