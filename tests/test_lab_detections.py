@@ -7,7 +7,7 @@ when run against the synthetic lab dataset in data/lab.
 Rules are converted with the pySigma SQLite backend and executed in an in-memory database,
 so this checks real rule logic, not just syntax.
 
-    pip install -r requirements.txt   # Python 3.11+
+    pip install -r requirements.txt   # Python 3.14 (see .python-version)
     python data/generate_lab_data.py   # optional: regenerate (deterministic)
     python tests/test_lab_detections.py
 """
