@@ -12,6 +12,10 @@
 <a href="CITATION.cff"><img alt="Cite this kit" src="https://img.shields.io/badge/cite-CITATION.cff-lightgrey"></a>
 </p>
 
+**Watch the 65-second overview:**
+
+https://github.com/user-attachments/assets/1cf4a2cb-78ad-4b53-9258-703f8cec299e
+
 **Intel-driven threat hunting, closed-loop.** A practical kit for turning cyber threat intelligence into testable hunt hypotheses, executing hunts across common SIEM/EDR platforms, and feeding what you find back into your intelligence and detection programs.
 
 > Developed as companion material for a proposed FIRST CTI 2027 workshop and the book *Advanced Cyber Threat Intelligence and Hunting* (Dan Sorensen & Gianluca Tiepolo).
@@ -68,7 +72,7 @@ cti-hunt-loop-kit/
 ├── navigator/          # ATT&CK Navigator coverage layer and coverage table (generated)
 ├── tools/              # Navigator layer, bibliography and demo-GIF generators
 ├── docs/               # Bibliography (references.yml → REFERENCES.md)
-├── assets/             # Animated banner and terminal demo
+├── assets/             # Animated banner, terminal demo, explainer video
 ├── tests/              # Sigma rules vs. lab answer key; repo consistency checks
 ├── .python-version     # Python version used everywhere (3.14)
 ├── requirements.txt    # Pinned Sigma tooling for CI, tests and the workshop (Python 3.14)
@@ -229,7 +233,7 @@ Suggested hunt program metrics. Track them in [`metrics/hunt-tracker.csv`](metri
 - [x] ATT&CK Navigator layer for kit coverage ([`navigator/`](navigator/COVERAGE.md)), regenerated and checked in CI
 - [x] CI hardening: SHA-pinned actions, pinned Python tooling, Dependabot, lab reproducibility and repo consistency checks (v1.2, see [`CHANGELOG.md`](CHANGELOG.md))
 - [x] Research bibliography with automated freshness checks, CodeQL, Scorecard, zizmor, signed releases with SBOM, scheduled maintenance issues, animated banner and demo (v1.3)
-- [ ] Short explainer video for the workshop
+- [x] 65-second explainer video ([`assets/hunt-loop-explainer.mp4`](assets/hunt-loop-explainer.mp4), reproducible from [`tools/explainer/`](tools/explainer/))
 
 ## Contributing
 

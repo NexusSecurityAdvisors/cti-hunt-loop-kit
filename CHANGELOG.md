@@ -7,6 +7,7 @@ All notable changes to the CTI Hunt Loop Kit. Dates are UTC.
 ### Research and documentation
 - `docs/references.yml` → generated `docs/REFERENCES.md`: 18 sources (peer-reviewed, NIST, CISA joint advisories, vendor research), APA 7, all within ~4 years. Every playbook now cites current threat intelligence alongside the ATT&CK and product docs.
 - README *Research basis* section; `CITATION.cff` for academic citation.
+- 65-second explainer video embedded in the README (`assets/hunt-loop-explainer.mp4`; rendered deterministically from `tools/explainer/` with Playwright + ffmpeg).
 - Animated SVG banner, terminal demo GIF recorded from the real test run (`tools/render_demo_gif.py`), Mermaid diagrams of the rule-testing flow and the DevSecOps pipeline.
 
 ### Security and automation
