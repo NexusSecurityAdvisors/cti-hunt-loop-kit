@@ -22,7 +22,7 @@ Choose **one** of these platform tracks. All three use the same dataset ([`data/
 |---|---|---|
 | KQL | Free Azure Data Explorer cluster with the lab CSVs ingested ([instructions](../data/README.md#loading-the-data)) | `queries/kql/` |
 | SPL | Splunk trial / dev license with the lab JSONL uploaded | `queries/spl/` |
-| Sigma + Python | Python 3.9+, `pip install pysigma-backend-sqlite`, a notebook or a SQLite browser | `queries/sigma/` |
+| Sigma + Python | Python 3.11+, `pip install -r requirements.txt`, a notebook or a SQLite browser | `queries/sigma/` |
 
 Also bring a copy of the templates in [`templates/`](../templates/). One copy per team is enough. Markdown, paper or a shared doc all work.
 
