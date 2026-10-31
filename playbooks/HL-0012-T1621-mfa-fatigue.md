@@ -90,6 +90,12 @@ Scope exclusions to **user + IP range + time window** (for example, during a doc
 
 ## References
 
+Current threat intelligence and research (full list in [`docs/REFERENCES.md`](../docs/REFERENCES.md)):
+
+- CISA & FBI (2025). *Scattered Spider (AA23-320A), revised July 2025*. Joint cybersecurity advisory. <https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-320a> ([bib](../docs/REFERENCES.md#cisa-aa23-320a))
+
+Technique and product documentation:
+
 - MITRE ATT&CK T1621 — https://attack.mitre.org/techniques/T1621/
 - MITRE ATT&CK T1078.004 — https://attack.mitre.org/techniques/T1078/004/
 - Microsoft: How number matching works in MFA push notifications — https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-mfa-number-match
