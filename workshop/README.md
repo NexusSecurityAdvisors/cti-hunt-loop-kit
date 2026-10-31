@@ -40,7 +40,7 @@ Also bring a copy of the templates in [`templates/`](../templates/). One copy pe
 | 3:00 | **5–6. Operationalize & feed back** ([Exercise 6](exercises.md#exercise-6-close-the-loop)) | Hunt report, intel feedback, metrics row |
 | 3:20 | Debrief. Walk through the timeline, discuss the look-alikes, compare metrics across teams | |
 
-Facilitators: see [`facilitator-guide.md`](facilitator-guide.md). Do not hand it out before the debrief.
+Facilitators: the facilitator guide (scenario timeline, expected findings and debrief notes) is kept in a private repository so attendees cannot read ahead. To run the workshop, request access through the [repository owner](https://github.com/NexusSecurityAdvisors).
 
 ## Ground rules
 
