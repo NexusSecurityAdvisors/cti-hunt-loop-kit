@@ -2,6 +2,19 @@
 
 All notable changes to the CTI Hunt Loop Kit. Dates are UTC.
 
+## v1.3.0 — 2026-10-31
+
+### Research and documentation
+- `docs/references.yml` → generated `docs/REFERENCES.md`: 18 sources (peer-reviewed, NIST, CISA joint advisories, vendor research), APA 7, all within ~4 years. Every playbook now cites current threat intelligence alongside the ATT&CK and product docs.
+- README *Research basis* section; `CITATION.cff` for academic citation.
+- Animated SVG banner, terminal demo GIF recorded from the real test run (`tools/render_demo_gif.py`), Mermaid diagrams of the rule-testing flow and the DevSecOps pipeline.
+
+### Security and automation
+- New workflows: CodeQL (Python + Actions), OpenSSF Scorecard, dependency review, zizmor workflow audit, signed releases (CycloneDX SBOM + SLSA build provenance), scheduled maintenance (weekly links / source age / ATT&CK release; quarterly content-review issue).
+- Every workflow starts from `permissions: {}` with per-job grants; all actions SHA-pinned; zizmor reports no findings.
+- `CODEOWNERS`, `.pre-commit-config.yaml` (gitleaks, YAML/JSON checks, the kit's own tests).
+- Validate also checks the bibliography and warns on sources older than 4 years.
+
 ## v1.2 — 2026-10-31
 
 ### Security and CI

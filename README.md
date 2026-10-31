@@ -1,5 +1,17 @@
 # CTI Hunt Loop Kit
 
+<p align="center"><img src="assets/hunt-loop-banner.svg" alt="CTI Hunt Loop Kit: an animated six-stage loop from intel collection to feedback" width="100%"></p>
+
+<p align="center">
+<a href="https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/actions/workflows/validate.yml"><img alt="Validate" src="https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/actions/workflows/validate.yml/badge.svg"></a>
+<a href="https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/actions/workflows/codeql.yml/badge.svg"></a>
+<a href="https://scorecard.dev/viewer/?uri=github.com/NexusSecurityAdvisors/cti-hunt-loop-kit"><img alt="OpenSSF Scorecard" src="https://api.scorecard.dev/projects/github.com/NexusSecurityAdvisors/cti-hunt-loop-kit/badge"></a>
+<img alt="MITRE ATT&CK v20" src="https://img.shields.io/badge/MITRE_ATT%26CK-v20-red">
+<img alt="Python 3.14" src="https://img.shields.io/badge/python-3.14-blue">
+<a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-green"></a>
+<a href="CITATION.cff"><img alt="Cite this kit" src="https://img.shields.io/badge/cite-CITATION.cff-lightgrey"></a>
+</p>
+
 **Intel-driven threat hunting, closed-loop.** A practical kit for turning cyber threat intelligence into testable hunt hypotheses, executing hunts across common SIEM/EDR platforms, and feeding what you find back into your intelligence and detection programs.
 
 > Developed as companion material for a proposed FIRST CTI 2027 workshop and the book *Advanced Cyber Threat Intelligence and Hunting* (Dan Sorensen & Gianluca Tiepolo).
@@ -29,6 +41,16 @@ flowchart LR
 | 5. Operationalize | How do we catch this automatically next time? | `detections/` |
 | 6. Feed Back | What did we learn that changes our intel? | `templates/intel-feedback.md` |
 
+## Research basis
+
+The loop applies what recent research says separates effective hunt programs from ad-hoc querying. Full bibliography, kept to sources from roughly the last four years and checked automatically: [`docs/REFERENCES.md`](docs/REFERENCES.md).
+
+- **Hypothesis-driven, repeatable hunts.** Systematic reviews map the field from manual, hypothesis-driven hunting to data-driven and ML-assisted methods, and both stress documented, repeatable processes ([Wang, 2022](docs/REFERENCES.md#wang-2022); [Mahboubi et al., 2024](docs/REFERENCES.md#mahboubi-2024)). The hypothesis card and playbook structure follow the prepare / execute / act phases of the [PEAK framework](docs/REFERENCES.md#peak-2023).
+- **Practitioner reality.** Interviews with 22 experienced hunters found their everyday challenges are as much about people and organizational culture as about technology ([Badva et al., USENIX Security 2024](docs/REFERENCES.md#badva-2024)); hunters move from a "fuzzy" lead to a clear hypothesis and need structured support to do it ([Milani et al., 2024](docs/REFERENCES.md#milani-2024)). The templates, triage questions and *Inconclusive (data gap)* outcome exist for these reasons.
+- **Measure outcomes, not activity.** In the 2026 SANS survey, data quality overtook skilled staff as hunters' top barrier for the first time, 50% vs. 45% ([SANS, 2026](docs/REFERENCES.md#sans-2026)), which is why the metrics track data gaps found and closed.
+- **Feed incident response.** Hunt findings map to the *Detect* and *Respond* functions of the NIST CSF 2.0 incident-response profile ([NIST SP 800-61r3, 2025](docs/REFERENCES.md#nist-800-61r3)).
+- **Current adversary tradecraft.** Each playbook cites recent CISA joint advisories and vendor research for the behaviour it hunts (for example [Scattered Spider, rev. 2025](docs/REFERENCES.md#cisa-aa23-320a) for MFA fatigue and MEGA exfiltration, and [living-off-the-land guidance, 2024](docs/REFERENCES.md#cisa-lotl-2024) for LOLBin and PowerShell hunts).
+
 ## Repository layout
 
 ```
@@ -44,14 +66,16 @@ cti-hunt-loop-kit/
 ├── workshop/           # Attendee lab guide and exercises (facilitator guide is private)
 ├── metrics/            # Hunt program tracker (CSV) and KPI script
 ├── navigator/          # ATT&CK Navigator coverage layer and coverage table (generated)
-├── tools/              # Layer generator
+├── tools/              # Navigator layer, bibliography and demo-GIF generators
+├── docs/               # Bibliography (references.yml → REFERENCES.md)
+├── assets/             # Animated banner and terminal demo
 ├── tests/              # Sigma rules vs. lab answer key; repo consistency checks
 ├── .python-version     # Python version used everywhere (3.14)
 ├── requirements.txt    # Pinned Sigma tooling for CI, tests and the workshop (Python 3.14)
 └── CHANGELOG.md        # Release notes
 ```
 
-> **Status:** v1.2. Fourteen ATT&CK-mapped playbooks covering Windows, Linux, DNS and Microsoft Entra ID, each with Sigma, KQL and SPL. Also includes a synthetic lab dataset, a full workshop, a metrics tracker and an ATT&CK Navigator coverage layer. See the roadmap below.
+> **Status:** v1.3. Fourteen ATT&CK-mapped playbooks covering Windows, Linux, DNS and Microsoft Entra ID, each with Sigma, KQL and SPL. Also includes a synthetic lab dataset, a full workshop, a metrics tracker and an ATT&CK Navigator coverage layer. See the roadmap below.
 
 ## Playbooks
 
@@ -98,21 +122,73 @@ pip install -r requirements.txt
 python tests/test_lab_detections.py   # every Sigma rule vs. the lab answer key
 ```
 
-## Validation and CI
+<p align="center"><img src="assets/demo-lab-tests.gif" alt="Terminal recording: all 14 Sigma rules pass against the lab answer key, then the repository consistency check passes" width="85%"></p>
 
-Every push and pull request runs the [Validate workflow](.github/workflows/validate.yml). You can run the same checks locally after `pip install -r requirements.txt`:
+How a rule is tested, end to end:
 
-| Check | Command |
-|---|---|
-| Sigma syntax and best practices | `sigma check queries/sigma` |
-| Sigma converts cleanly to Splunk | `sigma convert -t splunk --without-pipeline queries/sigma` |
-| Lab dataset matches its generator | `python data/generate_lab_data.py && git diff --exit-code -- data/lab data/answer_key.json` |
-| Every rule finds exactly the answer-key events | `python tests/test_lab_detections.py` |
-| Playbooks, queries, answer key, README rows and links agree | `python tests/test_repo_consistency.py` |
-| Metrics script runs | `python metrics/hunt_metrics.py` |
-| ATT&CK Navigator layer is current | `python tools/build_navigator_layer.py --check` |
+```mermaid
+flowchart LR
+    G[generate_lab_data.py<br/>fixed seed] --> D[(Lab telemetry<br/>JSONL + CSV)]
+    G --> K[answer_key.json<br/>malicious + look-alikes]
+    S[Sigma rule] -->|pySigma SQLite backend| Q[SQL]
+    D --> DB[(In-memory SQLite)]
+    Q --> DB
+    DB --> H[Hits by LabEventId]
+    H --> C{Exactly matches<br/>answer key?}
+    K --> C
+    C -->|yes| P[PASS]
+    C -->|no| F[FAIL with missed /<br/>unexpected events]
+```
 
-CI, tests and the workshop all use the Python version in [`.python-version`](.python-version) (3.14). Python 3.15 is not used yet because pySigma's `google-re2` dependency has no 3.15 wheels; bump `.python-version` once it does. The workflow runs with read-only permissions, pins third-party actions to full commit SHAs and pins Python dependencies. [Dependabot](.github/dependabot.yml) proposes updates weekly.
+## Security and automation (DevSecOps)
+
+Every change is validated, scanned and, on release, shipped with an SBOM and signed provenance. Scheduled jobs keep content current and open reminder issues instead of relying on memory.
+
+```mermaid
+flowchart TB
+    subgraph PR["Every push and pull request"]
+        direction LR
+        V[Validate<br/>rules · lab · consistency] --> CQ[CodeQL<br/>Python + Actions] --> DR[Dependency<br/>review] --> Z[zizmor<br/>workflow audit]
+    end
+    subgraph SCHED["On a schedule"]
+        direction LR
+        W[Weekly maintenance<br/>links · source age · ATT&CK] --> QR[Quarterly<br/>content review] --> SC[OpenSSF<br/>Scorecard] --> DB[Dependabot<br/>Actions + pip]
+    end
+    subgraph REL["Tag v*.*.*"]
+        direction LR
+        R1[Re-validate] --> R2[Zip + CycloneDX SBOM] --> R3[SLSA provenance<br/>attestation] --> R4[GitHub release]
+    end
+    PR --> CS[(Code scanning alerts)]
+    SCHED --> I[(Self-closing tracking issues)]
+    PR -. merge to main .-> REL
+```
+
+| Workflow | Runs | What it does |
+|---|---|---|
+| [Validate](.github/workflows/validate.yml) | push, PR | `sigma check`, Splunk conversion, lab reproducibility, every rule vs. the answer key, repo consistency, metrics, Navigator layer and bibliography up to date |
+| [CodeQL](.github/workflows/codeql.yml) | push, PR, weekly | `security-extended` analysis of the Python tooling and of the workflows |
+| [Dependency review](.github/workflows/dependency-review.yml) | PR | Blocks new dependencies with known vulnerabilities (moderate+) or disallowed licenses |
+| [Workflow security](.github/workflows/workflow-security.yml) | `.github/` changes, weekly | [zizmor](https://docs.zizmor.sh/) audit of every workflow, results in code scanning |
+| [OpenSSF Scorecard](.github/workflows/scorecard.yml) | push, weekly | Supply-chain posture score (badge above) |
+| [Scheduled maintenance](.github/workflows/maintenance.yml) | weekly, quarterly | Broken links, sources older than 4 years, new ATT&CK release → one self-closing tracking issue; quarterly content-review checklist issue |
+| [Release](.github/workflows/release.yml) | tag `v*.*.*` | Re-validates, packages the kit, builds a CycloneDX SBOM, signs build provenance, publishes the release |
+| [Dependabot](.github/dependabot.yml) | weekly | Grouped updates for SHA-pinned Actions and pinned Sigma tooling |
+
+All workflows start from `permissions: {}`, grant each job only what it needs, pin third-party actions to full commit SHAs and never persist the checkout token. Run the same checks locally with [`pre-commit`](.pre-commit-config.yaml) (includes [gitleaks](https://github.com/gitleaks/gitleaks) secret scanning):
+
+```bash
+pip install -r requirements.txt pre-commit && pre-commit install
+pre-commit run --all-files
+```
+
+**Verify a release** before using it in a workshop:
+
+```bash
+gh attestation verify cti-hunt-loop-kit-v1.3.0.zip -R NexusSecurityAdvisors/cti-hunt-loop-kit
+sha256sum -c SHA256SUMS
+```
+
+CI, tests and the workshop all use the Python version in [`.python-version`](.python-version) (3.14). Python 3.15 is not used yet because pySigma's `google-re2` dependency has no 3.15 wheels; bump `.python-version` once it does.
 
 ## Hunt hypothesis card (preview)
 
@@ -152,6 +228,8 @@ Suggested hunt program metrics. Track them in [`metrics/hunt-tracker.csv`](metri
 - [x] Cloud identity hunts (OAuth consent abuse, MFA fatigue), Linux persistence and DNS C2 beaconing (HL-0011 to HL-0014), added to the lab and workshop
 - [x] ATT&CK Navigator layer for kit coverage ([`navigator/`](navigator/COVERAGE.md)), regenerated and checked in CI
 - [x] CI hardening: SHA-pinned actions, pinned Python tooling, Dependabot, lab reproducibility and repo consistency checks (v1.2, see [`CHANGELOG.md`](CHANGELOG.md))
+- [x] Research bibliography with automated freshness checks, CodeQL, Scorecard, zizmor, signed releases with SBOM, scheduled maintenance issues, animated banner and demo (v1.3)
+- [ ] Short explainer video for the workshop
 
 ## Contributing
 
@@ -161,12 +239,16 @@ Contributions are welcome: new playbooks, query translations, and lessons learne
 2. Follow the existing templates and include ATT&CK technique IDs.
 3. **Never commit real customer data, IOCs under restrictive TLP, or proprietary telemetry.** Use synthetic or publicly shareable (TLP:CLEAR) material only.
 4. If you add a playbook, add matching malicious and benign events to `data/generate_lab_data.py`, then regenerate so `tests/test_lab_detections.py` covers your rule. Add a row to the playbook table above and run `python tools/build_navigator_layer.py` to refresh the coverage layer.
-5. Run the checks under [Validation and CI](#validation-and-ci) locally.
+5. Run the checks under [Security and automation](#security-and-automation-devsecops) locally (`pre-commit run --all-files`). Cite new sources in [`docs/references.yml`](docs/references.yml).
 6. Open a pull request describing what you added and how you tested it.
 
 ## Disclaimer
 
 This kit is provided for educational and defensive purposes. Test all queries in a non-production environment and tune them for your telemetry before operational use.
+
+## Citing
+
+If you use the kit in research or teaching, cite it with the metadata in [`CITATION.cff`](CITATION.cff) (GitHub's *Cite this repository* button generates APA and BibTeX).
 
 ## License
 
