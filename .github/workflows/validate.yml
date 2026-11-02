@@ -76,3 +76,9 @@ jobs:
 
       - name: ATT&CK Navigator layer is up to date
         run: python tools/build_navigator_layer.py --check
+
+      - name: Bibliography is up to date
+        run: python tools/build_references.py --check
+
+      - name: Flag sources older than 4 years (warning only)
+        run: python tools/build_references.py --stale

@@ -91,6 +91,12 @@ The lab dataset (`data/lab`) contains process creation (Sysmon and `DeviceProces
 
 ## References
 
+Current threat intelligence and research (full list in [`docs/REFERENCES.md`](../docs/REFERENCES.md)):
+
+- CISA, NSA, FBI, & international partners (2024). *Identifying and mitigating living off the land techniques*. Joint guidance. <https://www.cisa.gov/resources-tools/resources/identifying-and-mitigating-living-land-techniques> ([bib](../docs/REFERENCES.md#cisa-lotl-2024))
+
+Technique and product documentation:
+
 - MITRE ATT&CK T1218 — https://attack.mitre.org/techniques/T1218/
 - MITRE ATT&CK T1218.005 — https://attack.mitre.org/techniques/T1218/005/
 - MITRE ATT&CK T1218.010 — https://attack.mitre.org/techniques/T1218/010/

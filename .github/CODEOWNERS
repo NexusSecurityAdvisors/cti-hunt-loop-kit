@@ -1,0 +1,6 @@
+# Review is required from the maintainer for everything; security-sensitive paths are listed
+# explicitly so the rule survives if the default owner changes.
+*                       @DanPazlev
+/.github/               @DanPazlev
+/queries/sigma/         @DanPazlev
+/data/                  @DanPazlev

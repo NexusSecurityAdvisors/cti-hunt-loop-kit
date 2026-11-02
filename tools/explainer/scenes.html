@@ -1,0 +1,178 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1280px; height: 720px; overflow: hidden; background: #0b1220; }
+  body { font-family: Inter, "DejaVu Sans", sans-serif; color: #f8fafc; }
+  #stage { position: absolute; inset: 0; background: radial-gradient(1200px 700px at 70% 30%, #16324f 0%, #0b1220 70%); }
+  .grid { position: absolute; inset: 0; background-image: linear-gradient(#1e3a5f55 1px, transparent 1px), linear-gradient(90deg, #1e3a5f55 1px, transparent 1px); background-size: 32px 32px; }
+  .scene { position: absolute; inset: 0; display: none; }
+  .kicker { font: 600 18px Inter; letter-spacing: .18em; text-transform: uppercase; color: #5eead4; }
+  h1 { font: 800 68px/1.05 Inter; letter-spacing: -.02em; }
+  h2 { font: 700 44px/1.15 Inter; letter-spacing: -.01em; }
+  p.lead { font: 400 26px/1.4 Inter; color: #cbd5e1; }
+  .mono { font-family: "DejaVu Sans Mono", monospace; }
+  .chip { display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1.5px solid #2dd4bf88; background: #0f2a3d; color: #5eead4; font: 600 17px "DejaVu Sans Mono", monospace; margin: 0 10px 10px 0; }
+  .card { position: absolute; border-radius: 16px; background: #111c2e; border: 1.5px solid #24405f; }
+  .lane { position: absolute; left: 120px; width: 1040px; height: 110px; border-radius: 18px; display: flex; align-items: center; padding: 0 36px; font: 600 26px Inter; }
+  .node { position: absolute; width: 74px; height: 74px; margin: -37px 0 0 -37px; border-radius: 50%; background: #334155; border: 3px solid #5eead4; display: flex; align-items: center; justify-content: center; font: 800 28px Inter; }
+  .nlabel { position: absolute; width: 220px; margin-left: -110px; text-align: center; font: 700 21px Inter; }
+  .nsub { display: block; font: 400 16px Inter; color: #94a3b8; margin-top: 4px; }
+  .pb { position: absolute; width: 268px; height: 74px; border-radius: 12px; background: #111c2e; border: 1.5px solid #24405f; padding: 10px 14px; }
+  .pb b { font: 700 16px "DejaVu Sans Mono", monospace; color: #5eead4; }
+  .pb span { display: block; font: 500 15px Inter; color: #e2e8f0; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .term { position: absolute; left: 600px; top: 150px; width: 620px; height: 470px; border-radius: 14px; background: #0d1117; border: 1.5px solid #30363d; overflow: hidden; }
+  .term .bar { height: 34px; background: #161b22; }
+  .term .bar i { position: absolute; top: 11px; width: 12px; height: 12px; border-radius: 50%; }
+  .term pre { padding: 16px 18px; font: 14px/1.55 "DejaVu Sans Mono", monospace; color: #e6edf3; white-space: pre; }
+  .ok { color: #3fb950; } .pr { color: #58a6ff; }
+  .step { position: absolute; width: 188px; height: 132px; border-radius: 14px; background: #111c2e; border: 2px solid #24405f; padding: 16px; }
+  .step b { display: block; font: 700 19px Inter; margin-bottom: 8px; }
+  .step span { font: 400 15px/1.35 Inter; color: #94a3b8; }
+  .fade { position: absolute; inset: 0; background: #000; pointer-events: none; }
+</style></head>
+<body>
+<div id="stage"><div class="grid"></div>
+
+<!-- 1 Title -->
+<section class="scene" id="s1">
+  <div style="position:absolute;left:110px;top:200px;width:1060px">
+    <div class="kicker" id="s1k">Nexus Security Advisors · open source</div>
+    <h1 id="s1h" style="margin-top:22px">CTI Hunt Loop Kit</h1>
+    <p class="lead" id="s1p" style="margin-top:22px;max-width:900px">Turn threat intelligence into hunts, hunts into detections, and findings back into better intelligence.</p>
+    <div id="s1c" style="margin-top:34px"><span class="chip">14 playbooks</span><span class="chip">Sigma · KQL · SPL</span><span class="chip">synthetic lab</span><span class="chip">ATT&amp;CK v20</span></div>
+  </div>
+</section>
+
+<!-- 2 Problem -->
+<section class="scene" id="s2">
+  <div style="position:absolute;left:120px;top:70px"><div class="kicker">The problem</div><h2 style="margin-top:12px">Intel and hunting run in separate lanes</h2></div>
+  <div class="lane" id="l1" style="top:230px;background:#13243a;border:2px solid #3b82f6">Threat intel → reports, PIRs, IOCs</div>
+  <div class="lane" id="l2" style="top:370px;background:#1d1a2f;border:2px solid #a78bfa">Threat hunting → one-off queries</div>
+  <p class="lead" id="s2p" style="position:absolute;left:120px;top:540px;width:1040px">Lessons rarely flow back. Hunts are not repeated, detections are not promoted, and data gaps stay invisible.</p>
+  <div id="s2x" style="position:absolute;left:610px;top:323px;font:800 52px Inter;color:#f87171">✕</div>
+</section>
+
+<!-- 3 Loop -->
+<section class="scene" id="s3">
+  <div style="position:absolute;left:70px;top:70px;width:380px">
+    <div class="kicker">The Hunt Loop</div>
+    <h2 style="margin-top:12px">Every hunt ends in a recorded outcome</h2>
+    <p class="lead" id="s3p" style="margin-top:22px;font-size:22px">A new detection, an intel update, or a retired hypothesis. Never just "nothing found".</p>
+  </div>
+  <svg id="ring" width="1280" height="720" style="position:absolute;inset:0">
+    <circle cx="860" cy="380" r="190" fill="none" stroke="#2dd4bf55" stroke-width="4" stroke-dasharray="8 12"/>
+    <circle id="pulse" r="18" fill="#5eead4" opacity=".85"/>
+  </svg>
+  <div id="nodes"></div>
+</section>
+
+<!-- 4 Playbooks -->
+<section class="scene" id="s4">
+  <div style="position:absolute;left:70px;top:50px"><div class="kicker">14 ATT&amp;CK-mapped playbooks</div><h2 style="margin-top:10px;font-size:38px">One ransomware intrusion, from cloud identity to encryption</h2></div>
+  <div id="pbs"></div>
+  <p class="lead" id="s4p" style="position:absolute;left:70px;top:640px;font-size:21px">Each with a hypothesis, Sigma + KQL + SPL queries, known benign look-alikes, triage questions and current threat-intel citations.</p>
+</section>
+
+<!-- 5 Lab -->
+<section class="scene" id="s5">
+  <div style="position:absolute;left:70px;top:150px;width:490px">
+    <div class="kicker">Practice before production</div>
+    <h2 style="margin-top:12px;font-size:40px">Five days of synthetic telemetry. One hidden intrusion.</h2>
+    <p class="lead" id="s5p" style="margin-top:22px;font-size:22px">Windows, Linux, DNS and Entra ID logs with planted benign look-alikes. Run it in KQL, SPL, or Sigma + Python with no SIEM. CI proves every rule finds exactly the answer key.</p>
+  </div>
+  <div class="term"><div class="bar"><i style="left:16px;background:#ff5f57"></i><i style="left:38px;background:#febc2e"></i><i style="left:60px;background:#28c840"></i></div><pre id="tty"></pre></div>
+</section>
+
+<!-- 6 DevSecOps -->
+<section class="scene" id="s6">
+  <div style="position:absolute;left:70px;top:60px"><div class="kicker">Built like production software</div><h2 style="margin-top:12px">Secured, tested and maintained on a schedule</h2></div>
+  <div id="steps"></div>
+  <p class="lead" id="s6p" style="position:absolute;left:70px;top:450px;width:1140px;font-size:22px">SHA-pinned actions, least-privilege tokens, OpenSSF Scorecard, signed releases with an SBOM, and weekly checks that open an issue when a link breaks, a source ages past four years, or MITRE ships a new ATT&amp;CK release.</p>
+</section>
+
+<!-- 7 Close -->
+<section class="scene" id="s7">
+  <div style="position:absolute;left:110px;top:170px;width:1060px">
+    <div class="kicker">Get the kit</div>
+    <h1 style="margin-top:20px;font-size:54px">github.com/NexusSecurityAdvisors/<br>cti-hunt-loop-kit</h1>
+    <p class="lead" style="margin-top:30px">Apache-2.0 · Companion to <i>Advanced Cyber Threat Intelligence and Hunting</i> (Sorensen &amp; Tiepolo) · proposed FIRST CTI 2027 workshop</p>
+    <div id="s7c" style="margin-top:34px"><span class="chip">Fork it</span><span class="chip">Run the lab</span><span class="chip">Close the loop</span></div>
+  </div>
+</section>
+
+<div class="fade" id="fade"></div>
+</div>
+<script>
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2; };
+const appear = (el, t, start, dur = .6, dy = 24) => { const k = ease((t - start) / dur); el.style.opacity = k; el.style.transform = `translateY(${(1-k)*dy}px)`; };
+const $ = id => document.getElementById(id);
+
+// Scene durations (seconds); the renderer reads these.
+window.DUR = { 1: 7, 2: 8, 3: 13, 4: 9, 5: 10, 6: 10, 7: 8 };
+const FADE = .5;
+
+// Scene 3 nodes
+const STAGES = [["Collect","PIRs, reports"],["Hypothesize","hypothesis card"],["Hunt","Sigma · KQL · SPL"],["Analyze","triage, verdicts"],["Operationalize","promote detections"],["Feed back","intel updates"]];
+const CX = 860, CY = 380, R = 190;
+STAGES.forEach((s, i) => {
+  const a = -Math.PI/2 + i * Math.PI/3, x = CX + R*Math.cos(a), y = CY + R*Math.sin(a);
+  const n = document.createElement('div'); n.className = 'node'; n.id = 'n'+i; n.style.left = x+'px'; n.style.top = y+'px'; n.textContent = i+1; $('nodes').appendChild(n);
+  const l = document.createElement('div'); l.className = 'nlabel'; l.id = 'nl'+i;
+  const ox = Math.cos(a) * 140, oy = Math.sin(a) * 78;
+  l.style.left = (x + ox) + 'px'; l.style.top = (y + oy - 22) + 'px';
+  l.innerHTML = s[0] + `<span class="nsub">${s[1]}</span>`; $('nodes').appendChild(l);
+});
+
+// Scene 4 playbooks
+const PB = [["HL-0012","MFA fatigue"],["HL-0011","OAuth consent abuse"],["HL-0001","Encoded PowerShell"],["HL-0008","LOLBin proxy execution"],["HL-0004","Registry Run keys"],["HL-0003","Scheduled tasks"],["HL-0014","DNS C2 beaconing"],["HL-0006","Kerberoasting"],["HL-0002","LSASS dumping"],["HL-0005","WMI / PsExec"],["HL-0009","RDP lateral movement"],["HL-0010","Exfil to cloud storage"],["HL-0013","Linux cron / systemd"],["HL-0007","Inhibit recovery"]];
+PB.forEach((p, i) => { const c = i % 4, r = Math.floor(i / 4); const d = document.createElement('div'); d.className = 'pb'; d.id = 'pb'+i;
+  d.style.left = (70 + c*290) + 'px'; d.style.top = (180 + r*100) + 'px'; d.innerHTML = `<b>${p[0]}</b><span>${p[1]}</span>`; $('pbs').appendChild(d); });
+
+// Scene 5 terminal lines (real output of tests/test_lab_detections.py, abridged)
+const TTY = ["$ python tests/test_lab_detections.py",
+ "PASS HL-0001 encoded_powershell: 2/2 malicious, 90/90 look-alikes",
+ "PASS HL-0002 lsass_credential_dumping: 2/2 malicious",
+ "PASS HL-0006 kerberoasting: 4/4 malicious, 15/15 look-alikes",
+ "PASS HL-0007 inhibit_system_recovery: 10/10 malicious",
+ "PASS HL-0010 exfil_to_cloud_storage: 1/1 malicious",
+ "PASS HL-0012 correlation: 14/14 malicious, 0 benign",
+ "PASS HL-0013 linux_cron_systemd: 2/2 malicious",
+ "PASS HL-0014 dns_c2_beaconing: 206/206 malicious",
+ "...",
+ "$ python tests/test_repo_consistency.py",
+ "PASS: 14 playbooks, 15 Sigma rules, 0 problems"];
+
+// Scene 6 pipeline steps
+const STEPS = [["Validate","rules vs. lab, consistency"],["CodeQL","Python + Actions"],["zizmor","workflow security"],["Dependency review","vulns + licenses"],["Release","SBOM + signed provenance"],["Scheduled","links · sources · ATT&CK"]];
+STEPS.forEach((s, i) => { const d = document.createElement('div'); d.className = 'step'; d.id = 'st'+i; d.style.left = (70 + i*192) + 'px'; d.style.top = '260px'; d.innerHTML = `<b>${s[0]}</b><span>${s[1]}</span>`; $('steps').appendChild(d); });
+
+window.render = (scene, t) => {
+  document.querySelectorAll('.scene').forEach(s => s.style.display = 'none');
+  $('s'+scene).style.display = 'block';
+  const D = DUR[scene];
+  $('fade').style.opacity = Math.max(1 - t/FADE, (t - (D - FADE))/FADE, 0);
+  if (scene === 1) { appear($('s1k'), t, .3); appear($('s1h'), t, .6); appear($('s1p'), t, 1.3); appear($('s1c'), t, 2.2); }
+  if (scene === 2) { appear($('l1'), t, .4, .6, 0); appear($('l2'), t, 1.0, .6, 0);
+    const gap = ease((t - 2.2) / 1.2); $('l1').style.transform = `translateY(${-gap*16}px)`; $('l2').style.transform = `translateY(${gap*16}px)`;
+    appear($('s2p'), t, 3.0); const x = ease((t - 4.2)/.4); $('s2x').style.opacity = x; $('s2x').style.transform = `scale(${.6 + .4*x})`; }
+  if (scene === 3) {
+    appear($('s3p'), t, 1.0);
+    const lit = Math.floor((t - 1.2) / 1.6);
+    STAGES.forEach((_, i) => { const on = t > 1.2 + i * 1.6; appear($('n'+i), t, 1.2 + i*1.6, .5, 0); appear($('nl'+i), t, 1.4 + i*1.6, .5, 10);
+      $('n'+i).style.background = (i === lit % 6 && t < 11) ? '#5eead4' : '#334155'; $('n'+i).style.color = (i === lit % 6 && t < 11) ? '#0b1220' : '#f8fafc'; });
+    const prog = clamp((t - 1.2) / 9.6) * 2 * Math.PI + (t > 10.8 ? (t - 10.8) * 2.5 : 0), a = -Math.PI/2 + prog;
+    $('pulse').setAttribute('cx', CX + R*Math.cos(a)); $('pulse').setAttribute('cy', CY + R*Math.sin(a)); $('pulse').style.opacity = t > 1.2 ? .85 : 0; }
+  if (scene === 4) { PB.forEach((_, i) => appear($('pb'+i), t, .5 + i*.28, .45, 14)); appear($('s4p'), t, 5.0); }
+  if (scene === 5) { appear($('s5p'), t, .6);
+    const n = Math.floor(clamp((t - 1.0) / 6.5) * TTY.length); const shown = TTY.slice(0, n);
+    $('tty').innerHTML = shown.map(l => l.startsWith('$') ? `<span class="pr">${l}</span>` : l.startsWith('PASS') ? `<span class="ok">${l}</span>` : l).join('\n') + (Math.floor(t*2) % 2 ? '' : '\n<span class="pr">▌</span>'); }
+  if (scene === 6) { STEPS.forEach((_, i) => { appear($('st'+i), t, .5 + i*.45, .45, 18); const on = t > 3.6 + i*.55;
+      $('st'+i).style.borderColor = on ? '#3fb950' : '#24405f'; $('st'+i).style.boxShadow = on ? '0 0 24px #3fb95044' : 'none'; });
+    appear($('s6p'), t, 3.2); }
+  if (scene === 7) { appear($('s7c'), t, 1.2); }
+};
+render(1, 0);
+</script>
+</body></html>

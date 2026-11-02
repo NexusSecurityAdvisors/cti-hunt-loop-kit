@@ -1,0 +1,37 @@
+# Local guardrails that mirror CI. Install once: pip install pre-commit && pre-commit install
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks # block committed secrets before they reach GitHub
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-json
+      - id: end-of-file-fixer
+        exclude: ^data/lab/
+      - id: trailing-whitespace
+        exclude: ^data/lab/
+      - id: check-added-large-files
+        args: [--maxkb=2048]
+  - repo: local
+    hooks:
+      - id: sigma-lab-tests
+        name: Sigma rules vs. lab answer key
+        entry: python tests/test_lab_detections.py
+        language: system
+        pass_filenames: false
+        files: ^(queries/sigma|data)/
+      - id: repo-consistency
+        name: Repository consistency
+        entry: python tests/test_repo_consistency.py
+        language: system
+        pass_filenames: false
+      - id: references
+        name: Bibliography up to date
+        entry: python tools/build_references.py --check
+        language: system
+        pass_filenames: false
+        files: ^docs/

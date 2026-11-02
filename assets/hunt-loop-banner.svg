@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="1200" height="320" role="img" aria-labelledby="t d">
+  <title id="t">CTI Hunt Loop Kit</title>
+  <desc id="d">Animated diagram of the six-stage Hunt Loop: Collect, Hypothesize, Hunt, Analyze, Operationalize, Feed back. A pulse travels around the loop and each stage lights up in turn.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#132a46"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#5eead4" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#5eead4" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#1e3a5f" stroke-width="0.6"/>
+    </pattern>
+    <style>
+      .title { font: 700 44px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #f8fafc; }
+      .tag   { font: 400 19px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #cbd5e1; }
+      .chip  { font: 600 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #5eead4; }
+      .lbl   { font: 600 13px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #e2e8f0; text-anchor: middle; }
+      .num   { font: 700 15px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #f8fafc; text-anchor: middle; dominant-baseline: central; }
+      .ring  { fill: none; stroke: #2dd4bf; stroke-opacity: .35; stroke-width: 3; stroke-dasharray: 6 10; animation: spin 24s linear infinite; transform-origin: 920px 160px; }
+      .node  { fill: #334155; stroke: #5eead4; stroke-width: 2; animation: pulse 6s ease-in-out infinite; }
+      .n1 { animation-delay: 0s; } .n2 { animation-delay: 1s; } .n3 { animation-delay: 2s; }
+      .n4 { animation-delay: 3s; } .n5 { animation-delay: 4s; } .n6 { animation-delay: 5s; }
+      @keyframes pulse { 0%, 20%, 100% { fill: #334155; } 8% { fill: #5eead4; } }
+      @keyframes spin  { to { transform: rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) { .ring, .node { animation: none; } .pulse { display: none; } }
+    </style>
+  </defs>
+
+  <rect width="1200" height="320" rx="18" fill="url(#bg)"/>
+  <rect width="1200" height="320" rx="18" fill="url(#grid)" opacity=".5"/>
+
+  <text x="56" y="118" class="title">CTI Hunt Loop Kit</text>
+  <text x="58" y="158" class="tag">Intel-driven threat hunting, closed-loop.</text>
+  <text x="58" y="186" class="tag">Hypotheses → Sigma · KQL · SPL → detections → better intel.</text>
+  <g transform="translate(58 222)">
+    <rect width="132" height="30" rx="15" fill="#0f2a3d" stroke="#2dd4bf" stroke-opacity=".5"/>
+    <text x="66" y="20" class="chip" text-anchor="middle">14 playbooks</text>
+    <rect x="144" width="150" height="30" rx="15" fill="#0f2a3d" stroke="#2dd4bf" stroke-opacity=".5"/>
+    <text x="219" y="20" class="chip" text-anchor="middle">ATT&amp;CK v19+</text>
+    <rect x="306" width="168" height="30" rx="15" fill="#0f2a3d" stroke="#2dd4bf" stroke-opacity=".5"/>
+    <text x="390" y="20" class="chip" text-anchor="middle">tested in CI</text>
+  </g>
+
+  <!-- Loop: centre (920,160), radius 110; stages every 60 degrees starting at the top -->
+  <circle cx="920" cy="160" r="110" class="ring"/>
+  <path id="loop" d="M920 50 a110 110 0 1 1 -0.01 0" fill="none"/>
+  <circle r="16" fill="url(#glow)" class="pulse">
+    <animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#loop"/></animateMotion>
+  </circle>
+
+  <g>
+    <circle cx="920"    cy="50"    r="17" class="node n1"/><text x="920"    y="50"    class="num">1</text>
+    <circle cx="1015.3" cy="105"   r="17" class="node n2"/><text x="1015.3" y="105"   class="num">2</text>
+    <circle cx="1015.3" cy="215"   r="17" class="node n3"/><text x="1015.3" y="215"   class="num">3</text>
+    <circle cx="920"    cy="270"   r="17" class="node n4"/><text x="920"    y="270"   class="num">4</text>
+    <circle cx="824.7"  cy="215"   r="17" class="node n5"/><text x="824.7"  y="215"   class="num">5</text>
+    <circle cx="824.7"  cy="105"   r="17" class="node n6"/><text x="824.7"  y="105"   class="num">6</text>
+  </g>
+  <text x="920"  y="22"  class="lbl">Collect &amp; prioritize</text>
+  <text x="1100" y="100" class="lbl">Hypothesize</text>
+  <text x="1080" y="232" class="lbl">Hunt</text>
+  <text x="920"  y="306" class="lbl">Analyze &amp; triage</text>
+  <text x="732"  y="232" class="lbl">Operationalize</text>
+  <text x="748"  y="100" class="lbl">Feed back</text>
+</svg>

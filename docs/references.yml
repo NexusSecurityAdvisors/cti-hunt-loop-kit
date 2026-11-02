@@ -1,0 +1,175 @@
+# Bibliography for the CTI Hunt Loop Kit: the single source of truth.
+# tools/build_references.py renders docs/REFERENCES.md from this file and checks freshness.
+#
+# Fields:
+#   id         stable key, cited as [id] in docs
+#   type       academic | government | industry | standard
+#   published  YYYY-MM of the version cited (latest revision for living advisories)
+#   evergreen  true for continuously maintained resources (exempt from the age check)
+#   used_by    playbook IDs (HL-####) or "general"
+#
+# Freshness policy: non-evergreen sources older than MAX_AGE_YEARS (4) are flagged by CI
+# and by the weekly maintenance workflow, which opens a review issue.
+
+- id: wang-2022
+  type: academic
+  authors: Wang, Z.
+  title: A systematic literature review on cyber threat hunting
+  venue: arXiv preprint arXiv:2212.05310
+  published: 2022-12
+  url: https://arxiv.org/abs/2212.05310
+  used_by: [general]
+
+- id: mahboubi-2024
+  type: academic
+  authors: Mahboubi, A., Luong, K., Aboutorab, H., Bui, H. T., Jarrad, G., Bahutair, M., Camtepe, S., Pogrebna, G., Ahmed, E., Barry, B., & Gately, H.
+  title: "Evolving techniques in cyber threat hunting: A systematic review"
+  venue: Journal of Network and Computer Applications, 232, 104004
+  published: 2024-10
+  url: https://researchr.org/publication/MahboubiLABJBCPABG24
+  used_by: [general]
+
+- id: badva-2024
+  type: academic
+  authors: Badva, P., Ramokapane, K. M., Pantano, E., & Rashid, A.
+  title: "Unveiling the hunter-gatherers: Exploring threat hunting practices and challenges in cyber defense"
+  venue: 33rd USENIX Security Symposium (USENIX Security '24)
+  published: 2024-08
+  url: https://www.usenix.org/conference/usenixsecurity24/presentation/badva
+  used_by: [general]
+
+- id: milani-2024
+  type: academic
+  authors: Milani, A. M. P., Starr, A., Hill, S., Curtis, C., Anderson, N., Moreno-Lumbreras, D., & Storey, M.-A.
+  title: "Fuzzy to clear: Elucidating the threat hunter cognitive process and cognitive support needs"
+  venue: arXiv preprint arXiv:2408.04348
+  published: 2024-08
+  url: https://arxiv.org/abs/2408.04348
+  used_by: [general]
+
+- id: isik-2025
+  type: academic
+  authors: Işık, B., Tuncer, B. İ., Amirov, N., & Bahtiyar, Ş.
+  title: "DNS tunneling: Threat landscape and improved detection solutions"
+  venue: arXiv preprint arXiv:2507.10267
+  published: 2025-07
+  url: https://arxiv.org/abs/2507.10267
+  used_by: [HL-0014]
+
+- id: peak-2023
+  type: industry
+  authors: Bianco, D., & Splunk SURGe
+  title: Introducing the PEAK threat hunting framework
+  venue: Splunk Security Blog
+  published: 2023-05
+  url: https://www.splunk.com/en_us/blog/security/peak-threat-hunting-framework.html
+  used_by: [general]
+
+- id: sans-2026
+  type: industry
+  authors: SANS Institute
+  title: "SANS 2026 threat hunting survey: Data quality overtakes staffing as the top barrier"
+  venue: SANS Institute press release and survey report
+  published: 2026-09
+  url: https://www.sans.org/press/announcements/threat-hunters-call-data-their-biggest-barrier-overtaking-staffing-first-time-survey-finds
+  used_by: [general]
+
+- id: nist-800-61r3
+  type: standard
+  authors: Nelson, A., Rekhi, S., Souppaya, M., & Scarfone, K.
+  title: "Incident response recommendations and considerations for cybersecurity risk management: A CSF 2.0 community profile (NIST SP 800-61r3)"
+  venue: National Institute of Standards and Technology
+  published: 2025-04
+  url: https://csrc.nist.gov/pubs/sp/800/61/r3/final
+  used_by: [general]
+
+- id: attack-v19
+  type: standard
+  authors: MITRE
+  title: "ATT&CK v19 release notes (Defense Evasion split into Stealth and Defense Impairment)"
+  venue: MITRE ATT&CK
+  published: 2026-04
+  url: https://attack.mitre.org/resources/updates/updates-april-2026/
+  used_by: [general]
+
+- id: sigma-spec
+  type: standard
+  authors: SigmaHQ
+  title: Sigma specification (rules, correlations, filters)
+  venue: GitHub, SigmaHQ/sigma-specification
+  published: 2024-08
+  evergreen: true
+  url: https://github.com/SigmaHQ/sigma-specification
+  used_by: [general]
+
+- id: cisa-ransomware-guide
+  type: government
+  authors: CISA, FBI, NSA, & MS-ISAC
+  title: "#StopRansomware guide"
+  venue: Cybersecurity and Infrastructure Security Agency
+  published: 2023-05
+  url: https://www.cisa.gov/stopransomware/ransomware-guide
+  used_by: [HL-0001, HL-0007]
+
+- id: cisa-lotl-2024
+  type: government
+  authors: CISA, NSA, FBI, & international partners
+  title: Identifying and mitigating living off the land techniques
+  venue: Joint guidance
+  published: 2024-02
+  url: https://www.cisa.gov/resources-tools/resources/identifying-and-mitigating-living-land-techniques
+  used_by: [HL-0001, HL-0002, HL-0003, HL-0004, HL-0005, HL-0008]
+
+- id: cisa-aa23-320a
+  type: government
+  authors: CISA & FBI
+  title: "Scattered Spider (AA23-320A), revised July 2025"
+  venue: Joint cybersecurity advisory
+  published: 2025-07
+  url: https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-320a
+  used_by: [HL-0010, HL-0012]
+
+- id: cisa-aa23-061a
+  type: government
+  authors: CISA & FBI
+  title: "#StopRansomware: BlackSuit (Royal) ransomware (AA23-061A), updated August 2024"
+  venue: Joint cybersecurity advisory
+  published: 2024-08
+  url: https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-061a
+  used_by: [HL-0005, HL-0007, HL-0009]
+
+- id: ms-lsass-2022
+  type: industry
+  authors: Microsoft Threat Intelligence
+  title: Detecting and preventing LSASS credential dumping attacks
+  venue: Microsoft Security Blog
+  published: 2022-10
+  url: https://www.microsoft.com/en-us/security/blog/2022/10/05/detecting-and-preventing-lsass-credential-dumping-attacks/
+  used_by: [HL-0002]
+
+- id: ms-kerberoasting-2024
+  type: industry
+  authors: Microsoft
+  title: Microsoft's guidance to help mitigate Kerberoasting
+  venue: Microsoft Security Blog
+  published: 2024-10
+  url: https://www.microsoft.com/en-us/security/blog/2024/10/11/microsofts-guidance-to-help-mitigate-kerberoasting/
+  used_by: [HL-0006]
+
+- id: ms-midnight-blizzard-2024
+  type: industry
+  authors: Microsoft Threat Intelligence
+  title: "Midnight Blizzard: Guidance for responders on nation-state attack"
+  venue: Microsoft Security Blog
+  published: 2024-01
+  url: https://www.microsoft.com/en-us/security/blog/2024/01/25/midnight-blizzard-guidance-for-responders-on-nation-state-attack/
+  used_by: [HL-0011]
+
+- id: elastic-linux-persistence-2024
+  type: industry
+  authors: Groenewoud, R.
+  title: "Linux detection engineering: A primer on persistence mechanisms"
+  venue: Elastic Security Labs
+  published: 2024-08
+  url: https://www.elastic.co/security-labs/primer-on-persistence-mechanisms
+  used_by: [HL-0013]

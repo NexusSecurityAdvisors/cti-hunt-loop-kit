@@ -91,6 +91,12 @@ Scope exclusions to **app ID + scopes + consent type**. Excluding by app display
 
 ## References
 
+Current threat intelligence and research (full list in [`docs/REFERENCES.md`](../docs/REFERENCES.md)):
+
+- Microsoft Threat Intelligence (2024). *Midnight Blizzard: Guidance for responders on nation-state attack*. Microsoft Security Blog. <https://www.microsoft.com/en-us/security/blog/2024/01/25/midnight-blizzard-guidance-for-responders-on-nation-state-attack/> ([bib](../docs/REFERENCES.md#ms-midnight-blizzard-2024))
+
+Technique and product documentation:
+
 - MITRE ATT&CK T1528 — https://attack.mitre.org/techniques/T1528/
 - MITRE ATT&CK T1550.001 — https://attack.mitre.org/techniques/T1550/001/
 - Microsoft: Detect and remediate illicit consent grants — https://learn.microsoft.com/en-us/defender-office-365/detect-and-remediate-illicit-consent-grants
