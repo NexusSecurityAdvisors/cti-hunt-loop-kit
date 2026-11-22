@@ -1,0 +1,6 @@
+# Tooling for validating and testing the kit. Python version: see .python-version (3.14).
+# Pinned so CI and workshop machines get identical rule conversions. Dependabot proposes upgrades.
+# Edit this file, then regenerate requirements.txt: pip-compile --generate-hashes --allow-unsafe --strip-extras requirements.in
+sigma-cli==4.0.1
+pysigma-backend-sqlite==2.1.1
+pysigma-backend-splunk==3.0.1

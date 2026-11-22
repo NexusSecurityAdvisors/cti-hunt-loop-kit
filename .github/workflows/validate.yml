@@ -33,7 +33,7 @@ jobs:
           cache-dependency-path: requirements.txt
 
       - name: Install Sigma tooling
-        run: pip install -r requirements.txt
+        run: pip install --require-hashes -r requirements.txt
 
       - name: Check Sigma rules (syntax and best practices)
         run: sigma check queries/sigma
@@ -57,7 +57,7 @@ jobs:
           cache-dependency-path: requirements.txt
 
       - name: Install Sigma tooling
-        run: pip install -r requirements.txt
+        run: pip install --require-hashes -r requirements.txt
 
       - name: Lab dataset is reproducible from the generator
         run: |
