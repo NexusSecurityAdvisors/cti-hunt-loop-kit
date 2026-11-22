@@ -1,0 +1,7 @@
+source,file,owner,retention_days,earliest_available_utc,forwarded_to_siem,notes
+Identity provider audit log,identity_audit.csv,Identity team,30,2027-02-01T00:00:00Z,Yes,"Consent, credential, role, and user events"
+Change calendar,change_calendar.csv,IT service management,365,2027-01-25T00:00:00Z,No,Approved change windows and tickets
+OT jump host session log,jumphost_sessions.csv,OT operations,7,2027-02-24T00:00:00Z,No,Stored locally on the jump host; rolls over
+Approved vendor list,approved_vendors.csv,Procurement,,,No,Vendor accounts allowed to use remote access
+"EDR, engineering workstations",(not provided in lab),SOC,90,2026-12-03T00:00:00Z,Yes,IT side only; OT hosts not covered
+Passive OT network monitoring,(not deployed),OT operations,0,,No,Not deployed
