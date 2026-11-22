@@ -92,9 +92,11 @@ def build(rules):
         "",
         f"**{len(rules)} playbooks · {len(by_tech)} techniques and sub-techniques · ATT&CK v{ATTACK_VERSION}**",
         "",
-        "Open the interactive view in the [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/): "
-        "*Open Existing Layer → Upload from local* and choose [`cti-hunt-loop-kit.layer.json`](cti-hunt-loop-kit.layer.json), "
-        "or *Load from URL* with the file's raw GitHub URL.",
+        (
+            "Open the interactive view in the [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/): "
+            "*Open Existing Layer → Upload from local* and choose [`cti-hunt-loop-kit.layer.json`](cti-hunt-loop-kit.layer.json), "
+            "or *Load from URL* with the file's raw GitHub URL."
+        ),
         "",
         "## By tactic",
         "",

@@ -27,7 +27,7 @@ jobs:
 
       - name: Validate before packaging
         run: |
-          pip install -r requirements.txt
+          pip install --require-hashes -r requirements.txt
           sigma check queries/sigma
           python tests/test_lab_detections.py
           python tests/test_repo_consistency.py
@@ -40,7 +40,7 @@ jobs:
         run: |
           mkdir dist
           git archive --format=zip --prefix="cti-hunt-loop-kit-${TAG}/" -o "dist/cti-hunt-loop-kit-${TAG}.zip" HEAD
-          pip install "cyclonedx-bom==7.6.0"
+          pip install --require-hashes -r requirements-ci.txt
           cyclonedx-py requirements requirements.txt --of JSON -o "dist/cti-hunt-loop-kit-${TAG}.cdx.json"
           (cd dist && sha256sum ./* > SHA256SUMS)
 
