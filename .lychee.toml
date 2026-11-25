@@ -10,6 +10,9 @@ exclude = [
   "^https://www\\.sans\\.org/",
   "^https://researchr\\.org/",
   "^https://dataexplorer\\.azure\\.com/",
+  # Return 403 to automated checkers; verified manually (ICD 203 redirects to archive.dni.gov and loads; PEAK post loads)
+  "^https://www\\.dni\\.gov/files/documents/ICD/ICD-203\\.pdf$",
+  "^https://www\\.splunk\\.com/en_us/blog/security/peak-threat-hunting-framework\\.html$",
   # Placeholders and examples
   "example\\.(com|org)",
   "\\.example(/|$)",

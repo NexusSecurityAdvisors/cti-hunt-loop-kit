@@ -21,6 +21,8 @@ Citations use APA 7 style. Sources are kept to roughly the last 4 years: CI and 
 
 - <a id="attack-v19"></a>MITRE (2026). *ATT&CK v19 release notes (Defense Evasion split into Stealth and Defense Impairment)*. MITRE ATT&CK. <https://attack.mitre.org/resources/updates/updates-april-2026/>  
   `[attack-v19]` · used by: kit-wide
+- <a id="mitre-det0363-2026"></a>MITRE (2026). *Detection of Credential Dumping from LSASS Memory via Access and Dump Sequence (DET0363, v1.0)*. MITRE ATT&CK Detection Strategies. <https://attack.mitre.org/detectionstrategies/DET0363>  
+  `[mitre-det0363-2026]` · used by: [HL-0002](../playbooks/HL-0002-T1003.001-lsass-credential-dumping.md)
 - <a id="nist-800-61r3"></a>Nelson, A., Rekhi, S., Souppaya, M., & Scarfone, K. (2025). *Incident response recommendations and considerations for cybersecurity risk management: A CSF 2.0 community profile (NIST SP 800-61r3)*. National Institute of Standards and Technology. <https://csrc.nist.gov/pubs/sp/800/61/r3/final>  
   `[nist-800-61r3]` · used by: kit-wide
 - <a id="sigma-spec"></a>SigmaHQ (2024). *Sigma specification (rules, correlations, filters)*. GitHub, SigmaHQ/sigma-specification. <https://github.com/SigmaHQ/sigma-specification>  
@@ -45,8 +47,6 @@ Citations use APA 7 style. Sources are kept to roughly the last 4 years: CI and 
   `[elastic-linux-persistence-2024]` · used by: [HL-0013](../playbooks/HL-0013-T1053.003-T1543.002-linux-cron-systemd-persistence.md)
 - <a id="ms-kerberoasting-2024"></a>Microsoft (2024). *Microsoft's guidance to help mitigate Kerberoasting*. Microsoft Security Blog. <https://www.microsoft.com/en-us/security/blog/2024/10/11/microsofts-guidance-to-help-mitigate-kerberoasting/>  
   `[ms-kerberoasting-2024]` · used by: [HL-0006](../playbooks/HL-0006-T1558.003-kerberoasting.md)
-- <a id="ms-lsass-2022"></a>Microsoft Threat Intelligence (2022). *Detecting and preventing LSASS credential dumping attacks*. Microsoft Security Blog. <https://www.microsoft.com/en-us/security/blog/2022/10/05/detecting-and-preventing-lsass-credential-dumping-attacks/>  
-  `[ms-lsass-2022]` · used by: [HL-0002](../playbooks/HL-0002-T1003.001-lsass-credential-dumping.md)
 - <a id="ms-midnight-blizzard-2024"></a>Microsoft Threat Intelligence (2024). *Midnight Blizzard: Guidance for responders on nation-state attack*. Microsoft Security Blog. <https://www.microsoft.com/en-us/security/blog/2024/01/25/midnight-blizzard-guidance-for-responders-on-nation-state-attack/>  
   `[ms-midnight-blizzard-2024]` · used by: [HL-0011](../playbooks/HL-0011-T1528-oauth-consent-abuse.md)
 - <a id="sans-2026"></a>SANS Institute (2026). *SANS 2026 threat hunting survey: Data quality overtakes staffing as the top barrier*. SANS Institute press release and survey report. <https://www.sans.org/press/announcements/threat-hunters-call-data-their-biggest-barrier-overtaking-staffing-first-time-survey-finds>  
