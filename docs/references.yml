@@ -138,13 +138,13 @@
   url: https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-061a
   used_by: [HL-0005, HL-0007, HL-0009]
 
-- id: ms-lsass-2022
-  type: industry
-  authors: Microsoft Threat Intelligence
-  title: Detecting and preventing LSASS credential dumping attacks
-  venue: Microsoft Security Blog
-  published: 2022-10
-  url: https://www.microsoft.com/en-us/security/blog/2022/10/05/detecting-and-preventing-lsass-credential-dumping-attacks/
+- id: mitre-det0363-2026
+  type: standard
+  authors: MITRE
+  title: "Detection of Credential Dumping from LSASS Memory via Access and Dump Sequence (DET0363, v1.0)"
+  venue: MITRE ATT&CK Detection Strategies
+  published: 2026-05
+  url: https://attack.mitre.org/detectionstrategies/DET0363
   used_by: [HL-0002]
 
 - id: ms-kerberoasting-2024
