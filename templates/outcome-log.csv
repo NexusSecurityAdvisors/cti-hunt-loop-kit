@@ -1,0 +1,3 @@
+hunt_id,card_id,pir_id,hunter,start_date,end_date,preflight_result,outcome,scope,time_window,confidence_icd203,evidence_summary,follow_on_type,follow_on_id,owner,due_date,source_ids_used
+H-001,HC-001,PIR-03,,YYYY-MM-DD,YYYY-MM-DD,Pass,Supported finding,Tenant halvard.example,30 days,Very likely,3 off-hours events; 2 unverified apps with mail scope; shared IP,Detection,DET-014,,YYYY-MM-DD,SRC-07
+H-002,HC-002,PIR-04,,YYYY-MM-DD,YYYY-MM-DD,Fail,Inconclusive,ENG-JMP-01,30 days (7 available),Not assessed,No unapproved sessions in the 7 days retained,Collection requirement,CR-001,,YYYY-MM-DD,SRC-07

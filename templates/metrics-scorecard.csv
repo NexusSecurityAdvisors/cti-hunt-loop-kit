@@ -1,0 +1,9 @@
+metric,definition,numerator,denominator,value,baseline,period_start,period_end,target,audience,notes
+PIR-to-hunt traceability,Hunts linked to an approved PIR / total hunts,,,,,YYYY-MM-DD,YYYY-MM-DD,,CISO,
+Observability adequacy,Hunts that passed preflight / completed hunts,,,,,YYYY-MM-DD,YYYY-MM-DD,,CIO; telemetry and OT owners,
+Detection conversion,Supported findings turned into tested detections / supported findings eligible for detection,,,,,YYYY-MM-DD,YYYY-MM-DD,,Detection engineering,A falling rate can mean the easy gaps are closed
+Decision closure,Hunt-derived decisions acted on by due date / hunt-derived decisions due,,,,,YYYY-MM-DD,YYYY-MM-DD,,Executives; board,
+Dwell-time reduction,Median time from first activity to detection for hunted behaviors (before vs. after a hunt-derived rule),,,,,YYYY-MM-DD,YYYY-MM-DD,,Executives; board,Report as two medians and the sample size
+Product-value score,Mean 0 to 3 outcome score per intelligence source,,,,,YYYY-MM-DD,YYYY-MM-DD,,CTI lead; procurement,
+Hygiene: hypotheses executed on time,Approved hypotheses executed within the agreed window / approved hypotheses,,,,,YYYY-MM-DD,YYYY-MM-DD,,CTI lead,
+Hygiene: outcomes recorded,Completed hunts with a recorded outcome and owner / completed hunts,,,,,YYYY-MM-DD,YYYY-MM-DD,,CTI lead,
