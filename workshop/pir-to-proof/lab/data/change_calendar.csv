@@ -1,0 +1,9 @@
+window_id,start_utc,end_utc,ticket,description
+CW-001,2027-01-26T18:00:00Z,2027-01-26T22:00:00Z,CHG-4101,Standard weekly change window
+CW-002,2027-02-02T18:00:00Z,2027-02-02T22:00:00Z,CHG-4102,Standard weekly change window
+CW-003,2027-02-09T18:00:00Z,2027-02-09T22:00:00Z,CHG-4103,Standard weekly change window
+CW-004,2027-02-16T18:00:00Z,2027-02-16T22:00:00Z,CHG-4104,Standard weekly change window
+CW-E01,2027-02-18T13:00:00Z,2027-02-18T15:00:00Z,CHG-4199,Emergency change: PLM Bridge certificate rotation
+CW-005,2027-02-23T18:00:00Z,2027-02-23T22:00:00Z,CHG-4105,Standard weekly change window
+CW-006,2027-03-02T18:00:00Z,2027-03-02T22:00:00Z,CHG-4106,Standard weekly change window
+CW-007,2027-03-09T18:00:00Z,2027-03-09T22:00:00Z,CHG-4107,Standard weekly change window

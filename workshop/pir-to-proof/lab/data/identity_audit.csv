@@ -1,0 +1,312 @@
+timestamp_utc,operation,actor,actor_type,target,target_app_id,publisher_verified,permissions,consent_type,ip_address,change_ticket
+2027-02-01T08:15:39Z,Add user,cloud.ops@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.37,REQ-27056
+2027-02-01T08:49:08Z,Update application,cloud.ops@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.15,REQ-21913
+2027-02-01T09:50:31Z,Update application,it.admin1@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.22,REQ-24896
+2027-02-01T10:21:17Z,Add user,it.admin1@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.48,REQ-26114
+2027-02-01T10:47:56Z,Consent to application,b.osei@halvard.example,User,Expense Portal,a1f0c3d2-0002,true,User.Read,User,192.0.2.40,
+2027-02-01T11:06:54Z,Update application,it.admin2@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.10,REQ-20859
+2027-02-01T11:16:31Z,Consent to application,a.lindqvist@halvard.example,User,Expense Portal,a1f0c3d2-0002,true,User.Read,User,192.0.2.30,
+2027-02-01T13:56:34Z,Add user,it.admin2@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.36,REQ-27729
+2027-02-01T14:02:59Z,Reset user password,cloud.ops@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.49,
+2027-02-01T14:47:25Z,Update application,it.admin2@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.59,REQ-20168
+2027-02-01T14:54:06Z,Add user,it.admin1@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.13,REQ-22127
+2027-02-01T15:09:22Z,Add user,cloud.ops@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.34,REQ-22946
+2027-02-01T17:09:40Z,Add user,cloud.ops@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.48,REQ-23238
+2027-02-01T17:34:26Z,Reset user password,it.admin2@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.24,
+2027-02-02T07:01:43Z,Update application,it.admin1@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.19,REQ-24385
+2027-02-02T07:59:25Z,Add member to role,cloud.ops@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.20,REQ-22009
+2027-02-02T08:00:35Z,Add user,cloud.ops@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.48,REQ-25001
+2027-02-02T08:02:09Z,Reset user password,it.admin1@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.34,
+2027-02-02T08:18:28Z,Reset user password,it.admin1@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.30,
+2027-02-02T09:04:33Z,Reset user password,cloud.ops@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.42,
+2027-02-02T10:11:12Z,Add user,it.admin1@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.39,REQ-23555
+2027-02-02T10:49:53Z,Update user,it.admin2@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.47,
+2027-02-02T11:28:06Z,Add member to role,it.admin1@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.57,REQ-29904
+2027-02-02T12:14:43Z,Reset user password,cloud.ops@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.13,
+2027-02-02T12:19:21Z,Add user,cloud.ops@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.39,REQ-28639
+2027-02-02T12:34:41Z,Update user,it.admin2@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.46,
+2027-02-02T13:58:48Z,Add user,it.admin1@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.55,REQ-29188
+2027-02-02T14:54:08Z,Add member to role,cloud.ops@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.49,REQ-22699
+2027-02-02T15:48:15Z,Reset user password,it.admin2@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.46,
+2027-02-02T16:10:15Z,Add member to role,it.admin2@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.51,REQ-24020
+2027-02-02T19:29:00Z,Consent to application,it.admin2@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,User.Read profile,Admin,192.0.2.28,CHG-4102
+2027-02-02T19:58:00Z,Update application,cloud.ops@halvard.example,User,PLM Bridge,a1f0c3d2-0001,true,,,192.0.2.30,CHG-4102
+2027-02-02T20:55:00Z,Update application,cloud.ops@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,,,192.0.2.52,CHG-4102
+2027-02-02T21:22:00Z,Consent to application,it.admin2@halvard.example,User,Quality Records,a1f0c3d2-0004,true,Sites.ReadWrite.All,Admin,192.0.2.21,CHG-4102
+2027-02-03T10:09:31Z,Add user,it.admin2@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.50,REQ-29098
+2027-02-03T13:03:41Z,Update application,it.admin1@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.25,REQ-28825
+2027-02-03T14:30:53Z,Update user,cloud.ops@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.39,
+2027-02-04T07:28:01Z,Add member to role,it.admin2@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.43,REQ-29225
+2027-02-04T08:12:48Z,Update user,it.admin2@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.32,
+2027-02-04T08:22:00Z,Add member to role,cloud.ops@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.34,REQ-26054
+2027-02-04T09:24:39Z,Update application,it.admin2@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.45,REQ-25428
+2027-02-04T12:31:38Z,Reset user password,it.admin1@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.21,
+2027-02-04T12:51:16Z,Update application,cloud.ops@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.52,REQ-25386
+2027-02-04T13:29:07Z,Reset user password,cloud.ops@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.35,
+2027-02-04T13:30:54Z,Update application,it.admin2@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.42,REQ-21992
+2027-02-04T14:18:36Z,Add user,it.admin2@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.45,REQ-28045
+2027-02-04T14:35:15Z,Update user,it.admin1@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.28,
+2027-02-04T15:21:43Z,Update user,it.admin1@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.47,
+2027-02-04T16:16:41Z,Add user,cloud.ops@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.47,REQ-27978
+2027-02-04T17:11:34Z,Update user,cloud.ops@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.28,
+2027-02-04T17:12:04Z,Add member to role,it.admin1@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.59,REQ-28651
+2027-02-05T07:40:34Z,Reset user password,it.admin1@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.21,
+2027-02-05T08:03:03Z,Add member to role,it.admin1@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.13,REQ-23196
+2027-02-05T08:53:38Z,Update user,it.admin2@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.47,
+2027-02-05T10:02:18Z,Consent to application,l.fischer@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,User.Read profile,User,192.0.2.54,
+2027-02-05T10:14:32Z,Update application,cloud.ops@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.58,REQ-25847
+2027-02-05T10:34:58Z,Reset user password,cloud.ops@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.10,
+2027-02-05T11:06:28Z,Add user,it.admin1@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.26,REQ-29575
+2027-02-05T11:45:30Z,Add member to role,it.admin1@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.53,REQ-27592
+2027-02-05T13:25:48Z,Reset user password,it.admin2@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.20,
+2027-02-05T13:26:53Z,Add member to role,it.admin1@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.55,REQ-23919
+2027-02-05T15:00:42Z,Update user,it.admin1@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.26,
+2027-02-05T15:09:28Z,Add member to role,it.admin1@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.46,REQ-28171
+2027-02-05T15:13:06Z,Add user,cloud.ops@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.49,REQ-29053
+2027-02-05T17:29:43Z,Add member to role,it.admin2@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.56,REQ-28445
+2027-02-06T03:12:41Z,Consent to application,j.okafor@halvard.example,User,MailSync Pro,f9e2b7a0-7781,false,Mail.Read offline_access User.Read,User,203.0.113.45,
+2027-02-08T07:43:05Z,Update user,cloud.ops@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.14,
+2027-02-08T08:21:07Z,Reset user password,it.admin1@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.38,
+2027-02-08T09:03:01Z,Update application,cloud.ops@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.10,REQ-27368
+2027-02-08T09:12:38Z,Add user,cloud.ops@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.34,REQ-29827
+2027-02-08T10:14:23Z,Add user,it.admin1@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.38,REQ-27776
+2027-02-08T10:16:36Z,Add user,it.admin1@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.28,REQ-29952
+2027-02-08T10:40:31Z,Add user,it.admin1@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.45,REQ-24365
+2027-02-08T15:14:19Z,Add member to role,cloud.ops@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.35,REQ-23484
+2027-02-08T17:38:00Z,Add user,it.admin2@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.52,REQ-23747
+2027-02-09T07:43:00Z,Update user,cloud.ops@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.51,
+2027-02-09T07:56:30Z,Update application,cloud.ops@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.34,REQ-27944
+2027-02-09T09:20:38Z,Add member to role,it.admin1@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.31,REQ-28487
+2027-02-09T09:43:43Z,Add user,it.admin1@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.56,REQ-22612
+2027-02-09T09:59:53Z,Update user,cloud.ops@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.17,
+2027-02-09T10:43:07Z,Consent to application,o.sato@halvard.example,User,Expense Portal,a1f0c3d2-0002,true,User.Read,User,192.0.2.47,
+2027-02-09T13:14:01Z,Add user,it.admin2@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.46,REQ-26774
+2027-02-09T15:11:07Z,Update user,cloud.ops@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.45,
+2027-02-09T16:12:19Z,Reset user password,it.admin2@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.45,
+2027-02-09T17:56:56Z,Add member to role,it.admin1@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.59,REQ-21578
+2027-02-09T18:15:00Z,Add member to role,it.admin2@halvard.example,User,Travel Booker,a1f0c3d2-0003,true,,,192.0.2.43,CHG-4103
+2027-02-09T19:17:00Z,Add service principal credentials,cloud.ops@halvard.example,User,PLM Bridge,a1f0c3d2-0001,true,,,192.0.2.26,CHG-4103
+2027-02-09T19:48:00Z,Consent to application,it.admin1@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,User.Read profile,Admin,192.0.2.56,CHG-4103
+2027-02-09T19:56:00Z,Consent to application,it.admin2@halvard.example,User,Quality Records,a1f0c3d2-0004,true,Sites.ReadWrite.All,Admin,192.0.2.33,CHG-4103
+2027-02-09T21:44:00Z,Add service principal credentials,it.admin1@halvard.example,User,Travel Booker,a1f0c3d2-0003,true,,,192.0.2.35,CHG-4103
+2027-02-09T21:54:00Z,Update application,it.admin1@halvard.example,User,Travel Booker,a1f0c3d2-0003,true,,,192.0.2.59,CHG-4103
+2027-02-09T22:47:05Z,Consent to application,m.ruiz@halvard.example,User,DocView Connect,f9e2b7a0-9134,false,Mail.Read Files.Read.All offline_access,User,198.51.100.23,
+2027-02-10T07:25:03Z,Add member to role,it.admin1@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.42,REQ-20182
+2027-02-10T07:32:19Z,Update user,it.admin2@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.38,
+2027-02-10T07:49:43Z,Update user,it.admin1@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.27,
+2027-02-10T07:59:23Z,Update application,it.admin1@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.22,REQ-24990
+2027-02-10T08:01:30Z,Add user,cloud.ops@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.27,REQ-27066
+2027-02-10T08:07:25Z,Update user,it.admin2@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.34,
+2027-02-10T08:14:11Z,Update application,cloud.ops@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.52,REQ-25959
+2027-02-10T08:19:29Z,Update application,it.admin2@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.47,REQ-26421
+2027-02-10T09:41:38Z,Update application,cloud.ops@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.18,REQ-25267
+2027-02-10T10:41:45Z,Add member to role,cloud.ops@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.20,REQ-25442
+2027-02-10T10:44:23Z,Add user,cloud.ops@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.28,REQ-20537
+2027-02-10T10:49:45Z,Add user,it.admin1@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.57,REQ-21805
+2027-02-10T11:47:54Z,Add user,it.admin1@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.29,REQ-24229
+2027-02-10T12:11:26Z,Update user,it.admin1@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.57,
+2027-02-10T12:48:58Z,Update user,it.admin1@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.33,
+2027-02-10T12:57:28Z,Update application,it.admin2@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.11,REQ-26945
+2027-02-10T13:00:17Z,Add user,cloud.ops@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.45,REQ-27099
+2027-02-10T13:31:41Z,Add member to role,cloud.ops@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.47,REQ-23046
+2027-02-10T14:15:29Z,Reset user password,cloud.ops@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.24,
+2027-02-10T16:32:03Z,Reset user password,cloud.ops@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.21,
+2027-02-10T16:42:10Z,Add user,it.admin2@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.31,REQ-29174
+2027-02-11T08:59:40Z,Update application,cloud.ops@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.26,REQ-23166
+2027-02-11T14:08:29Z,Add user,cloud.ops@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.48,REQ-20838
+2027-02-11T14:40:41Z,Add user,it.admin1@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.14,REQ-20463
+2027-02-11T14:41:09Z,Add user,it.admin2@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.47,REQ-29733
+2027-02-11T14:48:35Z,Add member to role,it.admin1@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.52,REQ-22598
+2027-02-11T15:43:43Z,Update user,cloud.ops@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.36,
+2027-02-11T16:51:34Z,Add member to role,it.admin2@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.42,REQ-25624
+2027-02-11T17:16:52Z,Add user,it.admin2@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.57,REQ-23711
+2027-02-11T17:34:50Z,Add member to role,cloud.ops@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.36,REQ-25731
+2027-02-11T17:39:14Z,Update user,cloud.ops@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.56,
+2027-02-12T08:29:39Z,Update application,it.admin1@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.15,REQ-21084
+2027-02-12T10:48:55Z,Add member to role,cloud.ops@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.32,REQ-23165
+2027-02-12T11:10:46Z,Update application,cloud.ops@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.37,REQ-24117
+2027-02-12T11:37:55Z,Add user,it.admin2@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.27,REQ-29342
+2027-02-12T11:54:39Z,Reset user password,it.admin1@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.16,
+2027-02-12T13:35:05Z,Update application,it.admin1@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.51,REQ-24084
+2027-02-12T14:48:04Z,Update user,it.admin2@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.52,
+2027-02-12T17:11:04Z,Add user,it.admin2@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.51,REQ-23305
+2027-02-12T17:36:03Z,Update application,it.admin2@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.17,REQ-21920
+2027-02-14T02:14:09Z,Add service principal credentials,j.okafor@halvard.example,User,PLM Bridge,a1f0c3d2-0001,true,,,203.0.113.45,
+2027-02-15T07:16:22Z,Add member to role,it.admin1@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.52,REQ-20314
+2027-02-15T07:34:46Z,Update user,it.admin2@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.23,
+2027-02-15T07:42:40Z,Consent to application,j.okafor@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,User.Read profile,User,192.0.2.12,
+2027-02-15T07:56:33Z,Add user,it.admin1@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.51,REQ-22944
+2027-02-15T08:19:36Z,Update user,it.admin1@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.23,
+2027-02-15T09:15:27Z,Update application,it.admin1@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.27,REQ-20840
+2027-02-15T10:06:02Z,Add user,it.admin1@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.14,REQ-25688
+2027-02-15T10:41:47Z,Update application,cloud.ops@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.53,REQ-23588
+2027-02-15T12:40:21Z,Add member to role,it.admin2@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.35,REQ-27753
+2027-02-15T13:28:41Z,Add member to role,it.admin1@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.39,REQ-24392
+2027-02-15T13:56:38Z,Reset user password,cloud.ops@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.29,
+2027-02-15T14:12:06Z,Update user,it.admin2@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.20,
+2027-02-15T14:29:17Z,Reset user password,cloud.ops@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.12,
+2027-02-15T14:54:30Z,Update application,it.admin2@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.16,REQ-25460
+2027-02-15T15:34:21Z,Reset user password,it.admin2@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.44,
+2027-02-15T15:46:42Z,Update user,it.admin1@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.42,
+2027-02-15T15:48:18Z,Update user,it.admin1@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.12,
+2027-02-15T16:29:54Z,Update application,it.admin1@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.20,REQ-21298
+2027-02-15T16:40:08Z,Update user,it.admin2@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.35,
+2027-02-15T17:58:32Z,Add member to role,cloud.ops@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.33,REQ-29577
+2027-02-16T08:18:43Z,Reset user password,it.admin1@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.47,
+2027-02-16T09:10:30Z,Reset user password,it.admin2@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.43,
+2027-02-16T09:46:46Z,Reset user password,cloud.ops@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.19,
+2027-02-16T10:05:43Z,Add user,it.admin1@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.52,REQ-27006
+2027-02-16T10:24:28Z,Update application,cloud.ops@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.25,REQ-24526
+2027-02-16T10:35:12Z,Add user,it.admin2@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.39,REQ-28222
+2027-02-16T10:48:27Z,Reset user password,it.admin2@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.38,
+2027-02-16T12:58:50Z,Add member to role,it.admin2@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.32,REQ-25217
+2027-02-16T13:23:10Z,Add user,it.admin2@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.33,REQ-22388
+2027-02-16T13:58:54Z,Update user,cloud.ops@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.33,
+2027-02-16T15:48:24Z,Reset user password,it.admin2@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.38,
+2027-02-16T17:34:43Z,Reset user password,cloud.ops@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.26,
+2027-02-16T17:44:19Z,Add member to role,cloud.ops@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.16,REQ-23848
+2027-02-16T17:59:24Z,Consent to application,e.tanaka@halvard.example,User,Travel Booker,a1f0c3d2-0003,true,User.Read Calendars.Read,User,192.0.2.37,
+2027-02-16T18:20:00Z,Add member to role,it.admin1@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,,,192.0.2.41,CHG-4104
+2027-02-16T18:58:00Z,Update application,it.admin1@halvard.example,User,Expense Portal,a1f0c3d2-0002,true,,,192.0.2.29,CHG-4104
+2027-02-16T19:10:00Z,Add member to role,cloud.ops@halvard.example,User,Quality Records,a1f0c3d2-0004,true,,,192.0.2.15,CHG-4104
+2027-02-16T21:14:00Z,Add service principal credentials,cloud.ops@halvard.example,User,Expense Portal,a1f0c3d2-0002,true,,,192.0.2.14,CHG-4104
+2027-02-17T07:07:11Z,Update user,it.admin1@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.52,
+2027-02-17T10:57:39Z,Update user,cloud.ops@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.29,
+2027-02-17T11:09:51Z,Update user,it.admin1@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.25,
+2027-02-17T12:00:06Z,Reset user password,it.admin1@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.24,
+2027-02-17T14:23:51Z,Update application,it.admin2@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.28,REQ-26246
+2027-02-17T16:47:25Z,Update user,it.admin1@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.46,
+2027-02-17T16:57:41Z,Update user,it.admin2@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.48,
+2027-02-17T17:03:48Z,Add user,cloud.ops@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.44,REQ-29402
+2027-02-17T17:14:21Z,Add member to role,cloud.ops@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.59,REQ-20644
+2027-02-18T07:36:01Z,Consent to application,a.lindqvist@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,User.Read profile,User,192.0.2.55,
+2027-02-18T09:18:53Z,Reset user password,it.admin2@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.46,
+2027-02-18T13:03:00Z,Update application,it.admin1@halvard.example,User,Expense Portal,a1f0c3d2-0002,true,,,192.0.2.50,CHG-4199
+2027-02-18T13:40:00Z,Add service principal credentials,cloud.ops@halvard.example,User,PLM Bridge,a1f0c3d2-0001,true,,,192.0.2.14,CHG-4199
+2027-02-18T14:16:54Z,Add member to role,cloud.ops@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.13,REQ-28813
+2027-02-18T14:25:00Z,Add service principal credentials,cloud.ops@halvard.example,User,Travel Booker,a1f0c3d2-0003,true,,,192.0.2.34,CHG-4199
+2027-02-18T14:52:50Z,Consent to application,m.ruiz@halvard.example,User,Expense Portal,a1f0c3d2-0002,true,User.Read,User,192.0.2.16,
+2027-02-18T14:58:00Z,Add member to role,it.admin2@halvard.example,User,Expense Portal,a1f0c3d2-0002,true,,,192.0.2.25,CHG-4199
+2027-02-18T15:27:32Z,Add member to role,it.admin2@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.48,REQ-28400
+2027-02-18T15:29:00Z,Consent to application,it.admin2@halvard.example,User,PLM Bridge,a1f0c3d2-0001,true,Files.Read.All Sites.Read.All,Admin,192.0.2.38,CHG-4199
+2027-02-18T15:35:00Z,Add member to role,cloud.ops@halvard.example,User,PLM Bridge,a1f0c3d2-0001,true,,,192.0.2.26,CHG-4199
+2027-02-18T15:41:00Z,Update application,cloud.ops@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,,,192.0.2.11,CHG-4199
+2027-02-18T15:43:00Z,Consent to application,it.admin1@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,User.Read profile,Admin,192.0.2.33,CHG-4199
+2027-02-18T16:24:18Z,Add member to role,cloud.ops@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.11,REQ-25074
+2027-02-18T16:30:00Z,Add member to role,it.admin1@halvard.example,User,Quality Records,a1f0c3d2-0004,true,,,192.0.2.34,CHG-4199
+2027-02-18T16:43:40Z,Reset user password,cloud.ops@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.28,
+2027-02-18T16:44:16Z,Reset user password,cloud.ops@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.35,
+2027-02-18T17:58:17Z,Add user,cloud.ops@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.41,REQ-20863
+2027-02-19T07:08:45Z,Add user,cloud.ops@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.28,REQ-24352
+2027-02-19T08:28:04Z,Reset user password,it.admin1@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.45,
+2027-02-19T08:58:38Z,Update user,cloud.ops@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.17,
+2027-02-19T09:00:23Z,Reset user password,it.admin1@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.59,
+2027-02-19T09:22:55Z,Add member to role,it.admin1@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.54,REQ-23499
+2027-02-19T09:53:33Z,Update application,it.admin1@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.17,REQ-26990
+2027-02-19T10:34:38Z,Update application,cloud.ops@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.45,REQ-27077
+2027-02-19T11:02:32Z,Add member to role,it.admin1@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.21,REQ-20213
+2027-02-19T11:43:31Z,Add user,cloud.ops@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.53,REQ-24352
+2027-02-19T12:36:41Z,Update application,it.admin1@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.16,REQ-26304
+2027-02-19T15:32:15Z,Reset user password,cloud.ops@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.28,
+2027-02-19T15:33:59Z,Update application,it.admin1@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.33,REQ-23095
+2027-02-19T15:37:55Z,Add member to role,cloud.ops@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.11,REQ-26294
+2027-02-19T17:08:20Z,Consent to application,d.kowalski@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,User.Read profile,User,192.0.2.55,
+2027-02-22T07:46:32Z,Update user,it.admin2@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.26,
+2027-02-22T09:21:13Z,Update user,it.admin1@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.21,
+2027-02-22T09:43:09Z,Add user,cloud.ops@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.43,REQ-23298
+2027-02-22T11:33:41Z,Consent to application,o.sato@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,User.Read profile,User,192.0.2.47,
+2027-02-22T11:51:33Z,Update application,it.admin2@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.19,REQ-21429
+2027-02-22T12:53:54Z,Add member to role,it.admin1@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.42,REQ-22622
+2027-02-22T14:11:20Z,Update application,cloud.ops@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.20,REQ-26709
+2027-02-22T14:31:41Z,Add user,it.admin1@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.37,REQ-28512
+2027-02-22T15:03:40Z,Add member to role,it.admin2@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.19,REQ-20368
+2027-02-22T17:11:48Z,Add member to role,cloud.ops@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.21,REQ-22866
+2027-02-22T17:19:00Z,Update application,it.admin1@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.34,REQ-22637
+2027-02-23T09:14:22Z,Update application,it.admin1@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.34,REQ-29518
+2027-02-23T09:42:11Z,Update application,cloud.ops@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.12,REQ-20551
+2027-02-23T09:59:55Z,Add user,cloud.ops@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.37,REQ-27382
+2027-02-23T10:22:52Z,Add member to role,it.admin2@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.30,REQ-25938
+2027-02-23T10:24:31Z,Update application,it.admin2@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.44,REQ-23698
+2027-02-23T11:35:55Z,Add user,it.admin2@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.22,REQ-28305
+2027-02-23T11:47:15Z,Reset user password,it.admin2@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.12,
+2027-02-23T13:15:36Z,Add member to role,it.admin2@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.37,REQ-27572
+2027-02-23T13:17:10Z,Add member to role,it.admin1@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.52,REQ-29399
+2027-02-23T15:18:20Z,Reset user password,it.admin1@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.37,
+2027-02-23T16:18:59Z,Add member to role,cloud.ops@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.20,REQ-28692
+2027-02-23T17:54:52Z,Update user,it.admin2@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.26,
+2027-02-23T18:24:00Z,Add service principal credentials,it.admin2@halvard.example,User,PLM Bridge,a1f0c3d2-0001,true,,,192.0.2.37,CHG-4105
+2027-02-23T18:35:00Z,Add member to role,cloud.ops@halvard.example,User,Travel Booker,a1f0c3d2-0003,true,,,192.0.2.18,CHG-4105
+2027-02-23T19:01:00Z,Add member to role,cloud.ops@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,,,192.0.2.43,CHG-4105
+2027-02-23T19:04:00Z,Add member to role,it.admin2@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,,,192.0.2.32,CHG-4105
+2027-02-23T21:42:00Z,Consent to application,it.admin2@halvard.example,User,PLM Bridge,a1f0c3d2-0001,true,Files.Read.All Sites.Read.All,Admin,192.0.2.18,CHG-4105
+2027-02-24T08:55:46Z,Consent to application,o.sato@halvard.example,User,Travel Booker,a1f0c3d2-0003,true,User.Read Calendars.Read,User,192.0.2.56,
+2027-02-24T09:48:45Z,Add member to role,cloud.ops@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.59,REQ-24750
+2027-02-24T09:59:46Z,Add user,cloud.ops@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.29,REQ-25121
+2027-02-24T10:23:22Z,Add member to role,it.admin1@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.23,REQ-29251
+2027-02-24T10:36:49Z,Update user,it.admin2@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.40,
+2027-02-24T11:10:46Z,Add user,it.admin2@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.25,REQ-25633
+2027-02-24T11:23:12Z,Add user,it.admin1@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.42,REQ-29950
+2027-02-24T12:39:18Z,Update user,cloud.ops@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.26,
+2027-02-24T13:23:36Z,Add user,it.admin1@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.28,REQ-26864
+2027-02-24T14:16:44Z,Add user,it.admin1@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.14,REQ-28614
+2027-02-24T14:40:45Z,Add user,cloud.ops@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.33,REQ-25530
+2027-02-24T14:44:55Z,Update user,it.admin2@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.18,
+2027-02-24T17:47:10Z,Add user,it.admin2@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.15,REQ-25766
+2027-02-25T07:06:41Z,Add user,it.admin1@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.16,REQ-21619
+2027-02-25T07:06:43Z,Consent to application,i.nwosu@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,User.Read profile,User,192.0.2.53,
+2027-02-25T07:08:01Z,Update application,it.admin1@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.33,REQ-21658
+2027-02-25T07:11:04Z,Add user,it.admin2@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.41,REQ-29575
+2027-02-25T07:53:31Z,Add member to role,it.admin2@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.50,REQ-26755
+2027-02-25T08:41:19Z,Update application,it.admin2@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.20,REQ-25650
+2027-02-25T09:33:48Z,Update user,it.admin2@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.19,
+2027-02-25T10:00:59Z,Add user,cloud.ops@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.59,REQ-22170
+2027-02-25T10:06:21Z,Add member to role,it.admin1@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.26,REQ-23947
+2027-02-25T10:32:14Z,Reset user password,it.admin2@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.58,
+2027-02-25T12:05:02Z,Update application,it.admin1@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.47,REQ-22851
+2027-02-25T12:30:01Z,Update application,it.admin1@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.51,REQ-29105
+2027-02-25T13:14:21Z,Update user,it.admin1@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.47,
+2027-02-25T17:11:47Z,Add user,it.admin1@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.49,REQ-23227
+2027-02-26T07:02:56Z,Update user,it.admin1@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.54,
+2027-02-26T07:46:56Z,Update user,it.admin1@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.43,
+2027-02-26T07:58:21Z,Update user,cloud.ops@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.35,
+2027-02-26T10:30:42Z,Add user,cloud.ops@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.36,REQ-24074
+2027-02-26T12:35:45Z,Reset user password,it.admin1@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.29,
+2027-02-26T12:54:05Z,Reset user password,cloud.ops@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.21,
+2027-02-26T13:10:37Z,Update user,it.admin1@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.40,
+2027-02-26T13:48:12Z,Reset user password,cloud.ops@halvard.example,User,c.marchetti@halvard.example,,,,,192.0.2.38,
+2027-02-26T15:26:04Z,Reset user password,it.admin2@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.54,
+2027-02-26T15:46:23Z,Add member to role,it.admin1@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.56,REQ-22573
+2027-02-26T16:13:08Z,Update application,it.admin1@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.36,REQ-21178
+2027-02-26T16:31:15Z,Update application,it.admin1@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.31,REQ-28573
+2027-02-26T17:34:09Z,Update user,it.admin2@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.17,
+2027-02-26T17:40:38Z,Add member to role,it.admin2@halvard.example,User,m.ruiz@halvard.example,,,,,192.0.2.31,REQ-27423
+2027-02-26T17:55:33Z,Update application,it.admin2@halvard.example,User,j.okafor@halvard.example,,,,,192.0.2.33,REQ-25898
+2027-03-01T07:16:33Z,Add member to role,cloud.ops@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.27,REQ-28705
+2027-03-01T08:01:47Z,Add member to role,it.admin2@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.15,REQ-24683
+2027-03-01T08:02:59Z,Update user,cloud.ops@halvard.example,User,h.brennan@halvard.example,,,,,192.0.2.37,
+2027-03-01T08:29:59Z,Update user,cloud.ops@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.25,
+2027-03-01T10:07:45Z,Reset user password,cloud.ops@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.10,
+2027-03-01T12:20:09Z,Consent to application,h.brennan@halvard.example,User,Travel Booker,a1f0c3d2-0003,true,User.Read Calendars.Read,User,192.0.2.17,
+2027-03-01T12:49:05Z,Add member to role,cloud.ops@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.46,REQ-26703
+2027-03-01T14:43:45Z,Update application,it.admin1@halvard.example,User,k.dubois@halvard.example,,,,,192.0.2.12,REQ-21389
+2027-03-01T16:33:19Z,Update user,it.admin1@halvard.example,User,n.petrov@halvard.example,,,,,192.0.2.58,
+2027-03-01T16:49:19Z,Add user,it.admin1@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.13,REQ-28919
+2027-03-01T16:57:09Z,Update application,it.admin2@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.14,REQ-21549
+2027-03-01T16:59:47Z,Reset user password,cloud.ops@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.30,
+2027-03-01T17:01:58Z,Update application,cloud.ops@halvard.example,User,f.haddad@halvard.example,,,,,192.0.2.11,REQ-26268
+2027-03-02T09:07:31Z,Add member to role,cloud.ops@halvard.example,User,l.fischer@halvard.example,,,,,192.0.2.54,REQ-22859
+2027-03-02T09:22:46Z,Reset user password,it.admin2@halvard.example,User,e.tanaka@halvard.example,,,,,192.0.2.51,
+2027-03-02T12:19:30Z,Update application,it.admin2@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.23,REQ-24047
+2027-03-02T13:09:24Z,Update user,it.admin2@halvard.example,User,d.kowalski@halvard.example,,,,,192.0.2.48,
+2027-03-02T14:43:19Z,Add user,it.admin2@halvard.example,User,o.sato@halvard.example,,,,,192.0.2.16,REQ-25843
+2027-03-02T14:52:26Z,Update user,it.admin1@halvard.example,User,g.oliveira@halvard.example,,,,,192.0.2.12,
+2027-03-02T15:17:28Z,Update user,it.admin1@halvard.example,User,a.lindqvist@halvard.example,,,,,192.0.2.45,
+2027-03-02T16:20:49Z,Add member to role,cloud.ops@halvard.example,User,i.nwosu@halvard.example,,,,,192.0.2.12,REQ-23508
+2027-03-02T17:19:02Z,Update application,it.admin1@halvard.example,User,b.osei@halvard.example,,,,,192.0.2.12,REQ-21888
+2027-03-02T17:30:05Z,Consent to application,a.lindqvist@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,User.Read profile,User,192.0.2.17,
+2027-03-02T18:49:00Z,Add member to role,it.admin2@halvard.example,User,Supplier Portal,a1f0c3d2-0005,true,,,192.0.2.53,CHG-4106
+2027-03-02T18:57:00Z,Add member to role,it.admin1@halvard.example,User,Travel Booker,a1f0c3d2-0003,true,,,192.0.2.10,CHG-4106
+2027-03-02T19:14:00Z,Consent to application,it.admin1@halvard.example,User,Travel Booker,a1f0c3d2-0003,true,User.Read Calendars.Read,Admin,192.0.2.16,CHG-4106
+2027-03-02T19:17:00Z,Add service principal credentials,it.admin2@halvard.example,User,Expense Portal,a1f0c3d2-0002,true,,,192.0.2.47,CHG-4106
+2027-03-02T19:59:00Z,Consent to application,it.admin1@halvard.example,User,PLM Bridge,a1f0c3d2-0001,true,Files.Read.All Sites.Read.All,Admin,192.0.2.35,CHG-4106
+2027-03-02T21:40:00Z,Consent to application,it.admin2@halvard.example,User,Expense Portal,a1f0c3d2-0002,true,User.Read,Admin,192.0.2.47,CHG-4106
