@@ -1,3 +1,0 @@
-decision_id,pir_id,source_hunt_ids,decision_requested,decision_owner,due_date,status,date_closed,result
-D-001,PIR-03,H-001,Restrict user consent to verified publishers and admin-approved apps,CISO,YYYY-MM-DD,Open,,
-D-002,PIR-04,H-002,Fund forwarding of jump host logs to the SIEM with 90-day retention,COO,YYYY-MM-DD,Open,,

@@ -1,6 +1,0 @@
-data_source,owner,what_it_sees,retention_days,earliest_available,forwarded_to_siem,supports_techniques,known_gaps,collection_requirement_id
-Identity provider audit log,Identity team,Consents; credential and role changes,30,,Yes,T1528; T1098.001,Retention may be shorter than the hunt window,
-Cloud control plane log,Cloud team,API calls; resource changes,,,Yes,Cloud persistence techniques,Not all regions enabled,
-EDR (engineering workstations),SOC,Process; file; network on endpoints,90,,Yes,Execution; credential access,OT-side hosts not covered,
-OT jump host session log,OT operations,Remote sessions into OT,7,,No,ICS T0822,Local only; not forwarded,CR-001
-Passive OT network monitoring,OT operations,Industrial protocol traffic,0,,No,ICS discovery and lateral movement,Not deployed,CR-002
