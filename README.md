@@ -59,7 +59,11 @@ The loop applies what recent research says separates effective hunt programs fro
 
 ```
 cti-hunt-loop-kit/
-├── templates/          # PIR worksheet, hypothesis card, hunt report, intel feedback form
+├── templates/          # PIR worksheet and register, hypothesis cards, preflight checklist, hunt report,
+│                       # intel feedback, collection plan, outcome/decision logs, scorecard, RACI,
+│                       # 90-day rollout, board brief, vendor questions
+├── reference/          # Admiralty grading, ICD 203 likelihood terms, tool map, AI review gates, free resources
+├── slides/             # Talk and workshop decks (PowerPoint)
 ├── playbooks/          # ATT&CK-mapped hunt playbooks (one per technique / campaign)
 ├── queries/
 │   ├── sigma/          # Platform-agnostic rules
@@ -67,7 +71,7 @@ cti-hunt-loop-kit/
 │   └── spl/            # Splunk
 ├── detections/         # Promotion criteria for turning hunts into production detections
 ├── data/               # Synthetic lab dataset (Sysmon/Security JSONL + Defender/Sentinel CSV) and generator
-├── workshop/           # Attendee lab guide and exercises (facilitator guide is private)
+├── workshop/           # Two attendee labs: Closing the Hunt Loop and pir-to-proof/ (facilitator guides are private)
 ├── metrics/            # Hunt program tracker (CSV) and KPI script
 ├── navigator/          # ATT&CK Navigator coverage layer and coverage table (generated)
 ├── tools/              # Navigator layer, bibliography and demo-GIF generators
@@ -143,6 +147,10 @@ flowchart LR
     C -->|yes| P[PASS]
     C -->|no| F[FAIL with missed /<br/>unexpected events]
 ```
+
+### PIR to Proof (half-day, spreadsheet only)
+
+[`workshop/pir-to-proof/`](workshop/pir-to-proof/README.md) is a four-hour lab for teams that want the program side of the loop: writing PIRs a hunter can use, turning a fictional report into hypothesis cards, a preflight data check, and scoring outcomes and sources for a board brief. The setting is a fictional aerospace supplier with an OT jump host. It needs only a spreadsheet; the companion talk and workshop decks are in [`slides/`](slides/).
 
 ## Security and automation (DevSecOps)
 

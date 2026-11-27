@@ -2,6 +2,18 @@
 
 All notable changes to the CTI Hunt Loop Kit. Dates are UTC.
 
+## Unreleased
+
+### Kit content
+- Folded the *PIR to Proof* kit (previously a nested `cti-hunt-loop-kit/` copy) into the main layout, so there is one kit to maintain and check:
+  - `workshop/pir-to-proof/`: half-day, spreadsheet-only lab (Halvard Aerostructures scenario, six exercises, deterministic lab data generator, fictional intel report).
+  - `templates/`: PIR register, collection plan, preflight checklist, outcome and decision logs, product-value rubric, metrics scorecard, RACI, 90-day rollout, board brief, vendor questions, and `hypothesis-card-lite.md` (the lab's shorter card; the full card is unchanged).
+  - `reference/`: Admiralty grading, ICD 203 likelihood terms, tool map, AI review gates, free resources, reference list.
+  - `detections/sigma/`: the lab's two Entra ID example rules, now checked and test-converted in CI with the hunt queries.
+  - `slides/`: talk and workshop decks.
+- The PIR to Proof facilitator guide and answer key moved to the private facilitator repository, matching the Closing the Hunt Loop workshop.
+- All material is now under Apache-2.0 (the nested copy was CC BY 4.0 for docs and MIT for scripts).
+
 ## v1.3.0 — 2026-10-31
 
 ### Research and documentation
