@@ -1,5 +1,7 @@
 # Workshop lab guide: Closing the Hunt Loop
 
+> Two labs ship with this kit. This one runs the full six-stage loop against a ransomware intrusion. For a shorter, spreadsheet-only lab on PIRs, preflight and outcome scoring in an aerospace setting, see [PIR to Proof](pir-to-proof/README.md).
+
 **Format:** hands-on, 3.5 hours (it also fits in two 90-minute blocks) · **Level:** intermediate SOC, CTI and DFIR practitioners · **Seats:** 20–40
 
 You join the threat hunting team at Northwind Labs, a fictional company. An industry ISAC alert says a ransomware affiliate is targeting your sector. It takes over Microsoft 365 accounts with MFA fatigue and OAuth consent phishing, gets in through macro documents, moves laterally with harvested service-account credentials, beacons over DNS, and exfiltrates to MEGA before encrypting Windows servers and NAS appliances. Your job is to run the Hunt Loop against five days of telemetry and decide whether that affiliate has already been inside. You also need to leave the program better than you found it.
