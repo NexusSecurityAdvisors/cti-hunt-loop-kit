@@ -8,7 +8,8 @@ You are the CTI and hunt team at **Halvard Aerostructures**, a fictional mid-siz
 
 - A laptop with a spreadsheet application
 - Optional: Python 3 with pandas
-- The `lab/` folder from this kit
+- The `lab/` folder from this workshop
+- The kit's [templates](../../templates/) and [reference sheets](../../reference/)
 
 ## Agenda
 
@@ -35,3 +36,7 @@ You are the CTI and hunt team at **Halvard Aerostructures**, a fictional mid-siz
 | `lab/data/approved_vendors.csv` | Vendor accounts allowed to connect |
 
 All data is synthetic. Times are UTC. The lab clock reads **2027-03-03 00:00 UTC**.
+
+Regenerate the data with `python lab/generate_lab_data.py` (deterministic, same output every time).
+
+Facilitators: the facilitator guide and answer key are kept in a private repository so attendees cannot read ahead. To run the workshop, request access through the [repository owner](https://github.com/NexusSecurityAdvisors).

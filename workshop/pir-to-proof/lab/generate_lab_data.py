@@ -13,7 +13,7 @@ Usage:
     python generate_lab_data.py            # writes CSVs into ./data
     python generate_lab_data.py --out DIR  # writes CSVs into DIR
 
-License: MIT (code). Generated data: CC BY 4.0.
+License: Apache-2.0 (see LICENSE at the repository root).
 """
 
 import argparse

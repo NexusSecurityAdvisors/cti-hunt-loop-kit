@@ -36,10 +36,10 @@ jobs:
         run: pip install --require-hashes -r requirements.txt
 
       - name: Check Sigma rules (syntax and best practices)
-        run: sigma check queries/sigma
+        run: sigma check queries/sigma detections/sigma
 
       - name: Test-convert Sigma rules to Splunk SPL
-        run: sigma convert -t splunk --without-pipeline queries/sigma
+        run: sigma convert -t splunk --without-pipeline queries/sigma detections/sigma
 
   lab:
     name: Sigma rules vs. lab dataset

@@ -33,3 +33,11 @@ From the workshop dataset, these are the strongest candidates for promotion:
 | HL-0002 LSASS dump | Very rare legitimately | Approved IR tooling, by signer and host group |
 | HL-0006 Kerberoasting | Fires hours before impact | Fix RC4-only legacy accounts (move them to AES); exclude only while remediation is pending |
 | HL-0008 LOLBin proxy execution | Remote scriptlets and HTAs are rarely legitimate | Named intranet HTA apps by full URL |
+
+## Example rules from the PIR to Proof lab
+
+[`sigma/`](sigma/) holds two Entra ID rules written in the [PIR to Proof workshop](../workshop/pir-to-proof/README.md) from Hypothesis A. They are starting points, not production content, and have not been through the promotion criteria above.
+
+- Field names follow common Entra ID audit log mappings and differ between pipelines. Map them before converting.
+- Test on known-good data first, then on the lab's planted events.
+- The change-window and ticket conditions from the lab are correlations; implement them in your SIEM with your change calendar.

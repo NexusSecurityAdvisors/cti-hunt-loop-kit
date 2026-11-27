@@ -9,6 +9,6 @@
 
 ## Take home
 
-- The whole kit, under CC BY 4.0
+- The whole kit, under the Apache License 2.0
 - `templates/rollout-90-day.md` for the first quarter
 - `templates/metrics-scorecard.csv` for reporting
