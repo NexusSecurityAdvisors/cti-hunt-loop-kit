@@ -1,4 +1,4 @@
 # CI-only tools (workflow audit, SBOM). Regenerate with:
 #   pip-compile --generate-hashes --allow-unsafe --strip-extras requirements-ci.in
-zizmor==1.31.1
+zizmor==1.33.1
 cyclonedx-bom==7.6.0
