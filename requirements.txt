@@ -517,9 +517,9 @@ pysigma-backend-splunk==3.0.1 \
     --hash=sha256:bd920634c43f67124445a207f8a804c13cc71d7cd4fd1d2ddb6313d4f974b613 \
     --hash=sha256:cb983c86c409227d25b3c39f4420b0508f630db012071fff0920a999cce92a05
     # via -r requirements.in
-pysigma-backend-sqlite==2.1.1 \
-    --hash=sha256:1fe1941943dcc9ed14a66836b1ed96b1456ad750df84dedb9136a1db979ab967 \
-    --hash=sha256:df500e04a1589b8604436bdb0106d4b89a7ab31159b59789be9435fdd255a35f
+pysigma-backend-sqlite==2.2.0 \
+    --hash=sha256:2dd15374726dd1abcd654615535c9c621abfa929c9575faf8af8a8de8c5150a5 \
+    --hash=sha256:85faba474baef9cd8e8db8304bbce1e85f49c4a848a99c12847a2cf1bd52fdf9
     # via -r requirements.in
 pyyaml==6.0.4 \
     --hash=sha256:070c22b6f490d6cc30912be9fb9ab1af9c752769b39b53616f6510c3f038ee6a \
